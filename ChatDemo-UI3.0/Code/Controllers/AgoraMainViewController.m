@@ -89,26 +89,26 @@ static NSString *kGroupName = @"GroupName";
     self.title = NSLocalizedString(@"title.contacts", @"Contacts");
     _contactsVC = [[AgoraContactsViewController alloc] init];
     _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.contacts", @"Contacts")
-                                                           image:[UIImage imageNamed:@"Contacts"]
+                                                           image:ImageWithName(@"TabBar.bundle/tabbar_contacts")
                                                              tag:0];
-    [_contactsVC.tabBarItem setSelectedImage:[UIImage imageNamed:@"Contacts_active"]];
+    [_contactsVC.tabBarItem setSelectedImage:ImageWithName(@"TabBar.bundle/tabbar_contactsHL")];
     [self unSelectedTapTabBarItems:_contactsVC.tabBarItem];
     [self selectedTapTabBarItems:_contactsVC.tabBarItem];
     [_contactsVC setupNavigationItem:self.navigationItem];
     
     _chatsVC = [[AgoraChatsViewController alloc] init];
     _chatsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.chats", @"Chats")
-                                                        image:[UIImage imageNamed:@"Chats"]
+                                                        image:ImageWithName(@"TabBar.bundle/tabbar_chats")
                                                           tag:1];
-    [_chatsVC.tabBarItem setSelectedImage:[UIImage imageNamed:@"Chats_active"]];
+    [_chatsVC.tabBarItem setSelectedImage:ImageWithName(@"TabBar.bundle/tabbar_chatsHL")];
     [self unSelectedTapTabBarItems:_chatsVC.tabBarItem];
     [self selectedTapTabBarItems:_chatsVC.tabBarItem];
     
     _settingsVC = [[AgoraSettingsViewController alloc] init];
     _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.settings", @"Settings")
-                                                           image:[UIImage imageNamed:@"Settings"]
+                                                           image:ImageWithName(@"TabBar.bundle/tabbar_setting")
                                                              tag:2];
-    [_settingsVC.tabBarItem setSelectedImage:[UIImage imageNamed:@"Settings_active"]];
+    [_settingsVC.tabBarItem setSelectedImage:ImageWithName(@"TabBar.bundle/tabbar_settingHL")];
     [self unSelectedTapTabBarItems:_settingsVC.tabBarItem];
     [self selectedTapTabBarItems:_settingsVC.tabBarItem];
     
@@ -126,7 +126,7 @@ static NSString *kGroupName = @"GroupName";
 - (void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIFont systemFontOfSize:11.f], NSFontAttributeName,BlueyGreyColor,NSForegroundColorAttributeName,
+                                        [UIFont systemFontOfSize:11.f], NSFontAttributeName,TabbarNormalColor,NSBackgroundColorAttributeName,
                                         nil] forState:UIControlStateNormal];
 }
 
@@ -134,7 +134,7 @@ static NSString *kGroupName = @"GroupName";
 {
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                         [UIFont systemFontOfSize:11.f],
-                                        NSFontAttributeName,KermitGreenTwoColor,NSForegroundColorAttributeName,
+                                        NSFontAttributeName,TabbarSelectedColor,NSBackgroundColorAttributeName,
                                         nil] forState:UIControlStateSelected];
 }
 

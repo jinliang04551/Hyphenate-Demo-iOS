@@ -14,7 +14,16 @@
 
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
+// rgb颜色转换（16进制->10进制）
+#define COLOR_HEXA(__RGB,__ALPHA) [UIColor colorWithRed:((float)((__RGB & 0xFF0000) >> 16))/255.0 green:((float)((__RGB & 0xFF00) >> 8))/255.0 blue:((float)(__RGB & 0xFF))/255.0 alpha:__ALPHA]
+
+#define COLOR_HEX(__RGB) COLOR_HEXA(__RGB,1.0f)
+
 #define WEAK_SELF typeof(self) __weak weakSelf = self;
+
+//weak & strong self
+#define ACD_WS                  __weak __typeof(&*self)weakSelf = self;
+#define ACD_SS(WKSELF)          __strong __typeof(&*self)strongSelf = WKSELF;
 
 #define KScreenHeight [[UIScreen mainScreen] bounds].size.height
 #define KScreenWidth  [[UIScreen mainScreen] bounds].size.width

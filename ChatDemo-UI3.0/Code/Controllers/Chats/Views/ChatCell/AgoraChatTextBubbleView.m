@@ -79,6 +79,11 @@
 - (void)setModel:(AgoraMessageModel *)model
 {
     [super setModel:model];
+    
+    if (self.model.message.body.type != AgoraChatMessageBodyTypeText) {
+        return;
+    }
+    
     NSString *text = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((AgoraChatTextMessageBody *)self.model.message.body).text];
     NSMutableAttributedString * attributedString = [[NSMutableAttributedString alloc]
                                                     initWithString:text];

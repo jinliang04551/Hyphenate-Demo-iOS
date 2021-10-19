@@ -42,3 +42,7 @@
 #define DefaultBarColor        RGBACOLOR(250.0,251.0,252.0,1.0)
 
 #define TextViewBorderColor    RGBACOLOR(189.0,189.0,189.0,1.0)
+
+#define TabbarSelectedColor    COLOR_HEX(0xFF14CC)
+#define TabbarNormalColor      COLOR_HEX(0xFF14CC)
+

@@ -12,13 +12,11 @@
 #import <UserNotifications/UserNotifications.h>
 #import "AgoraMainViewController.h"
 #import "AgoraLoginViewController.h"
+#import "AgoraNewLoginViewController.h"
+
 #import "AgoraLaunchViewController.h"
 #import "AgoraChatDEMoHelper.h"
 
-//#import <Fabric/Fabric.h>
-//#import <Crashlytics/Crashlytics.h>
-
-//@import Firebase;
 
 #define EaseIMAppKey @"easemob-demo#easeim"
 #define ChatDemoUIAppKey @"easemob-demo#chatdemoui"
@@ -46,7 +44,7 @@
     }
             
     // init HyphenateSDK
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:MeiDongAppKey];
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:EaseIMAppKey];
     
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -96,7 +94,9 @@
         [AgoraChatDemoHelper shareHelper].mainVC = main;
         
     } else {
-        AgoraLoginViewController *login = [[AgoraLoginViewController alloc] init];
+//        AgoraLoginViewController *login = [[AgoraLoginViewController alloc] init];
+        AgoraNewLoginViewController *login = [[AgoraNewLoginViewController alloc] init];
+
         self.window.rootViewController = login;
         [AgoraChatDemoHelper shareHelper].mainVC = nil;
     }
