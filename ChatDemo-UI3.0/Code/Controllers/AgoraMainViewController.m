@@ -17,6 +17,8 @@
 #import "AgoraChatViewController.h"
 #import <UserNotifications/UserNotifications.h>
 
+#import "AgoraChatNewContactsViewController.h"
+
 #define kGroupMessageAtList      @"em_at_list"
 #define kGroupMessageAtAll       @"all"
 
@@ -28,7 +30,9 @@ static NSString *kGroupName = @"GroupName";
 
 @interface AgoraMainViewController () <AgoraChatManagerDelegate, AgoraChatGroupManagerDelegate, AgoraChatClientDelegate>
 {
-    AgoraContactsViewController *_contactsVC;
+//    AgoraContactsViewController *_contactsVC;
+    AgoraChatNewContactsViewController *_contactsVC;
+
     AgoraChatsViewController *_chatsVC;
     AgoraSettingsViewController *_settingsVC;
 }
@@ -87,14 +91,15 @@ static NSString *kGroupName = @"GroupName";
 - (void)loadViewControllers
 {
     self.title = NSLocalizedString(@"title.contacts", @"Contacts");
-    _contactsVC = [[AgoraContactsViewController alloc] init];
+//    _contactsVC = [[AgoraContactsViewController alloc] init];
+    _contactsVC = [[AgoraChatNewContactsViewController alloc] init];
     _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.contacts", @"Contacts")
                                                            image:ImageWithName(@"TabBar.bundle/tabbar_contacts")
                                                              tag:0];
     [_contactsVC.tabBarItem setSelectedImage:ImageWithName(@"TabBar.bundle/tabbar_contactsHL")];
     [self unSelectedTapTabBarItems:_contactsVC.tabBarItem];
     [self selectedTapTabBarItems:_contactsVC.tabBarItem];
-    [_contactsVC setupNavigationItem:self.navigationItem];
+//    [_contactsVC setupNavigationItem:self.navigationItem];
     
     _chatsVC = [[AgoraChatsViewController alloc] init];
     _chatsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.chats", @"Chats")
@@ -208,7 +213,7 @@ static NSString *kGroupName = @"GroupName";
 {
     if (item.tag == 0) {
         self.title = NSLocalizedString(@"title.contacts", @"Contacts");
-        [_contactsVC setupNavigationItem:self.navigationItem];
+//        [_contactsVC setupNavigationItem:self.navigationItem];
     }
     else if (item.tag == 1){
         self.title = NSLocalizedString(@"title.chats", @"Chats");

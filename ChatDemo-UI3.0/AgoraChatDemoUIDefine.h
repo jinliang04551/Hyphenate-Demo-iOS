@@ -42,6 +42,12 @@
 
 #define kAgroaPadding 10.0f
 
+//fonts
+#define NFont(__SIZE) [UIFont systemFontOfSize:__SIZE] //system font with size
+#define IFont(__SIZE) [UIFont italicSystemFontOfSize:__SIZE] //system font with size
+#define BFont(__SIZE) [UIFont boldSystemFontOfSize:__SIZE]//system bold font with size
+#define Font(__NAME, __SIZE) [UIFont fontWithName:__NAME size:__SIZE] //font with name and size
+
 //消息撤回
 #define MSG_EXT_RECALL @"agora_recall"
 

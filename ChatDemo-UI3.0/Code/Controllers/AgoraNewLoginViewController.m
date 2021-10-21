@@ -1,6 +1,6 @@
 //
 //  AgoraNewLoginViewController.m
-//  ChatDemo-UI3.0
+//  login-UI3.0
 //
 //  Created by liang on 2021/10/18.
 //  Copyright © 2021 easemob. All rights reserved.
@@ -61,8 +61,6 @@
     [self.logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top).offset(134.0);
         make.centerX.equalTo(self.contentView);
-//        make.width.equalTo(@126.0);
-//        make.height.equalTo(@126.0);
     }];
     
     [self.titleImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -197,7 +195,7 @@
     if (_logoImageView == nil) {
         _logoImageView = [[UIImageView alloc] init];
         _logoImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _logoImageView.image = ImageWithName(@"ChatDemo.bundle/login_logo");
+        _logoImageView.image = ImageWithName(@"login.bundle/login_logo");
     }
     return _logoImageView;
 }
@@ -206,7 +204,7 @@
     if (_titleImageView == nil) {
         _titleImageView = [[UIImageView alloc] init];
         _titleImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _titleImageView.image = ImageWithName(@"ChatDemo.bundle/login_agoraChat");
+        _titleImageView.image = ImageWithName(@"login.bundle/login_agoraChat");
     }
     return _titleImageView;
 }

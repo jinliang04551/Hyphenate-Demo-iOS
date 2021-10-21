@@ -17,7 +17,6 @@ typedef enum : NSUInteger {
     AgoraContactInfoTypeAddBlacklist,
 } AgoraContactInfoType;
 
-
 @interface AgoraContactInfoCell : AgoraChatCustomBaseCell
 
 @property (nonatomic, strong) NSDictionary *infoDic;
