@@ -26,6 +26,10 @@ typedef enum{
     AgoraChatErrorInvalidURL,                       /*! \~chinese URL无效 \~english URL is invalid */
     AgoraChatErrorInvalidToken,                     /*! \~chinese Token无效 \~english Token is invalid */
     AgoraChatErrorUsernameTooLong,                  /*! \~chinese 用户名过长 \~english Username too long */
+    AgoraChatErrorChannelSyncNotOpen,               /*! \~chinese 会话同步未启用 \~english Channel Sync Not Open */
+    AgoraChatErrorInvalidConversation,              /*! \~chinese 无效的会话 \~english Invalid Conversation */
+    AgoraChatErrorTokenExpire,                      /*! \~chinese token过期 \~english Token is Expire */
+    AgoraChatErrorTokeWillExpire,                   /*! \~chinese token即将过期 \~english Token will Expire */
     
     AgoraChatErrorUserAlreadyLoginSame = 200,       /*! \~chinese 当前用户已登录 \~english Same User is already login */
     AgoraChatErrorUserNotLogin,                     /*! \~chinese 用户未登录 \~english User not logged in */

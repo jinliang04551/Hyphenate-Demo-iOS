@@ -1,17 +1,18 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  AgoraGroupMemberNewCell.h
+//  ChatDemo-UI3.0
+//
+//  Created by liang on 2021/10/25.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
-#import <UIKit/UIKit.h>
+#import "AgoraChatCustomBaseCell.h"
 #import "AgoraGroupUIProtocol.h"
+#import "ACDCustomCell.h"
+
 @class AgoraUserModel;
 
-@interface AgoraGroupMemberCell : AgoraChatCustomBaseCell
+@interface AgoraGroupMemberCell : ACDCustomCell
 
 @property (nonatomic, assign) BOOL isGroupOwner;
 

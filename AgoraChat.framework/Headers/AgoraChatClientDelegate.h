@@ -113,6 +113,24 @@ typedef enum {
  */
 - (void)userAccountDidForcedToLogout:(AgoraChatError *)aError;
 
+/*!
+ *  \~chinese
+ *  token即将过期 （使用声网token agoraToken 登陆）
+ *
+ *  \~english
+ *  token will expire (log in using agoraToken)
+ */
+- (void)tokenWillExpire:(int)aErrorCode;
+
+/*!
+ *  \~chinese
+ *  token已经过期 （使用声网token agoraToken 登陆）
+ *
+ *  \~english
+ *  token did expire (log in using agoraToken)
+ */
+- (void)tokenDidExpire:(int)aErrorCode;
+
 #pragma mark - Deprecated methods
 
 /*!

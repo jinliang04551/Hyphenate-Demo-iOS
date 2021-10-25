@@ -11,7 +11,6 @@
 #define kSearchBarHeight 40.0f
 
 @interface AgoraSearchTableViewController ()<UISearchBarDelegate>
-@property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) NSMutableArray *searchDataArray;
 @end
 

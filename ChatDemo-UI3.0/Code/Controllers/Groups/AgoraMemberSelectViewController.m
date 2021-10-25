@@ -9,10 +9,10 @@
 
 #import "AgoraMemberSelectViewController.h"
 #import "AgoraUserModel.h"
-#import "AgoraGroupMemberCell.h"
 #import "AgoraMemberCollectionCell.h"
 #import "AgoraRealtimeSearchUtils.h"
 #import "NSArray+AgoraSortContacts.h"
+#import "AgoraGroupMemberCell.h"
 
 
 #define NEXT_TITLE   NSLocalizedString(@"common.next", @"Next")
@@ -96,27 +96,26 @@
 
 
 - (void)setupNavBar {
-    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelBtn.frame = CGRectMake(0, 0, 44, 44);
-    [cancelBtn setTitleColor:KermitGreenTwoColor forState:UIControlStateNormal];
-    [cancelBtn setTitleColor:KermitGreenTwoColor forState:UIControlStateHighlighted];
-    [cancelBtn setTitle:NSLocalizedString(@"common.cancel", @"Cancel") forState:UIControlStateNormal];
-    [cancelBtn setTitle:NSLocalizedString(@"common.cancel", @"Cancel") forState:UIControlStateHighlighted];
-    cancelBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [cancelBtn addTarget:self action:@selector(cancelSelectContacts) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *leftBar = [[UIBarButtonItem alloc] initWithCustomView:cancelBtn];
+    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftBtn.frame = CGRectMake(0, 0, 20, 20);
+    [leftBtn setImage:[UIImage imageNamed:@"gray_goBack"] forState:UIControlStateNormal];
+    [leftBtn setImage:[UIImage imageNamed:@"gray_goBack"] forState:UIControlStateHighlighted];
+    [leftBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *leftBar = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
     [self.navigationItem setLeftBarButtonItem:leftBar];
     
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _doneBtn.frame = CGRectMake(0, 0, 44, 44);
     [self updateDoneUserInteractionEnabled:NO];
-    NSString *title = NEXT_TITLE;
-    if (_style == AgoraContactSelectStyle_Invite) {
-        title = DONE_TITLE;
-    }
+//    NSString *title = NEXT_TITLE;
+//    if (_style == AgoraContactSelectStyle_Invite) {
+//        title = DONE_TITLE;
+//    }
+    NSString *title = @"create";
     [_doneBtn setTitle:title forState:UIControlStateNormal];
     [_doneBtn setTitle:title forState:UIControlStateHighlighted];
     _doneBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+    
     [_doneBtn addTarget:self action:@selector(selectDoneAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:_doneBtn];
     [self.navigationItem setRightBarButtonItem:rightBar];
@@ -213,8 +212,8 @@
 
 #pragma mark - Action
 
-- (void)cancelSelectContacts {
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (void)backAction {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)selectDoneAction {
@@ -258,7 +257,7 @@
     static NSString *cellIdentifier = @"AgoraGroupMember_Invite_Cell";
     AgoraGroupMemberCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:cellIdentifier owner:self options:nil] lastObject];
+        cell = [[AgoraGroupMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
     AgoraUserModel *model = nil;
@@ -279,7 +278,7 @@
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50.0f;
+    return 54.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

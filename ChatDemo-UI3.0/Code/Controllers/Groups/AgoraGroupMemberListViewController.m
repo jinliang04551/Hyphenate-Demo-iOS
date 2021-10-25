@@ -9,8 +9,8 @@
 
 #import "AgoraGroupMemberListViewController.h"
 #import "AgoraUserModel.h"
-#import "AgoraGroupMemberCell.h"
 #import "AgoraNotificationNames.h"
+#import "AgoraGroupMemberCell.h"
 
 @interface AgoraGroupMemberListViewController ()<AgoraGroupUIProtocol>
 

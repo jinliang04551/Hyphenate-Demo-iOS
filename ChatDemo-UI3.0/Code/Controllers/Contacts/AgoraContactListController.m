@@ -68,24 +68,24 @@ static NSString *cellIdentify = @"AgoraContactCell";
 
 - (void)tableDidTriggerHeaderRefresh {
     if (_isSearchState) {
-//        [self tableDidFinishTriggerHeader:YES];
+        [self tableViewDidFinishTriggerHeader:YES];
         return;
     }
     
     WEAK_SELF
     [[AgoraChatClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, AgoraChatError *aError) {
         if (aError == nil) {
-//            [weakSelf tableDidFinishTriggerHeader:YES];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-                [weakSelf updateContacts:aList];
+            [weakSelf tableViewDidFinishTriggerHeader:YES];
+            dispatch_async(dispatch_get_global_queue(0, 0), ^(){
                 dispatch_async(dispatch_get_main_queue(), ^(){
-                    [weakSelf.table reloadData];
+                    [weakSelf updateContacts:aList];
+                    [weakSelf.tableView reloadData];
                 });
             });
         
         }
         else {
-//            [weakSelf tableDidFinishTriggerHeader:YES];
+            [weakSelf tableViewDidFinishTriggerHeader:YES];
         }
     }];
 }
@@ -100,8 +100,8 @@ static NSString *cellIdentify = @"AgoraContactCell";
     [self updateContacts:bubbyList];
     WEAK_SELF
     dispatch_async(dispatch_get_main_queue(), ^(){
-        [weakSelf.table reloadData];
-//        [weakSelf.refreshControl endRefreshing];
+        [weakSelf.tableView reloadData];
+        [weakSelf.refreshControl endRefreshing];
     });
 }
 
@@ -241,19 +241,19 @@ static NSString *cellIdentify = @"AgoraContactCell";
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     [searchBar setShowsCancelButton:YES animated:YES];
     _isSearchState = YES;
-    self.table.userInteractionEnabled = NO;
+    self.tableView.userInteractionEnabled = NO;
     return YES;
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    self.table.userInteractionEnabled = YES;
+    self.tableView.userInteractionEnabled = YES;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    self.table.userInteractionEnabled = YES;
+    self.tableView.userInteractionEnabled = YES;
     if (searchBar.text.length == 0) {
         [_searchResults removeAllObjects];
-        [self.table reloadData];
+        [self.tableView reloadData];
         return;
     }
     __weak typeof(self) weakSelf = self;
@@ -261,7 +261,7 @@ static NSString *cellIdentify = @"AgoraContactCell";
         if (results) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 _searchResults = [NSMutableArray arrayWithArray:results];
-                [weakSelf.table reloadData];
+                [weakSelf.tableView reloadData];
             });
         }
     }];
@@ -277,24 +277,24 @@ static NSString *cellIdentify = @"AgoraContactCell";
     [searchBar resignFirstResponder];
     [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchDidFinish];
     _isSearchState = NO;
-    self.table.scrollEnabled = !_isSearchState;
-    [self.table reloadData];
+    self.tableView.scrollEnabled = !_isSearchState;
+    [self.tableView reloadData];
 }
 
 
 #pragma mark getter and setter
-- (UITableView *)table {
-    if (_table == nil) {
-        _table                 = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
-        _table.delegate        = self;
-        _table.dataSource      = self;
-        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
-        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-        _table.backgroundColor = UIColor.redColor;
-        _table.clipsToBounds = YES;
-    }
-    return _table;
-}
+//- (UITableView *)table {
+//    if (_table == nil) {
+//        _table                 = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
+//        _table.delegate        = self;
+//        _table.dataSource      = self;
+//        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
+//        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+//        _table.backgroundColor = UIColor.redColor;
+//        _table.clipsToBounds = YES;
+//    }
+//    return _table;
+//}
 
 
 #pragma mark - MISScrollPageControllerContentSubViewControllerDelegate

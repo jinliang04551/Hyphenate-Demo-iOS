@@ -95,7 +95,6 @@ typedef enum : NSUInteger {
         }
     }
     _contactInfo = [NSArray arrayWithArray:info];
-//    _contactFunc = @[@{DELETE_CONTACT:RGBACOLOR(255.0, 59.0, 48.0, 1.0)}];
     _contactActions = @[@{_contactInfo:@(AgoraContactInfoTypeDelete),KContactInfoTitle:DELETE_CONTACT},@{KContactInfoKey:@(AgoraContactInfoTypeAddBlacklist),KContactInfoTitle:ADD_BLACKLIST}];
 }
 

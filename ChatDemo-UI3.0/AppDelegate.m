@@ -71,14 +71,35 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
-    AgoraLaunchViewController *launch = [[AgoraLaunchViewController alloc] init];
-    self.window.rootViewController = launch;
+//    AgoraLaunchViewController *launch = [[AgoraLaunchViewController alloc] init];
+//    self.window.rootViewController = launch;
+    [self loadViewController];
+    
     [self.window makeKeyAndVisible];
     
     [self _registerAPNS];
     [self registerNotifications];
     
     return YES;
+}
+
+- (void)loadViewController {
+    BOOL isAutoLogin = [AgoraChatClient sharedClient].isAutoLogin;
+    if (isAutoLogin) {
+        AgoraMainViewController *main = [[AgoraMainViewController alloc] init];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:main];
+        navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+        self.window.rootViewController = navigationController;
+        [AgoraChatDemoHelper shareHelper].mainVC = main;
+        
+    } else {
+//        AgoraLoginViewController *login = [[AgoraLoginViewController alloc] init];
+        AgoraNewLoginViewController *login = [[AgoraNewLoginViewController alloc] init];
+
+        self.window.rootViewController = login;
+        [AgoraChatDemoHelper shareHelper].mainVC = nil;
+    }
+    
 }
 
 

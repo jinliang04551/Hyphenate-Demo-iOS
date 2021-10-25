@@ -1,32 +1,84 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  AgoraGroupMemberNewCell.m
+//  ChatDemo-UI3.0
+//
+//  Created by liang on 2021/10/25.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
 #import "AgoraGroupMemberCell.h"
 #import "AgoraUserModel.h"
 
 @interface AgoraGroupMemberCell()
-@property (strong, nonatomic) IBOutlet UIImageView *avatarImageView;
-@property (strong, nonatomic) IBOutlet UILabel *nicknameLabel;
-@property (strong, nonatomic) IBOutlet UILabel *identityLabel;
-@property (strong, nonatomic) IBOutlet UIButton *selectButton;
+@property (nonatomic, strong)  UILabel *identityLabel;
+@property (nonatomic, strong)  UIButton *selectButton;
 
 @end
 
 @implementation AgoraGroupMemberCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
+- (void)prepareForReuse {
+    [super prepareForReuse];
     self.accessoryType = UITableViewCellAccessoryNone;
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     _isEditing = NO;
     _isSelected = NO;
     _isGroupOwner = NO;
+}
+
+- (void)prepare {
+    [self.contentView addSubview:self.iconImageView];
+    [self.contentView addSubview:self.nameLabel];
+    [self.contentView addSubview:self.selectButton];
+}
+
+
+- (void)placeSubViews {
+    [self.selectButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentView);
+        make.left.equalTo(self.contentView).offset(16.0f);
+    }];
+    
+    [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentView);
+        make.left.equalTo(self.selectButton.mas_right).offset(10.0f);
+    }];
+    
+    [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentView);
+        make.left.equalTo(self.iconImageView.mas_right).offset(16.0f);
+    }];
+}
+
+
+
+#pragma mark action
+
+- (void)selectMemberAction:(UIButton *)sender {
+    
+    _selectButton.selected = !sender.isSelected;
+    
+    if (_delegate) {
+        if (_selectButton.selected && [_delegate respondsToSelector:@selector(addSelectOccupants:)]) {
+            [_delegate addSelectOccupants:@[_model]];
+        }
+        else if ([_delegate respondsToSelector:@selector(removeSelectOccupants:)]) {
+            [_delegate removeSelectOccupants:@[_model]];
+        }
+    }
+}
+
+#pragma mark getter and setter
+- (UIButton *)selectButton {
+    if (_selectButton == nil) {
+        _selectButton = [[UIButton alloc] init];
+        [_selectButton addTarget:self action:@selector(selectMemberAction:) forControlEvents:UIControlEventTouchUpInside];
+        [_selectButton setImage:ImageWithName(@"member_normal") forState:UIControlStateNormal];
+        [_selectButton setImage:ImageWithName(@"member_selected") forState:UIControlStateSelected];
+
+    }
+    return _selectButton;
 }
 
 - (void)setIsGroupOwner:(BOOL)isGroupOwner {
@@ -55,34 +107,15 @@
 
 - (void)setModel:(AgoraUserModel *)model {
     _model = model;
-    _nicknameLabel.text = _model.nickname;
+    self.nameLabel.text = _model.nickname;
     if (_model.avatarURLPath.length > 0) {
         NSURL *avatarUrl = [NSURL URLWithString:_model.avatarURLPath];
-        [_avatarImageView sd_setImageWithURL:avatarUrl placeholderImage:_model.defaultAvatarImage];
+        [self.iconImageView sd_setImageWithURL:avatarUrl placeholderImage:_model.defaultAvatarImage];
     }
     else {
-        _avatarImageView.image = _model.defaultAvatarImage;
+        self.iconImageView.image = _model.defaultAvatarImage;
     }
+        
 }
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-- (IBAction)selectMemberAction:(UIButton *)sender {
-    
-    _selectButton.selected = !sender.isSelected;
-    if (_delegate) {
-        if (_selectButton.selected && [_delegate respondsToSelector:@selector(addSelectOccupants:)]) {
-            [_delegate addSelectOccupants:@[_model]];
-        }
-        else if ([_delegate respondsToSelector:@selector(removeSelectOccupants:)]) {
-            [_delegate removeSelectOccupants:@[_model]];
-        }
-    }
-}
-
 
 @end

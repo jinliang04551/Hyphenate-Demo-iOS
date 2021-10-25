@@ -12,6 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AgoraChatNewContactsViewController : UIViewController
 
+- (void)loadContactsFromServer;
+
+- (void)reloadContacts;
+
+- (void)reloadContactRequests;
+
+- (void)reloadGroupNotifications;
+
 @end
 
 NS_ASSUME_NONNULL_END

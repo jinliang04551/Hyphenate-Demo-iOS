@@ -216,7 +216,7 @@
         _usernameTextField.backgroundColor = COLOR_HEX(0xF2F2F2);
         _usernameTextField.delegate = self;
         _usernameTextField.borderStyle = UITextBorderStyleNone;
-        _usernameTextField.placeholder = NSLocalizedString(@"login.usernameTextField.hyphenateID", @"HyphenateID");
+        _usernameTextField.placeholder = @"AgoraID";
         
         _usernameTextField.returnKeyType = UIReturnKeyGo;
         _usernameTextField.font = [UIFont systemFontOfSize:17];

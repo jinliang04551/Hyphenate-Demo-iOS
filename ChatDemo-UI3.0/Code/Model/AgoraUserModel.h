@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSString *nickname;
 @property (nonatomic, strong) NSString *avatarURLPath;
 @property (nonatomic, strong, readonly) UIImage *defaultAvatarImage;
+@property (nonatomic, assign) BOOL  selected;
 
 - (instancetype)initWithHyphenateId:(NSString *)hyphenateId;
 

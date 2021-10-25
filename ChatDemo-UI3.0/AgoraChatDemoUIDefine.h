@@ -25,6 +25,8 @@
 #define ACD_WS                  __weak __typeof(&*self)weakSelf = self;
 #define ACD_SS(WKSELF)          __strong __typeof(&*self)strongSelf = WKSELF;
 
+#define ACD_ONE_PX  1.0f 
+
 #define KScreenHeight [[UIScreen mainScreen] bounds].size.height
 #define KScreenWidth  [[UIScreen mainScreen] bounds].size.width
 

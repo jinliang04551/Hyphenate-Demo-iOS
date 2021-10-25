@@ -13,6 +13,13 @@
 #import "AgoraRequestListViewController.h"
 #import "ACDNaviCustomView.h"
 
+#import "AgoraChatDemoHelper.h"
+#import "AgoraApplyManager.h"
+
+#import "AgoraCreateViewController.h"
+#import "AgoraGroupEnterController.h"
+
+
 @interface AgoraChatNewContactsViewController ()<MISScrollPageControllerDataSource,
 MISScrollPageControllerDelegate>
 @property (nonatomic, strong) MISScrollPageController *pageController;
@@ -83,9 +90,45 @@ MISScrollPageControllerDelegate>
 }
 
 - (void)goAddPage {
-    NSLog(@"%s",__func__);
+
+//    AgoraCreateViewController *groupEnterVC = AgoraCreateViewController.new;
+    AgoraGroupEnterController *groupEnterVC = AgoraGroupEnterController.new;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:groupEnterVC];
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
+}
+
+
+- (void)reloadContacts {
+//    NSArray *bubbyList = [[AgoraChatClient sharedClient].contactManager getContacts];
+//    [self updateContacts:bubbyList];
+//    WEAK_SELF
+//    dispatch_async(dispatch_get_main_queue(), ^(){
+//        [weakSelf.tableView reloadData];
+//        [weakSelf.refreshControl endRefreshing];
+//    });
+}
+
+- (void)reloadContactRequests {
+//    WEAK_SELF
+//    dispatch_async(dispatch_get_main_queue(), ^(){
+//        NSArray *contactApplys = [[AgoraApplyManager defaultManager] contactApplys];
+//        weakSelf.contactRequests = [NSMutableArray arrayWithArray:contactApplys];
+//        [weakSelf.tableView reloadData];
+//        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
+//    });
+}
+
+- (void)reloadGroupNotifications {
+//    WEAK_SELF
+//    dispatch_async(dispatch_get_main_queue(), ^(){
+//        NSArray *groupApplys = [[AgoraApplyManager defaultManager] groupApplys];
+//        weakSelf.groupNotifications = [NSMutableArray arrayWithArray:groupApplys];
+//        [weakSelf.tableView reloadData];
+//        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
+//    });
     
 }
+
 
 #pragma mark - scrool pager data source and delegate
 - (NSUInteger)numberOfChildViewControllers {
@@ -104,7 +147,6 @@ MISScrollPageControllerDelegate>
 - (void)scrollPageController:(id)pageController childViewController:(id<MISScrollPageControllerContentSubViewControllerDelegate>)childViewController didAppearForIndex:(NSUInteger)index {
     self.currentPageIndex = index;
 }
-
 
 
 #pragma mark - setter or getter

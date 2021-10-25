@@ -21,6 +21,7 @@
 #import "IAgoraChatUserInfoManager.h"
 
 #import "AgoraChatDeviceConfig.h"
+#import "EMLocalNotificationManager.h"
 
 /*!
  *  \~chinese
@@ -29,13 +30,13 @@
  *  \~english
  *  Type of server check
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, AgoraChatServerCheckType) {
     AgoraChatServerCheckAccountValidation = 0,     /*! \~chinese 账号检查类型  \~english Valid account */
     AgoraChatServerCheckGetDNSListFromServer,      /*! \~chinese 获取服务列表检查类型  \~english Check get dns from server */
     AgoraChatServerCheckGetTokenFromServer,        /*! \~chinese 获取token检查类型  \~english Check get token from server */
     AgoraChatServerCheckDoLogin,                   /*! \~chinese 登录检查类型  \~english Check login mode */
     AgoraChatServerCheckDoLogout,                  /*! \~chinese 登出检查类型  \~english Check logout mode */
-} AgoraChatServerCheckType;
+};
 
 /*!
  * \~chinese
@@ -152,7 +153,6 @@ typedef enum {
  *  Whether connection  to Hyphenate IM server
  */
 @property (nonatomic, readonly) BOOL isConnected;
-
 
 /*!
  *  \~chinese
@@ -404,7 +404,7 @@ typedef enum {
 
 /*!
  *  \~chinese
- *  token登录，不支持自动登录
+ *  token登录
  *
  *  同步方法，会阻塞当前线程
  *
@@ -414,7 +414,7 @@ typedef enum {
  *  @result AgoraChatError 错误信息
  *
  *  \~english
- *  Login with token. Does not support automatic login
+ *  Login with token
  *
  *  Synchronization method will block the current thread
  *
@@ -428,14 +428,14 @@ typedef enum {
 
 /*!
  *  \~chinese
- *  token登录，不支持自动登录
+ *  token登录
  *
  *  @param aUsername        用户名
  *  @param aToken           Token
  *  @param aCompletionBlock 完成的回调
  *
  *  \~english
- *  Login with token. Does not support automatic login
+ *  Login with token
  *
  *  @param aUsername        Username
  *  @param aToken           Token
@@ -445,6 +445,71 @@ typedef enum {
 - (void)loginWithUsername:(NSString *)aUsername
                     token:(NSString *)aToken
                completion:(void (^)(NSString *aUsername, AgoraChatError *aError))aCompletionBlock;
+
+/*!
+ *  \~chinese
+ *  声网agoraToken登录
+ *
+ *  同步方法，会阻塞当前线程
+ *
+ *  @param aUsername    用户名
+ *  @param aAgoraToken  声网token
+ *
+ *  @result AgoraChatError 错误信息
+ *
+ *  \~english
+ *  Login with agoraToken. Does not support automatic login
+ *
+ *  Synchronization method will block the current thread
+ *
+ *  @param aUsername    Username
+ *  @param aAgoraToken  aAgora Token
+ *
+ *  @result AgoraChatError error
+ */
+- (AgoraChatError *)loginWithUsername:(NSString *)aUsername
+                    agoraToken:(NSString *)aAgoraToken;
+
+/*!
+ *  \~chinese
+ *  token登录
+ *
+ *  @param aUsername        用户名
+ *  @param aAgoraToken      声网token
+ *  @param aCompletionBlock 完成的回调
+ *
+ *  \~english
+ *  Login with token. Does not support automatic login
+ *
+ *  @param aUsername        Username
+ *  @param aAgoraToken      aAgora Token
+ *  @param aCompletionBlock The callback of completion block
+ *
+ */
+- (void)loginWithUsername:(NSString *)aUsername
+               agoraToken:(NSString *)aAgoraToken
+               completion:(void (^)(NSString *aUsername, AgoraChatError *aError))aCompletionBlock;
+
+/*!
+ *  \~chinese
+ *  当用户在声网token登录状态时，且在AgoraChatClientDelegate回调中收到token即将过期/已经过期事件的回调通知，可以调用这个api来更新token，避免因token失效产生的未知问题
+ *
+ *  同步方法，会阻塞当前线程
+ *
+ *  @param newAgoraToken 新声网token
+ *
+ *  @result AgoraChatError 错误信息
+ *
+ *  \~english
+ *  When a user is in the agora token login state and receives a callback notification of the token will expiration event in the AgoraChatClientDelegate,This API can be called to update the token to avoid unknown problems caused by token invalidation.
+ *
+ *  Synchronization method will block the current thread
+ *
+ *  @param newAgoraToken newAgoraToken
+ *
+ *  @result AgoraChatError error
+ */
+- (AgoraChatError *)renewToken:(NSString *)newAgoraToken;
 
 #pragma mark - Logout
 
