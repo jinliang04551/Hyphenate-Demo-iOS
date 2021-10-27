@@ -6,35 +6,35 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraChatNewContactsViewController.h"
+#import "ACDNewContactsViewController.h"
 #import "MISScrollPage.h"
-#import "AgoraContactListController.h"
-#import "AgoraGroupListViewController.h"
-#import "AgoraRequestListViewController.h"
+#import "ACDContactListController.h"
+#import "ACDGroupListViewController.h"
+#import "ACDRequestListViewController.h"
 #import "ACDNaviCustomView.h"
 
 #import "AgoraChatDemoHelper.h"
 #import "AgoraApplyManager.h"
 
 #import "AgoraCreateViewController.h"
-#import "AgoraGroupEnterController.h"
+#import "ACDGroupEnterController.h"
+#import "ACDGroupInfoViewController.h"
 
-
-@interface AgoraChatNewContactsViewController ()<MISScrollPageControllerDataSource,
+@interface ACDNewContactsViewController ()<MISScrollPageControllerDataSource,
 MISScrollPageControllerDelegate>
 @property (nonatomic, strong) MISScrollPageController *pageController;
 @property (nonatomic, strong) MISScrollPageSegmentView *segView;
 @property (nonatomic, strong) MISScrollPageContentView *contentView;
 @property (nonatomic, assign) NSInteger currentPageIndex;
-@property (nonatomic,strong) AgoraContactListController *contactListVC;
-@property (nonatomic,strong) AgoraGroupListViewController *groupListVC;
-@property (nonatomic,strong) AgoraRequestListViewController *requestListVC;
+@property (nonatomic,strong) ACDContactListController *contactListVC;
+@property (nonatomic,strong) ACDGroupListViewController *groupListVC;
+@property (nonatomic,strong) ACDRequestListViewController *requestListVC;
 @property (nonatomic,strong) ACDNaviCustomView *navView;
 
 
 @end
 
-@implementation AgoraChatNewContactsViewController
+@implementation ACDNewContactsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -47,8 +47,6 @@ MISScrollPageControllerDelegate>
 
 
 - (void)placeAndLayoutSubviews {
-    self.view.backgroundColor = UIColor.whiteColor;
-    
     UIView *container = UIView.new;
     container.backgroundColor = UIColor.whiteColor;
     container.clipsToBounds = YES;
@@ -92,7 +90,7 @@ MISScrollPageControllerDelegate>
 - (void)goAddPage {
 
 //    AgoraCreateViewController *groupEnterVC = AgoraCreateViewController.new;
-    AgoraGroupEnterController *groupEnterVC = AgoraGroupEnterController.new;
+    ACDGroupEnterController *groupEnterVC = ACDGroupEnterController.new;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:groupEnterVC];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
@@ -127,6 +125,12 @@ MISScrollPageControllerDelegate>
 //        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
 //    });
     
+}
+
+- (void)goGroupInfoPageWithGroupId:(NSString *)groupId withAccessType:(ACDGroupInfoAccessType)accessType {
+    ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
+    vc.accessType = accessType;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -186,23 +190,28 @@ MISScrollPageControllerDelegate>
 }
 
 
-- (AgoraContactListController *)contactListVC {
+- (ACDContactListController *)contactListVC {
     if (_contactListVC == nil) {
-        _contactListVC = AgoraContactListController.new;
+        _contactListVC = ACDContactListController.new;
     }
     return _contactListVC;
 }
 
-- (AgoraGroupListViewController *)groupListVC {
+- (ACDGroupListViewController *)groupListVC {
     if (_groupListVC == nil) {
-        _groupListVC = AgoraGroupListViewController.new;
+        _groupListVC = ACDGroupListViewController.new;
+        
+        ACD_WS
+        _groupListVC.selectedBlock = ^(NSString * _Nonnull groupId) {
+            [weakSelf goGroupInfoPageWithGroupId:groupId withAccessType:ACDGroupInfoAccessTypeContact];
+        };
     }
     return _groupListVC;
 }
 
-- (AgoraRequestListViewController *)requestListVC {
+- (ACDRequestListViewController *)requestListVC {
     if (_requestListVC == nil) {
-        _requestListVC = AgoraRequestListViewController.new;
+        _requestListVC = ACDRequestListViewController.new;
     }
     return _requestListVC;
 }

@@ -12,6 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AgoraSearchTableViewController : AgoraBaseTableViewController
 @property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, assign) int page;
+@property (nonatomic, strong) NSMutableArray *sectionTitles;
+@property (nonatomic, strong) NSMutableArray *searchSource;
+@property (nonatomic, strong, readonly) NSMutableArray *searchResults;
+@property (nonatomic, assign, readonly) BOOL isSearchState;
+
+@property (nonatomic, copy) void (^searchResultNullBlock)(void);
+
 
 @end
 

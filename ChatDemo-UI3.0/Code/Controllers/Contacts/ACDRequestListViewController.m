@@ -6,14 +6,14 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraRequestListViewController.h"
+#import "ACDRequestListViewController.h"
 #import "MISScrollPage.h"
 
-@interface AgoraRequestListViewController ()<MISScrollPageControllerContentSubViewControllerDelegate>
+@interface ACDRequestListViewController ()<MISScrollPageControllerContentSubViewControllerDelegate>
 
 @end
 
-@implementation AgoraRequestListViewController
+@implementation ACDRequestListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

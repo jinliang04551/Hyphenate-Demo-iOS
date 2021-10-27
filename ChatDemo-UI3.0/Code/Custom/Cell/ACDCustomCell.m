@@ -41,9 +41,10 @@
 
 }
 
-- (CGFloat)height {
-    return 44.0f;
++ (CGFloat)height {
+    return 54.0f;
 }
+
 
 #pragma mark getter and setter
 - (UIImageView *)iconImageView {
@@ -62,6 +63,8 @@
         _nameLabel.numberOfLines = 1;
         _nameLabel.textColor = COLOR_HEX(0x0D0D0D);
         _nameLabel.textAlignment = NSTextAlignmentLeft;
+        _nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+
     }
     return _nameLabel;
 }

@@ -12,6 +12,7 @@
 @interface AgoraGroupInfoViewController : AgoraBaseRefreshTableController
 @property (nonatomic,copy) void (^updateGroupNameBlock)(NSString *groupName);
 
+
 - (instancetype)initWithGroupId:(NSString *)aGroupId;
 
 @end

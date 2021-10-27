@@ -16,6 +16,7 @@
 #import "AgoraNotificationNames.h"
 #import "AgoraChatsCell.h"
 
+#import "ACDGroupEnterController.h"
 
 NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
@@ -55,6 +56,15 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     
     
     [self tableViewDidTriggerHeaderRefresh];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"chats" style:UIBarButtonItemStyleDone target:self action:@selector(goEnterGroupPage)];
+}
+
+
+- (void)goEnterGroupPage {
+    ACDGroupEnterController *vc = ACDGroupEnterController.new;
+    vc.accessType = ACDGroupEnterAccessTypeChat;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)queryHasLaunch {

@@ -6,7 +6,7 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraContactListController.h"
+#import "ACDContactListController.h"
 #import "MISScrollPage.h"
 #import "AgoraContactsViewController.h"
 #import "AgoraContactListSectionHeader.h"
@@ -29,7 +29,7 @@
 
 static NSString *cellIdentify = @"AgoraContactCell";
 
-@interface AgoraContactListController ()<MISScrollPageControllerContentSubViewControllerDelegate>
+@interface ACDContactListController ()<MISScrollPageControllerContentSubViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *contacts;
 @property (nonatomic, strong) NSMutableArray *contactRequests;
@@ -37,7 +37,7 @@ static NSString *cellIdentify = @"AgoraContactCell";
 
 @end
 
-@implementation AgoraContactListController
+@implementation ACDContactListController
 {
     NSMutableArray *_sectionTitles;
     NSMutableArray *_searchSource;
@@ -182,8 +182,9 @@ static NSString *cellIdentify = @"AgoraContactCell";
 }
 
 - (CGFloat)table:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50.0f;
+    return 54.0f;
 }
+
 
 - (UITableViewCell *)table:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     AgoraContactCell *cell = [table dequeueReusableCellWithIdentifier:cellIdentify];

@@ -66,7 +66,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     UIButton *createBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     createBtn.frame = CGRectMake(0, 0, 50, 40);
     createBtn.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    [createBtn setTitleColor:NavigationButtonDisableGrayColor forState:UIControlStateNormal];
+    [createBtn setTitleColor:ButtonDisableGrayColor forState:UIControlStateNormal];
     [createBtn setTitle:@"Next" forState:UIControlStateNormal];
     [createBtn setTitle:@"Next" forState:UIControlStateHighlighted];
     [createBtn addTarget:self action:@selector(nextButtonAction) forControlEvents:UIControlEventTouchUpInside];

@@ -6,7 +6,7 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraGroupListViewController.h"
+#import "ACDGroupListViewController.h"
 #import "MISScrollPage.h"
 #import "AgoraGroupCell.h"
 #import "AgoraGroupModel.h"
@@ -15,21 +15,41 @@
 #import "AgoraChatViewController.h"
 #import "AgoraCreateViewController.h"
 
+#import "ACDGroupNewCell.h"
+#import "ACDNoDataPromptView.h"
+#import "ACDGroupInfoViewController.h"
 
-@interface AgoraGroupListViewController ()<MISScrollPageControllerContentSubViewControllerDelegate>
+
+@interface ACDGroupListViewController ()<MISScrollPageControllerContentSubViewControllerDelegate>
+@property (nonatomic, strong) ACDNoDataPromptView *noDataPromptView;
 
 @end
 
-@implementation AgoraGroupListViewController
-
+@implementation ACDGroupListViewController
+#pragma mark life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.view.backgroundColor = UIColor.whiteColor;
+    
     [self addNotifications];
     [self loadGroupsFromServer];
 
-    self.tableView.tableFooterView = [[UIView alloc] init];
+    self.table.tableFooterView = [[UIView alloc] init];
 }
+
+- (void)prepare {
+    [super prepare];
+    [self.view addSubview:self.noDataPromptView];
+}
+
+- (void)placeSubViews {
+    [super placeSubViews];
+    [self.noDataPromptView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.searchBar.mas_bottom).offset(48.0);
+        make.centerX.left.right.equalTo(self.view);
+    }];
+}
+
 
 - (void)dealloc {
     [self removeNotifications];
@@ -37,26 +57,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-}
-
-- (void)setupNavBar {
-    self.title = NSLocalizedString(@"common.groups", @"Groups");
-    
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(0, 0, 20, 20);
-    [btn setImage:[UIImage imageNamed:@"Icon_Add"] forState:UIControlStateNormal];
-    [btn setImage:[UIImage imageNamed:@"Icon_Add"] forState:UIControlStateHighlighted];
-    [btn addTarget:self action:@selector(addGroupAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:btn];
-    [self.navigationItem setRightBarButtonItem:rightBar];
-    
-    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftBtn.frame = CGRectMake(0, 0, 20, 20);
-    [leftBtn setImage:[UIImage imageNamed:@"Icon_Back"] forState:UIControlStateNormal];
-    [leftBtn setImage:[UIImage imageNamed:@"Icon_Back"] forState:UIControlStateHighlighted];
-    [leftBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *leftBar = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
-    [self.navigationItem setLeftBarButtonItem:leftBar];
 }
 
 - (void)loadGroupsFromServer {
@@ -72,8 +72,8 @@
             [self.dataArray addObject:model];
         }
     }
-    [self tableViewDidFinishTriggerHeader:YES];
-    [self.tableView reloadData];
+//    [self tableViewDidFinishTriggerHeader:YES];
+    [self.table reloadData];
 }
 
 - (void)addNotifications {
@@ -99,6 +99,7 @@
 
 }
 
+
 #pragma mark - Notification Method
 - (void)refreshGroupList:(NSNotification *)notification {
     NSArray *groupList = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
@@ -109,34 +110,36 @@
             [self.dataArray addObject:model];
         }
     }
-    [self.tableView reloadData];
+    self.searchSource = self.dataArray;
+    [self.table reloadData];
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
+    if (self.isSearchState) {
+        return [self.searchResults count];
+    }
     return self.dataArray.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"AgoraGroupCell";
-    AgoraGroupCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    ACDGroupNewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:@"AgoraGroupCell" owner:self options:nil] lastObject];
+        cell = [[ACDGroupNewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.model = self.dataArray[indexPath.row];
+    
+    if (self.isSearchState) {
+        cell.model = self.searchResults[indexPath.row];
+    }else {
+        cell.model = self.dataArray[indexPath.row];
+    }
     
     return cell;
 }
@@ -145,19 +148,32 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    AgoraGroupModel *model = self.dataArray[indexPath.row];
-    AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:model.hyphenateId type:AgoraChatConversationTypeGroupChat createIfNotExist:YES];
-    NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-    [ext setObject:model.subject forKey:@"subject"];
-    [ext setObject:[NSNumber numberWithBool:model.group.isPublic] forKey:@"isPublic"];
-    conversation.ext = ext;
     
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:AgoraChatConversationTypeGroupChat];
-    [self.navigationController pushViewController:chatViewController animated:YES];
+    AgoraGroupModel *model = nil;
+    if (self.isSearchState) {
+        model = self.searchResults[indexPath.row];
+    }else {
+        model = self.dataArray[indexPath.row];
+    }
+    
+    if (self.selectedBlock) {
+        self.selectedBlock(model.group.groupId);
+    }
+    
+    
+//    AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:model.hyphenateId type:AgoraChatConversationTypeGroupChat createIfNotExist:YES];
+//    NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+//    [ext setObject:model.subject forKey:@"subject"];
+//    [ext setObject:[NSNumber numberWithBool:model.group.isPublic] forKey:@"isPublic"];
+//    conversation.ext = ext;
+//
+//    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:AgoraChatConversationTypeGroupChat];
+//    [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 70.0f;
+    return 54.0f;
 }
 
 #pragma mark - Data
@@ -184,7 +200,7 @@
     
     [[AgoraChatClient sharedClient].groupManager getJoinedGroupsFromServerWithPage:self.page pageSize:50 completion:^(NSArray *aList, AgoraChatError *aError) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
-        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+//        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         if (!aError && aList.count > 0) {
             [weakSelf.dataArray removeAllObjects];
             for (AgoraChatGroup *group in aList) {
@@ -193,28 +209,37 @@
                     [weakSelf.dataArray addObject:model];
                 }
             }
-            
+            weakSelf.searchSource = [NSMutableArray arrayWithArray:weakSelf.dataArray];
             dispatch_async(dispatch_get_main_queue(), ^(){
-                [weakSelf.tableView reloadData];
+                [weakSelf.table reloadData];
             });
         }
     }];
 }
 
 #pragma mark getter and setter
-//- (UITableView *)table {
-//    if (_table == nil) {
-//        _table                 = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
-//        _table.delegate        = self;
-//        _table.dataSource      = self;
-//        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
-//        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-//        _table.backgroundColor = UIColor.redColor;
-//        _table.clipsToBounds = YES;
-//    }
-//    return _table;
-//}
-//
+- (UITableView *)table {
+    if (_table == nil) {
+        _table                 = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
+        _table.delegate        = self;
+        _table.dataSource      = self;
+        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
+        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+        _table.clipsToBounds = YES;
+    }
+    return _table;
+}
+
+- (ACDNoDataPromptView *)noDataPromptView {
+    if (_noDataPromptView == nil) {
+        _noDataPromptView = ACDNoDataPromptView.new;
+        [_noDataPromptView.noDataImageView setImage:ImageWithName(@"no_search_result")];
+        _noDataPromptView.prompt.text = @"The Group Does Not Exist";
+        _noDataPromptView.hidden = YES;
+    }
+    return _noDataPromptView;
+}
+
 
 
 #pragma mark - MISScrollPageControllerContentSubViewControllerDelegate

@@ -19,6 +19,7 @@
 
 #define COLOR_HEX(__RGB) COLOR_HEXA(__RGB,1.0f)
 
+
 #define WEAK_SELF typeof(self) __weak weakSelf = self;
 
 //weak & strong self

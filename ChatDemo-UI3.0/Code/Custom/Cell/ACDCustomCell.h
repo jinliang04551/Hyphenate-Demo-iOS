@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)prepare;
 - (void)placeSubViews;
 + (NSString *)reuseIdentifier;
-- (CGFloat)height;
++ (CGFloat)height;
 
 @end
 

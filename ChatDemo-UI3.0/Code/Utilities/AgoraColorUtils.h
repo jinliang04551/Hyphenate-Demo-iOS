@@ -46,7 +46,7 @@
 #define TabbarSelectedColor    COLOR_HEX(0xFF14CC)
 #define TabbarNormalColor      COLOR_HEX(0xFF14CC)
 
-#define NavigationButtonDisableGrayColor  COLOR_HEX(0x999999)
-#define NavigationButtonEnableGrayColor  COLOR_HEX(0x154DFE)
+#define ButtonDisableGrayColor  COLOR_HEX(0x999999)
+#define ButtonEnableBlueColor  COLOR_HEX(0x154DFE)
 
 

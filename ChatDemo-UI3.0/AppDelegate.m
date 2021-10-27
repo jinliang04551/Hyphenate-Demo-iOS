@@ -33,6 +33,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    // set default app tabbar 
+    [[ACDAppStyle shareAppStyle] defaultStyle];
+    
     // Override point for customization after application launch.
     
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {

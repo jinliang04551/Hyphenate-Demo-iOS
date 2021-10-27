@@ -424,8 +424,8 @@
 		EC432EB4271D852C001B31DE /* AgoraNewLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EB3271D852C001B31DE /* AgoraNewLoginViewController.m */; };
 		EC432EB6271D9BFD001B31DE /* login.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC432EB5271D9BFD001B31DE /* login.bundle */; };
 		EC432EB8271EADDA001B31DE /* TabBar.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC432EB7271EADDA001B31DE /* TabBar.bundle */; };
-		EC432EBC271EC5DC001B31DE /* AgoraGroupEnterController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EBB271EC5DC001B31DE /* AgoraGroupEnterController.m */; };
-		EC432EBF271EE73A001B31DE /* AgoraChatNewContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EBE271EE73A001B31DE /* AgoraChatNewContactsViewController.m */; };
+		EC432EBC271EC5DC001B31DE /* ACDGroupEnterController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EBB271EC5DC001B31DE /* ACDGroupEnterController.m */; };
+		EC432EBF271EE73A001B31DE /* ACDNewContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EBE271EE73A001B31DE /* ACDNewContactsViewController.m */; };
 		EC432EC2271EF1D6001B31DE /* AgoraContactInfoNewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EC1271EF1D6001B31DE /* AgoraContactInfoNewViewController.m */; };
 		EC432EC5271EF51F001B31DE /* AgoraInfoHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EC4271EF51F001B31DE /* AgoraInfoHeaderView.m */; };
 		EC432ECD27202996001B31DE /* addContact_disable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC432EC727202996001B31DE /* addContact_disable@3x.png */; };
@@ -447,7 +447,7 @@
 		EC54DCC227211A4300ABEE3E /* blocked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DCBE27211A4300ABEE3E /* blocked@2x.png */; };
 		EC54DCC327211A4300ABEE3E /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DCBF27211A4300ABEE3E /* delete@2x.png */; };
 		EC54DCC427211A4300ABEE3E /* blocked@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DCC027211A4300ABEE3E /* blocked@3x.png */; };
-		EC54DCC7272143B300ABEE3E /* AgoraContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCC6272143B300ABEE3E /* AgoraContactListController.m */; };
+		EC54DCC7272143B300ABEE3E /* ACDContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCC6272143B300ABEE3E /* ACDContactListController.m */; };
 		EC54DCCC272144B400ABEE3E /* AgoraBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */; };
 		EC54DCCF272148E300ABEE3E /* AgoraSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCCE272148E300ABEE3E /* AgoraSearchTableViewController.m */; };
 		EC54DCE62721502200ABEE3E /* MISScrollPageCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCD32721502200ABEE3E /* MISScrollPageCollectionView.m */; };
@@ -459,8 +459,8 @@
 		EC54DCEC2721502200ABEE3E /* MISScrollPageSegmentTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCE12721502200ABEE3E /* MISScrollPageSegmentTitleView.m */; };
 		EC54DCED2721502200ABEE3E /* MISScrollPageControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCE32721502200ABEE3E /* MISScrollPageControllerDelegate.m */; };
 		EC54DCEE2721502200ABEE3E /* UIView+MISRedPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCE42721502200ABEE3E /* UIView+MISRedPoint.m */; };
-		EC54DCF127215A9D00ABEE3E /* AgoraGroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCF027215A9D00ABEE3E /* AgoraGroupListViewController.m */; };
-		EC54DCF427215ABE00ABEE3E /* AgoraRequestListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCF327215ABE00ABEE3E /* AgoraRequestListViewController.m */; };
+		EC54DCF127215A9D00ABEE3E /* ACDGroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCF027215A9D00ABEE3E /* ACDGroupListViewController.m */; };
+		EC54DCF427215ABE00ABEE3E /* ACDRequestListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCF327215ABE00ABEE3E /* ACDRequestListViewController.m */; };
 		EC54DCF827216EBA00ABEE3E /* ACDNaviCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCF727216EBA00ABEE3E /* ACDNaviCustomView.m */; };
 		EC54DCFC272170E600ABEE3E /* ACDCustomBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCFB272170E600ABEE3E /* ACDCustomBaseView.m */; };
 		EC54DCFF2721739400ABEE3E /* contact_add_contacts@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DCFD2721739400ABEE3E /* contact_add_contacts@2x.png */; };
@@ -494,6 +494,15 @@
 		EC54DDCB2726A47100ABEE3E /* member_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DDC72726A47100ABEE3E /* member_selected@3x.png */; };
 		EC54DDCE2726A81A00ABEE3E /* member_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DDCC2726A81A00ABEE3E /* member_delete@2x.png */; };
 		EC54DDCF2726A81A00ABEE3E /* member_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DDCD2726A81A00ABEE3E /* member_delete@3x.png */; };
+		EC54DDD22726C41A00ABEE3E /* ACDGroupNewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DDD12726C41A00ABEE3E /* ACDGroupNewCell.m */; };
+		EC54DDD82726DEF400ABEE3E /* ACDJoinGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DDD72726DEF400ABEE3E /* ACDJoinGroupViewController.m */; };
+		EC54DDDE2727A8F900ABEE3E /* ACDAppStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DDDD2727A8F900ABEE3E /* ACDAppStyle.m */; };
+		EC54DDE12727F1B400ABEE3E /* ACDNoDataPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DDE02727F1B400ABEE3E /* ACDNoDataPromptView.m */; };
+		EC54DDE427280ECF00ABEE3E /* ACDTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DDE327280ECF00ABEE3E /* ACDTableViewController.m */; };
+		EC54DDE72728158B00ABEE3E /* ACDGroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DDE62728158B00ABEE3E /* ACDGroupInfoViewController.m */; };
+		EC54DDEA27282D8400ABEE3E /* ACDJoinGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DDE927282D8400ABEE3E /* ACDJoinGroupCell.m */; };
+		EC54DDED2728F42F00ABEE3E /* request_join_group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DDEB2728F42F00ABEE3E /* request_join_group@2x.png */; };
+		EC54DDEE2728F42F00ABEE3E /* request_join_group@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DDEC2728F42F00ABEE3E /* request_join_group@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1070,10 +1079,10 @@
 		EC432EB3271D852C001B31DE /* AgoraNewLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraNewLoginViewController.m; sourceTree = "<group>"; };
 		EC432EB5271D9BFD001B31DE /* login.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = login.bundle; sourceTree = "<group>"; };
 		EC432EB7271EADDA001B31DE /* TabBar.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TabBar.bundle; sourceTree = "<group>"; };
-		EC432EBA271EC5DC001B31DE /* AgoraGroupEnterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraGroupEnterController.h; sourceTree = "<group>"; };
-		EC432EBB271EC5DC001B31DE /* AgoraGroupEnterController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraGroupEnterController.m; sourceTree = "<group>"; };
-		EC432EBD271EE73A001B31DE /* AgoraChatNewContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatNewContactsViewController.h; sourceTree = "<group>"; };
-		EC432EBE271EE73A001B31DE /* AgoraChatNewContactsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraChatNewContactsViewController.m; sourceTree = "<group>"; };
+		EC432EBA271EC5DC001B31DE /* ACDGroupEnterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupEnterController.h; sourceTree = "<group>"; };
+		EC432EBB271EC5DC001B31DE /* ACDGroupEnterController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupEnterController.m; sourceTree = "<group>"; };
+		EC432EBD271EE73A001B31DE /* ACDNewContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDNewContactsViewController.h; sourceTree = "<group>"; };
+		EC432EBE271EE73A001B31DE /* ACDNewContactsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDNewContactsViewController.m; sourceTree = "<group>"; };
 		EC432EC0271EF1D6001B31DE /* AgoraContactInfoNewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraContactInfoNewViewController.h; sourceTree = "<group>"; };
 		EC432EC1271EF1D6001B31DE /* AgoraContactInfoNewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraContactInfoNewViewController.m; sourceTree = "<group>"; };
 		EC432EC3271EF51F001B31DE /* AgoraInfoHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraInfoHeaderView.h; sourceTree = "<group>"; };
@@ -1098,8 +1107,8 @@
 		EC54DCBE27211A4300ABEE3E /* blocked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blocked@2x.png"; sourceTree = "<group>"; };
 		EC54DCBF27211A4300ABEE3E /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete@2x.png"; sourceTree = "<group>"; };
 		EC54DCC027211A4300ABEE3E /* blocked@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blocked@3x.png"; sourceTree = "<group>"; };
-		EC54DCC5272143B300ABEE3E /* AgoraContactListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraContactListController.h; sourceTree = "<group>"; };
-		EC54DCC6272143B300ABEE3E /* AgoraContactListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraContactListController.m; sourceTree = "<group>"; };
+		EC54DCC5272143B300ABEE3E /* ACDContactListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDContactListController.h; sourceTree = "<group>"; };
+		EC54DCC6272143B300ABEE3E /* ACDContactListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDContactListController.m; sourceTree = "<group>"; };
 		EC54DCCA272144B400ABEE3E /* AgoraBaseTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraBaseTableViewController.h; sourceTree = "<group>"; };
 		EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraBaseTableViewController.m; sourceTree = "<group>"; };
 		EC54DCCD272148E300ABEE3E /* AgoraSearchTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraSearchTableViewController.h; sourceTree = "<group>"; };
@@ -1123,10 +1132,10 @@
 		EC54DCE32721502200ABEE3E /* MISScrollPageControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MISScrollPageControllerDelegate.m; sourceTree = "<group>"; };
 		EC54DCE42721502200ABEE3E /* UIView+MISRedPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MISRedPoint.m"; sourceTree = "<group>"; };
 		EC54DCE52721502200ABEE3E /* MISScrollPageSegmentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MISScrollPageSegmentView.h; sourceTree = "<group>"; };
-		EC54DCEF27215A9D00ABEE3E /* AgoraGroupListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraGroupListViewController.h; sourceTree = "<group>"; };
-		EC54DCF027215A9D00ABEE3E /* AgoraGroupListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraGroupListViewController.m; sourceTree = "<group>"; };
-		EC54DCF227215ABE00ABEE3E /* AgoraRequestListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraRequestListViewController.h; sourceTree = "<group>"; };
-		EC54DCF327215ABE00ABEE3E /* AgoraRequestListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraRequestListViewController.m; sourceTree = "<group>"; };
+		EC54DCEF27215A9D00ABEE3E /* ACDGroupListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupListViewController.h; sourceTree = "<group>"; };
+		EC54DCF027215A9D00ABEE3E /* ACDGroupListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupListViewController.m; sourceTree = "<group>"; };
+		EC54DCF227215ABE00ABEE3E /* ACDRequestListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDRequestListViewController.h; sourceTree = "<group>"; };
+		EC54DCF327215ABE00ABEE3E /* ACDRequestListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDRequestListViewController.m; sourceTree = "<group>"; };
 		EC54DCF627216EBA00ABEE3E /* ACDNaviCustomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDNaviCustomView.h; sourceTree = "<group>"; };
 		EC54DCF727216EBA00ABEE3E /* ACDNaviCustomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDNaviCustomView.m; sourceTree = "<group>"; };
 		EC54DCFA272170E600ABEE3E /* ACDCustomBaseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDCustomBaseView.h; sourceTree = "<group>"; };
@@ -1169,6 +1178,22 @@
 		EC54DDC72726A47100ABEE3E /* member_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "member_selected@3x.png"; sourceTree = "<group>"; };
 		EC54DDCC2726A81A00ABEE3E /* member_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "member_delete@2x.png"; sourceTree = "<group>"; };
 		EC54DDCD2726A81A00ABEE3E /* member_delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "member_delete@3x.png"; sourceTree = "<group>"; };
+		EC54DDD02726C41A00ABEE3E /* ACDGroupNewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupNewCell.h; sourceTree = "<group>"; };
+		EC54DDD12726C41A00ABEE3E /* ACDGroupNewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupNewCell.m; sourceTree = "<group>"; };
+		EC54DDD62726DEF400ABEE3E /* ACDJoinGroupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDJoinGroupViewController.h; sourceTree = "<group>"; };
+		EC54DDD72726DEF400ABEE3E /* ACDJoinGroupViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDJoinGroupViewController.m; sourceTree = "<group>"; };
+		EC54DDDC2727A8F900ABEE3E /* ACDAppStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDAppStyle.h; sourceTree = "<group>"; };
+		EC54DDDD2727A8F900ABEE3E /* ACDAppStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDAppStyle.m; sourceTree = "<group>"; };
+		EC54DDDF2727F1B400ABEE3E /* ACDNoDataPromptView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDNoDataPromptView.h; sourceTree = "<group>"; };
+		EC54DDE02727F1B400ABEE3E /* ACDNoDataPromptView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDNoDataPromptView.m; sourceTree = "<group>"; };
+		EC54DDE227280ECF00ABEE3E /* ACDTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDTableViewController.h; sourceTree = "<group>"; };
+		EC54DDE327280ECF00ABEE3E /* ACDTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDTableViewController.m; sourceTree = "<group>"; };
+		EC54DDE52728158B00ABEE3E /* ACDGroupInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupInfoViewController.h; sourceTree = "<group>"; };
+		EC54DDE62728158B00ABEE3E /* ACDGroupInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupInfoViewController.m; sourceTree = "<group>"; };
+		EC54DDE827282D8400ABEE3E /* ACDJoinGroupCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDJoinGroupCell.h; sourceTree = "<group>"; };
+		EC54DDE927282D8400ABEE3E /* ACDJoinGroupCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDJoinGroupCell.m; sourceTree = "<group>"; };
+		EC54DDEB2728F42F00ABEE3E /* request_join_group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "request_join_group@2x.png"; sourceTree = "<group>"; };
+		EC54DDEC2728F42F00ABEE3E /* request_join_group@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "request_join_group@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1317,8 +1342,12 @@
 				7F6CC84826568B4600BA60BB /* AgoraCreateNewGroupViewController.xib */,
 				7F2A1FBE2669D70E00800ACC /* AgoraCreateViewController.h */,
 				7F2A1FBF2669D70E00800ACC /* AgoraCreateViewController.m */,
-				EC432EBA271EC5DC001B31DE /* AgoraGroupEnterController.h */,
-				EC432EBB271EC5DC001B31DE /* AgoraGroupEnterController.m */,
+				EC54DDE52728158B00ABEE3E /* ACDGroupInfoViewController.h */,
+				EC54DDE62728158B00ABEE3E /* ACDGroupInfoViewController.m */,
+				EC432EBA271EC5DC001B31DE /* ACDGroupEnterController.h */,
+				EC432EBB271EC5DC001B31DE /* ACDGroupEnterController.m */,
+				EC54DDD62726DEF400ABEE3E /* ACDJoinGroupViewController.h */,
+				EC54DDD72726DEF400ABEE3E /* ACDJoinGroupViewController.m */,
 				716634591DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.h */,
 				7166345A1DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.m */,
 				7166345B1DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.xib */,
@@ -1341,18 +1370,22 @@
 		716634261DB0EB7C00C92E27 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				7F6CC85E26568B8B00BA60BB /* AgoraGroup_Public_Cell.xib */,
-				716634281DB0EB7C00C92E27 /* AgoraGroupCell.h */,
+				EC54DD112722688F00ABEE3E /* ACDGroupEnterCell.h */,
+				EC54DD122722688F00ABEE3E /* ACDGroupEnterCell.m */,
+				EC54DD512722A45100ABEE3E /* ACDMAXGroupNumberCell.h */,
+				EC54DD522722A45100ABEE3E /* ACDMAXGroupNumberCell.m */,
 				EC54DD4B27229BA300ABEE3E /* ACDTextFieldCell.h */,
 				EC54DD4C27229BA300ABEE3E /* ACDTextFieldCell.m */,
 				EC54DD4E2722A29200ABEE3E /* ACDTextViewCell.h */,
 				EC54DD4F2722A29200ABEE3E /* ACDTextViewCell.m */,
-				EC54DD512722A45100ABEE3E /* ACDMAXGroupNumberCell.h */,
-				EC54DD522722A45100ABEE3E /* ACDMAXGroupNumberCell.m */,
+				EC54DDE827282D8400ABEE3E /* ACDJoinGroupCell.h */,
+				EC54DDE927282D8400ABEE3E /* ACDJoinGroupCell.m */,
+				7F6CC85E26568B8B00BA60BB /* AgoraGroup_Public_Cell.xib */,
+				716634281DB0EB7C00C92E27 /* AgoraGroupCell.h */,
 				716634291DB0EB7C00C92E27 /* AgoraGroupCell.m */,
 				7166342A1DB0EB7C00C92E27 /* AgoraGroupCell.xib */,
-				EC54DD112722688F00ABEE3E /* ACDGroupEnterCell.h */,
-				EC54DD122722688F00ABEE3E /* ACDGroupEnterCell.m */,
+				EC54DDD02726C41A00ABEE3E /* ACDGroupNewCell.h */,
+				EC54DDD12726C41A00ABEE3E /* ACDGroupNewCell.m */,
 				7F6CC85A26568B8B00BA60BB /* AgoraGroupMember_Invite_Cell.xib */,
 				EC54DDC127269BA300ABEE3E /* AgoraGroupMemberCell.h */,
 				EC54DDC227269BA300ABEE3E /* AgoraGroupMemberCell.m */,
@@ -1625,6 +1658,8 @@
 				D28345251D8FEE3F00FD48A9 /* Resources */,
 				D28345051D8FD1D400FD48A9 /* AppDelegate.h */,
 				3AEBE3F01E792FB000B82986 /* AppDelegate.m */,
+				EC54DDDC2727A8F900ABEE3E /* ACDAppStyle.h */,
+				EC54DDDD2727A8F900ABEE3E /* ACDAppStyle.m */,
 				D283450E1D8FD1D400FD48A9 /* Assets.xcassets */,
 				D28345101D8FD1D400FD48A9 /* LaunchScreen.storyboard */,
 				D2AA4DCE1D9227A400967E0E /* Main.storyboard */,
@@ -1728,14 +1763,14 @@
 				7F6CC8BA26568C4A00BA60BB /* AgoraAddContactViewController.h */,
 				7F6CC8B726568C4A00BA60BB /* AgoraAddContactViewController.m */,
 				7F6CC8B926568C4A00BA60BB /* AgoraAddContactViewController.xib */,
-				EC432EBD271EE73A001B31DE /* AgoraChatNewContactsViewController.h */,
-				EC432EBE271EE73A001B31DE /* AgoraChatNewContactsViewController.m */,
-				EC54DCC5272143B300ABEE3E /* AgoraContactListController.h */,
-				EC54DCC6272143B300ABEE3E /* AgoraContactListController.m */,
-				EC54DCEF27215A9D00ABEE3E /* AgoraGroupListViewController.h */,
-				EC54DCF027215A9D00ABEE3E /* AgoraGroupListViewController.m */,
-				EC54DCF227215ABE00ABEE3E /* AgoraRequestListViewController.h */,
-				EC54DCF327215ABE00ABEE3E /* AgoraRequestListViewController.m */,
+				EC432EBD271EE73A001B31DE /* ACDNewContactsViewController.h */,
+				EC432EBE271EE73A001B31DE /* ACDNewContactsViewController.m */,
+				EC54DCC5272143B300ABEE3E /* ACDContactListController.h */,
+				EC54DCC6272143B300ABEE3E /* ACDContactListController.m */,
+				EC54DCEF27215A9D00ABEE3E /* ACDGroupListViewController.h */,
+				EC54DCF027215A9D00ABEE3E /* ACDGroupListViewController.m */,
+				EC54DCF227215ABE00ABEE3E /* ACDRequestListViewController.h */,
+				EC54DCF327215ABE00ABEE3E /* ACDRequestListViewController.m */,
 				EC432EC0271EF1D6001B31DE /* AgoraContactInfoNewViewController.h */,
 				EC432EC1271EF1D6001B31DE /* AgoraContactInfoNewViewController.m */,
 				7F6CC8B826568C4A00BA60BB /* AgoraContactInfoViewController.h */,
@@ -2253,6 +2288,8 @@
 		EC54DCC92721447D00ABEE3E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				EC54DDE227280ECF00ABEE3E /* ACDTableViewController.h */,
+				EC54DDE327280ECF00ABEE3E /* ACDTableViewController.m */,
 				EC54DCCA272144B400ABEE3E /* AgoraBaseTableViewController.h */,
 				EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */,
 				EC54DCCD272148E300ABEE3E /* AgoraSearchTableViewController.h */,
@@ -2312,6 +2349,8 @@
 				EC54DCFB272170E600ABEE3E /* ACDCustomBaseView.m */,
 				EC432EEC27210ABC001B31DE /* ACDImageTextButtonView.h */,
 				EC432EED27210ABC001B31DE /* ACDImageTextButtonView.m */,
+				EC54DDDF2727F1B400ABEE3E /* ACDNoDataPromptView.h */,
+				EC54DDE02727F1B400ABEE3E /* ACDNoDataPromptView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2328,6 +2367,8 @@
 		EC54DD2827226C0C00ABEE3E /* Group */ = {
 			isa = PBXGroup;
 			children = (
+				EC54DDEB2728F42F00ABEE3E /* request_join_group@2x.png */,
+				EC54DDEC2728F42F00ABEE3E /* request_join_group@3x.png */,
 				EC54DDCC2726A81A00ABEE3E /* member_delete@2x.png */,
 				EC54DDCD2726A81A00ABEE3E /* member_delete@3x.png */,
 				EC54DDC62726A47100ABEE3E /* member_normal@2x.png */,
@@ -2704,6 +2745,7 @@
 				D2BF7F171D914DB30090AA66 /* logo2@2x.png in Resources */,
 				D2BF7E361D914DB30090AA66 /* Icon_Requests@2x.png in Resources */,
 				D22B7A331DB0F93300C8DD40 /* iconVideo.png in Resources */,
+				EC54DDEE2728F42F00ABEE3E /* request_join_group@3x.png in Resources */,
 				D2BF7E661D914DB30090AA66 /* Button_End@2x.png in Resources */,
 				D2BF7E5A1D914DB30090AA66 /* Button_Camera switch disabled@2x.png in Resources */,
 				D2BF7E7E1D914DB30090AA66 /* Button_Speaker@2x.png in Resources */,
@@ -2755,6 +2797,7 @@
 				D2BF7F2D1D914DB30090AA66 /* logo9@3x.png in Resources */,
 				EC432EDC27202B34001B31DE /* white_goBack@3x.png in Resources */,
 				D2BF7E851D914DB30090AA66 /* Button_Stats@3x.png in Resources */,
+				EC54DDED2728F42F00ABEE3E /* request_join_group@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2824,7 +2867,9 @@
 				EC432EB4271D852C001B31DE /* AgoraNewLoginViewController.m in Sources */,
 				D2426AEE1DCCAD14009C1632 /* UIViewController+HUD.m in Sources */,
 				7F6CC90226568D5000BA60BB /* AgoraUserModel.m in Sources */,
+				EC54DDEA27282D8400ABEE3E /* ACDJoinGroupCell.m in Sources */,
 				7F6CC93326568DC300BA60BB /* AgoraCDDeviceManagerBase.m in Sources */,
+				EC54DDE72728158B00ABEE3E /* ACDGroupInfoViewController.m in Sources */,
 				D29502741DBB2BF3001B9954 /* AgoraMessageModel.m in Sources */,
 				7F6CC92F26568DC300BA60BB /* AgoraCDDeviceManager+Media.m in Sources */,
 				7F6CC84E26568B4600BA60BB /* AgoraCreateNewGroupViewController.m in Sources */,
@@ -2865,25 +2910,29 @@
 				71D4A1D11D9C9229006FACB7 /* UIImage+ImageEffect.m in Sources */,
 				3A79D1161E77AB080085AB6E /* AgoraGroupBansViewController.m in Sources */,
 				7F6CC8AD26568C3600BA60BB /* AgoraChatLocationBubbleView.m in Sources */,
+				EC54DDD82726DEF400ABEE3E /* ACDJoinGroupViewController.m in Sources */,
 				7F6CC8F626568D2500BA60BB /* AgoraContactListSectionHeader.m in Sources */,
-				EC432EBF271EE73A001B31DE /* AgoraChatNewContactsViewController.m in Sources */,
+				EC432EBF271EE73A001B31DE /* ACDNewContactsViewController.m in Sources */,
 				7F0516DA26A012DD00B2C795 /* AgoraChatBaseTableview.m in Sources */,
 				7F663CF3265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m in Sources */,
-				EC54DCC7272143B300ABEE3E /* AgoraContactListController.m in Sources */,
+				EC54DCC7272143B300ABEE3E /* ACDContactListController.m in Sources */,
 				3AEBE3EE1E792ED400B82986 /* AgoraGroupPermissionCell.m in Sources */,
 				7166342C1DB0EB7C00C92E27 /* AgoraGroupCell.m in Sources */,
 				71D4A1FC1D9C9359006FACB7 /* AgoraGroupTitleCell.m in Sources */,
 				716634241DB0E86900C92E27 /* AgoraGroupsViewController.m in Sources */,
 				3A79D1191E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m in Sources */,
+				EC54DDD22726C41A00ABEE3E /* ACDGroupNewCell.m in Sources */,
 				7F6CC86826568B8B00BA60BB /* AgoraMemberCollectionCell.m in Sources */,
 				7F663CEA265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m in Sources */,
 				3A4BB1CD1ED43D7700B07FCA /* AgoraChatroomMembersViewController.m in Sources */,
+				EC54DDDE2727A8F900ABEE3E /* ACDAppStyle.m in Sources */,
 				7F6CC92E26568DC300BA60BB /* AgoraCDDeviceManager+Microphone.m in Sources */,
-				EC432EBC271EC5DC001B31DE /* AgoraGroupEnterController.m in Sources */,
+				EC432EBC271EC5DC001B31DE /* ACDGroupEnterController.m in Sources */,
 				7F6CC93826568DDF00BA60BB /* AgoraVoiceConverter.mm in Sources */,
 				D28345041D8FD1D400FD48A9 /* main.m in Sources */,
 				EC54DD532722A45100ABEE3E /* ACDMAXGroupNumberCell.m in Sources */,
 				7FB1588326A18C4300B995F3 /* AgoraChatBaseTextField.m in Sources */,
+				EC54DDE12727F1B400ABEE3E /* ACDNoDataPromptView.m in Sources */,
 				7F0516D526A0122B00B2C795 /* AgoraChatBaseViewController.m in Sources */,
 				7F3E7F86267A2E7F009CEAB6 /* AgoraChatRecallCell.m in Sources */,
 				3A4BB1CA1ED43D7700B07FCA /* AgoraChatroomAdminsViewController.m in Sources */,
@@ -2894,6 +2943,7 @@
 				D24327F11DAA444C00EDCDAB /* UIViewController+DismissKeyboard.m in Sources */,
 				7F1356992656582E00A181DD /* AgoraLoginViewController.m in Sources */,
 				7F6CC93226568DC300BA60BB /* AgoraCDDeviceManager+ProximitySensor.m in Sources */,
+				EC54DDE427280ECF00ABEE3E /* ACDTableViewController.m in Sources */,
 				7F6CC90E26568D8E00BA60BB /* AgoraApplyManager.m in Sources */,
 				7F6CC91926568D9B00BA60BB /* AgoraConvertToCommonEmoticonsHelper.m in Sources */,
 				7F6CC8D026568C6F00BA60BB /* AgoraContactCell.m in Sources */,
@@ -2930,7 +2980,7 @@
 				7F6CC8F026568C8600BA60BB /* AgoraAccountViewController.m in Sources */,
 				7F13569D2656582E00A181DD /* AgoraMainViewController.m in Sources */,
 				7F0516DE26A0137800B2C795 /* AgoraChatCustomBaseCell.m in Sources */,
-				EC54DCF427215ABE00ABEE3E /* AgoraRequestListViewController.m in Sources */,
+				EC54DCF427215ABE00ABEE3E /* ACDRequestListViewController.m in Sources */,
 				7166345C1DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.m in Sources */,
 				7F0516E726A0184100B2C795 /* AgoraChatBaseCell.m in Sources */,
 				7F6CC8EF26568C8600BA60BB /* AgoraPushDisplaynameViewController.m in Sources */,
@@ -2948,7 +2998,7 @@
 				7F6CC8AF26568C3600BA60BB /* AgoraChatAudioBubbleView.m in Sources */,
 				7F3E7FA0267B2314009CEAB6 /* UIColor+Util.m in Sources */,
 				7166340F1DB0E17C00C92E27 /* AgoraGroupModel.m in Sources */,
-				EC54DCF127215A9D00ABEE3E /* AgoraGroupListViewController.m in Sources */,
+				EC54DCF127215A9D00ABEE3E /* ACDGroupListViewController.m in Sources */,
 				7F6CC91A26568D9B00BA60BB /* AgoraEmoji.m in Sources */,
 				7FE43CDF26A0445700893D63 /* AgoraChatCustomTableViewController.m in Sources */,
 				7F6CC89A26568C2400BA60BB /* AgoraFacialView.m in Sources */,

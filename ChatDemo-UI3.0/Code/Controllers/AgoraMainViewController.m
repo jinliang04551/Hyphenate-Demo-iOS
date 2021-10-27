@@ -17,7 +17,7 @@
 #import "AgoraChatViewController.h"
 #import <UserNotifications/UserNotifications.h>
 
-#import "AgoraChatNewContactsViewController.h"
+#import "ACDNewContactsViewController.h"
 
 #define kGroupMessageAtList      @"em_at_list"
 #define kGroupMessageAtAll       @"all"
@@ -31,7 +31,7 @@ static NSString *kGroupName = @"GroupName";
 @interface AgoraMainViewController () <AgoraChatManagerDelegate, AgoraChatGroupManagerDelegate, AgoraChatClientDelegate>
 {
 //    AgoraContactsViewController *_contactsVC;
-    AgoraChatNewContactsViewController *_contactsVC;
+    ACDNewContactsViewController *_contactsVC;
 
     AgoraChatsViewController *_chatsVC;
     AgoraSettingsViewController *_settingsVC;
@@ -90,33 +90,35 @@ static NSString *kGroupName = @"GroupName";
 
 - (void)loadViewControllers
 {
-    self.title = NSLocalizedString(@"title.contacts", @"Contacts");
+//    self.title = NSLocalizedString(@"title.contacts", @"Contacts");
 //    _contactsVC = [[AgoraContactsViewController alloc] init];
-    _contactsVC = [[AgoraChatNewContactsViewController alloc] init];
-    _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.contacts", @"Contacts")
-                                                           image:ImageWithName(@"TabBar.bundle/tabbar_contacts")
-                                                             tag:0];
-    [_contactsVC.tabBarItem setSelectedImage:ImageWithName(@"TabBar.bundle/tabbar_contactsHL")];
-    [self unSelectedTapTabBarItems:_contactsVC.tabBarItem];
-    [self selectedTapTabBarItems:_contactsVC.tabBarItem];
-//    [_contactsVC setupNavigationItem:self.navigationItem];
+    _contactsVC = [[ACDNewContactsViewController alloc] init];
+    _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Contacts"
+                                                   image:[ImageWithName(@"TabBar.bundle/tabbar_contacts")
+                                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
+                                           selectedImage:[ImageWithName(@"TabBar.bundle/tabbar_contactsHL")
+                                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
     
     _chatsVC = [[AgoraChatsViewController alloc] init];
-    _chatsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.chats", @"Chats")
-                                                        image:ImageWithName(@"TabBar.bundle/tabbar_chats")
-                                                          tag:1];
-    [_chatsVC.tabBarItem setSelectedImage:ImageWithName(@"TabBar.bundle/tabbar_chatsHL")];
-    [self unSelectedTapTabBarItems:_chatsVC.tabBarItem];
-    [self selectedTapTabBarItems:_chatsVC.tabBarItem];
+    _chatsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats"
+                                                   image:[ImageWithName(@"TabBar.bundle/tabbar_chats")
+                                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
+                                           selectedImage:[ImageWithName(@"TabBar.bundle/tabbar_chatsHL")
+                                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
     
     _settingsVC = [[AgoraSettingsViewController alloc] init];
-    _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.settings", @"Settings")
-                                                           image:ImageWithName(@"TabBar.bundle/tabbar_setting")
-                                                             tag:2];
-    [_settingsVC.tabBarItem setSelectedImage:ImageWithName(@"TabBar.bundle/tabbar_settingHL")];
-    [self unSelectedTapTabBarItems:_settingsVC.tabBarItem];
-    [self selectedTapTabBarItems:_settingsVC.tabBarItem];
-    
+    _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings"
+                                                   image:[ImageWithName(@"TabBar.bundle/tabbar_setting")
+                                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
+                                           selectedImage:[ImageWithName(@"TabBar.bundle/tabbar_settingHL")
+                                                          imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
+    _contactsVC.tabBarItem.tag = 0;
+    _chatsVC.tabBarItem.tag = 1;
+    _settingsVC.tabBarItem.tag = 2;
+
     self.viewControllers = @[_contactsVC,_chatsVC,_settingsVC];
     self.selectedIndex = 0;
     
@@ -211,19 +213,34 @@ static NSString *kGroupName = @"GroupName";
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
-    if (item.tag == 0) {
-        self.title = NSLocalizedString(@"title.contacts", @"Contacts");
+//    if (item.tag == 0) {
+//        self.title = NSLocalizedString(@"title.contacts", @"Contacts");
 //        [_contactsVC setupNavigationItem:self.navigationItem];
-    }
-    else if (item.tag == 1){
-        self.title = NSLocalizedString(@"title.chats", @"Chats");
-        self.navigationItem.rightBarButtonItem = nil;
-        [_chatsVC setupNavigationItem:self.navigationItem];
-    }
-    else if (item.tag == 2){
-        self.title = NSLocalizedString(@"title.settings", @"Settings");
-        [self clearNavigationItem];
-    }
+//    }
+//    else if (item.tag == 1){
+//        self.title = NSLocalizedString(@"title.chats", @"Chats");
+//        self.navigationItem.rightBarButtonItem = nil;
+//        [_chatsVC setupNavigationItem:self.navigationItem];
+//    }
+//    else if (item.tag == 2){
+//        self.title = NSLocalizedString(@"title.settings", @"Settings");
+//        [self clearNavigationItem];
+//    }
+    
+    
+        if (item.tag== 0) {
+            self.title = NSLocalizedString(@"title.contacts", @"Contacts");
+//            [_contactsVC setupNavigationItem:self.navigationItem];
+        }
+        else if (item.tag == 1){
+            self.title = NSLocalizedString(@"title.chats", @"Chats");
+//            self.navigationItem.rightBarButtonItem = nil;
+//            [_chatsVC setupNavigationItem:self.navigationItem];
+        }
+        else if (item.tag == 2){
+            self.title = NSLocalizedString(@"title.settings", @"Settings");
+//            [self clearNavigationItem];
+        }
 }
 
 #pragma mark - AgoraChatManagerDelegate

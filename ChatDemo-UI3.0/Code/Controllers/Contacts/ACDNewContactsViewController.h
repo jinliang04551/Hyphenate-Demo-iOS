@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AgoraChatNewContactsViewController : UIViewController
+@interface ACDNewContactsViewController : UIViewController
 
 - (void)loadContactsFromServer;
 

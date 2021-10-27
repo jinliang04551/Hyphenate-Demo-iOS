@@ -17,7 +17,7 @@
         if (self) {
             _group = (AgoraChatGroup *)obj;
             _hyphenateId = _group.groupId;
-            _subject = _group.subject;
+            _subject = _group.groupName;
             _defaultAvatarImage = [UIImage imageNamed:@"default_group_avatar.png"];
         }
         return self;

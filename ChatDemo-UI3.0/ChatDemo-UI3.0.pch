@@ -35,6 +35,7 @@
 #import "AgoraNotificationNames.h"
 #import "AgoraCategory.h"
 #import "AgoraCustomBase.h"
+#import "ACDAppStyle.h"
 
 
 #endif

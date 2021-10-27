@@ -1,5 +1,5 @@
 //
-//  AgoraRequestListViewController.h
+//  AgoraGroupListViewController.h
 //  ChatDemo-UI3.0
 //
 //  Created by liang on 2021/10/21.
@@ -7,10 +7,12 @@
 //
 
 #import "AgoraSearchTableViewController.h"
+#import "ACDTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AgoraRequestListViewController : AgoraSearchTableViewController
+@interface ACDGroupListViewController : AgoraSearchTableViewController
+@property (nonatomic,copy)void (^selectedBlock)(NSString *groupId);
 
 @end
 

@@ -112,7 +112,6 @@
     [self addSubview:self.describeLabel];
     [self addSubview:self.chatButton];
     
-   
 }
 
 - (void)placeAndLayoutForMeInfo {

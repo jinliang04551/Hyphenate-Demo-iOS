@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AgoraContactListController : AgoraBaseRefreshTableController
+@interface ACDContactListController : AgoraBaseRefreshTableController
 
 @end
 
