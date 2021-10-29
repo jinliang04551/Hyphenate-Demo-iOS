@@ -75,28 +75,17 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     }];
 }
 
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    self.navigationController.navigationBarHidden = YES;
-//}
-//
-//- (void)viewWillDisappear:(BOOL)animated
-//{
-//    [super viewWillDisappear:animated];
-//    self.navigationController.navigationBarHidden = NO;
-//}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    self.navigationController.navigationBarHidden = YES;
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
 
 - (void)goAddPage {
 
@@ -106,44 +95,10 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
-
-- (void)reloadContacts {
-//    NSArray *bubbyList = [[AgoraChatClient sharedClient].contactManager getContacts];
-//    [self updateContacts:bubbyList];
-//    WEAK_SELF
-//    dispatch_async(dispatch_get_main_queue(), ^(){
-//        [weakSelf.tableView reloadData];
-//        [weakSelf.refreshControl endRefreshing];
-//    });
-}
-
-- (void)reloadContactRequests {
-//    WEAK_SELF
-//    dispatch_async(dispatch_get_main_queue(), ^(){
-//        NSArray *contactApplys = [[AgoraApplyManager defaultManager] contactApplys];
-//        weakSelf.contactRequests = [NSMutableArray arrayWithArray:contactApplys];
-//        [weakSelf.tableView reloadData];
-//        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
-//    });
-}
-
-- (void)reloadGroupNotifications {
-//    WEAK_SELF
-//    dispatch_async(dispatch_get_main_queue(), ^(){
-//        NSArray *groupApplys = [[AgoraApplyManager defaultManager] groupApplys];
-//        weakSelf.groupNotifications = [NSMutableArray arrayWithArray:groupApplys];
-//        [weakSelf.tableView reloadData];
-//        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
-//    });
-    
-}
-
 - (void)goGroupInfoPageWithGroupId:(NSString *)groupId withAccessType:(ACDGroupInfoAccessType)accessType {
     ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
     vc.delegate = self;
     vc.accessType = accessType;
-//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -166,6 +121,7 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 - (NSArray*)titlesOfSegmentView {
     return @[@"Friends",@"Groups",@"Requests"];
 }
+
 
 - (NSArray*)childViewControllersOfContentView{
     return @[self.contactListVC,self.groupListVC,self.requestListVC];

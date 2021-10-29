@@ -18,8 +18,6 @@
 
 @interface ACDGroupInfoViewController ()
 @property (nonatomic, strong) ACDInfoHeaderView *groupInfoHeaderView;
-@property (nonatomic, strong) AgoraChatGroup *group;
-@property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) ACDJoinGroupCell *joinGroupCell;
 @property (nonatomic, strong) ACDInfoDetailCell *membersCell;
 @property (nonatomic, strong) ACDInfoSwitchCell *allowSearchCell;
@@ -27,8 +25,9 @@
 @property (nonatomic, strong) ACDInfoCell *leaveCell;
 @property (nonatomic, strong) ACDInfoCell *transferOwnerCell;
 @property (nonatomic, strong) ACDInfoCell *disbandCell;
-
 @property (nonatomic, strong) NSArray *cells;
+@property (nonatomic, strong) AgoraChatGroup *group;
+@property (nonatomic, strong) NSString *groupId;
 
 @end
 
@@ -180,34 +179,37 @@
 
 - (void)leaveGroup
 {
-    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
-        
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.destroy", @"dissolution of the group") message:@"" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-           
-        }];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self dismissGroupWithGroupId:self.groupId];
-        }];
-        [alertController addAction:cancelAction];
-        [alertController addAction:okAction];
-        [self presentViewController:alertController animated:YES completion:nil];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Leave this group now?" message:@"No prompt for other members and no group messages after you quit this group." preferredStyle:UIAlertControllerStyleAlert];
     
-    } else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.leave", @"Leave group") message:@"" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-           
-        }];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//            [self leaveGroupWithGroupId:self.groupId];
-        }];
-        [alertController addAction:cancelAction];
-        [alertController addAction:okAction];
-        [self presentViewController:alertController animated:YES completion:nil];
-    }
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+       
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Leave" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self leaveGroupWithGroupId:self.groupId];
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
+
+- (void)leaveGroupWithGroupId:(NSString *)groupId {
+    [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"Leave group")];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+        AgoraChatError *error = nil;
+        [[AgoraChatClient sharedClient].groupManager leaveGroup:groupId error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hideHud];
+            if (error) {
+                [self showHint:NSLocalizedString(@"group.leaveFailure", @"exit the group failure")];
+            }
+            else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_END_CHAT object:groupId];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+            }
+        });
+    });
+}
+
 
 - (void)dismissGroupWithGroupId:(NSString *)groupId {
     [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
@@ -227,11 +229,21 @@
 }
 
 - (void)transferOwner {
-    
+        
 }
 
 - (void)disBandGroup {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Disband this group now?" message:@"Delete this group and associated Chats." preferredStyle:UIAlertControllerStyleAlert];
     
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+       
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Disband" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self dismissGroupWithGroupId:self.groupId];
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)changeGroupName {
@@ -454,8 +466,8 @@
 //            if ([weakSelf.delegate respondsToSelector:@selector(checkGroupMemberListWithGroup:)]) {
 //                [weakSelf.delegate checkGroupMemberListWithGroup:weakSelf.group];
 //            }
-        ACDGroupMembersViewController *vc = ACDGroupMembersViewController.new;
-        [self.navigationController pushViewController:vc animated:YES];
+        ACDGroupMembersViewController *vc = [[ACDGroupMembersViewController alloc] initWithGroup:weakSelf.group];
+        [weakSelf.navigationController pushViewController:vc animated:YES];
             
         };
     }
@@ -490,7 +502,7 @@
         _leaveCell.nameLabel.text = @"Leave this Group";
         ACD_WS
         _leaveCell.tapCellBlock = ^{
-            
+            [weakSelf leaveGroup];
         };
 
     }
@@ -502,7 +514,10 @@
         _transferOwnerCell = [[ACDInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoCell reuseIdentifier]];
         [_transferOwnerCell.iconImageView setImage:ImageWithName(@"groupInfo_trans")];
         _transferOwnerCell.nameLabel.text = @"Transfer Ownership";
-        
+        ACD_WS
+        _transferOwnerCell.tapCellBlock = ^{
+            [weakSelf transferOwner];
+        };
     }
     return _transferOwnerCell;
 }
@@ -513,6 +528,11 @@
         [_disbandCell.iconImageView setImage:ImageWithName(@"groupInfo_deband")];
         _disbandCell.nameLabel.text = @"Disband this Group";
         _disbandCell.nameLabel.textColor = TextLabelPinkColor;
+        ACD_WS
+        _disbandCell.tapCellBlock = ^{
+            [weakSelf disBandGroup];
+        };
+
     }
     return _disbandCell;
 

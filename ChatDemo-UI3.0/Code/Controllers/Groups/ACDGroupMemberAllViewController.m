@@ -1,19 +1,19 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  ACDGroupMemberAllViewController.m
+//  ChatDemo-UI3.0
+//
+//  Created by liang on 2021/10/29.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
+#import "ACDGroupMemberAllViewController.h"
 #import "AgoraGroupOccupantsViewController.h"
 
 #import "AgoraMemberCell.h"
 #import "UIViewController+HUD.h"
 #import "AgoraNotificationNames.h"
 
-@interface AgoraGroupOccupantsViewController ()
+@interface ACDGroupMemberAllViewController ()
 
 @property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) AgoraChatGroup *group;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation AgoraGroupOccupantsViewController
+@implementation ACDGroupMemberAllViewController
 
 - (instancetype)initWithGroupId:(NSString *)aGroupId
 {
@@ -49,7 +49,7 @@
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     [self.navigationItem setLeftBarButtonItem:backItem];
     
-    self.showRefreshHeader = YES;
+//    self.showRefreshHeader = YES;
     [self tableViewDidTriggerHeaderRefresh];
 }
 
@@ -193,7 +193,7 @@
             [weakSelf hideHud];
             if (!error) {
                 if (buttonIndex != 2) {
-                    [weakSelf.tableView reloadData];
+                    [weakSelf.table reloadData];
                 } else {
                     [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
                 }
@@ -271,24 +271,25 @@
     [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         weakSelf.cursor = aResult.cursor;
         [weakSelf hideHud];
-        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+//        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         if (!aError) {
             if (aIsHeader) {
                 [weakSelf.dataArray removeAllObjects];
             }
             
             [weakSelf.dataArray addObjectsFromArray:aResult.list];
-            [weakSelf.tableView reloadData];
+            [weakSelf.table reloadData];
         } else {
             [weakSelf showHint:NSLocalizedString(@"group.member.fetchFail", @"Failed to get the group details, please try again later")];
         }
         
         if ([aResult.list count] < pageSize) {
-            weakSelf.showRefreshFooter = NO;
+//            weakSelf.showRefreshFooter = NO;
         } else {
-            weakSelf.showRefreshFooter = YES;
+//            weakSelf.showRefreshFooter = YES;
         }
     }];
 }
+
 
 @end

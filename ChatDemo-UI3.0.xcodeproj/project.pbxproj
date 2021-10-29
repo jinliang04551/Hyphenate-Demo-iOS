@@ -75,7 +75,6 @@
 		7F2A1FC02669D70E00800ACC /* AgoraCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F2A1FBF2669D70E00800ACC /* AgoraCreateViewController.m */; };
 		7F3E7F86267A2E7F009CEAB6 /* AgoraChatRecallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E7F85267A2E7F009CEAB6 /* AgoraChatRecallCell.m */; };
 		7F3E7FA0267B2314009CEAB6 /* UIColor+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */; };
-		7F3E7FA3267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E7FA2267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m */; };
 		7F663CA1265B9FDA003F74B8 /* AgoraChatToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CA0265B9FDA003F74B8 /* AgoraChatToolBar.m */; };
 		7F663CEA265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CE9265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m */; };
 		7F663CF3265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CF2265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m */; };
@@ -529,6 +528,12 @@
 		EC54DE23272AA02100ABEE3E /* group_default_avatar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DE22272AA02100ABEE3E /* group_default_avatar@2x.png */; };
 		EC54DE26272B951A00ABEE3E /* chat_nav_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DE24272B951A00ABEE3E /* chat_nav_add@2x.png */; };
 		EC54DE27272B951A00ABEE3E /* chat_nav_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DE25272B951A00ABEE3E /* chat_nav_add@3x.png */; };
+		EC7A3236272BADE000AF0C19 /* ACDGroupMemberAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A3235272BADE000AF0C19 /* ACDGroupMemberAllViewController.m */; };
+		EC7A3239272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A3238272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m */; };
+		EC7A323C272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A323B272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.m */; };
+		EC7A323F272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A323E272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.m */; };
+		EC7A3242272BCBE600AF0C19 /* ACDContainerSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A3241272BCBE600AF0C19 /* ACDContainerSearchTableViewController.m */; };
+		EC7A3245272BD2E600AF0C19 /* ACDGroupMemberNavView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A3244272BD2E600AF0C19 /* ACDGroupMemberNavView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -658,8 +663,6 @@
 		7F3E7F87267A3053009CEAB6 /* AgoraChatDemoEnum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatDemoEnum.h; sourceTree = "<group>"; };
 		7F3E7F9E267B2314009CEAB6 /* UIColor+Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Util.h"; sourceTree = "<group>"; };
 		7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Util.m"; sourceTree = "<group>"; };
-		7F3E7FA1267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraGroupOwnerAdminListController.h; sourceTree = "<group>"; };
-		7F3E7FA2267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraGroupOwnerAdminListController.m; sourceTree = "<group>"; };
 		7F663C9E265B9308003F74B8 /* AgoraChatDemoUIDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatDemoUIDefine.h; sourceTree = "<group>"; };
 		7F663C9F265B9FDA003F74B8 /* AgoraChatToolBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatToolBar.h; sourceTree = "<group>"; };
 		7F663CA0265B9FDA003F74B8 /* AgoraChatToolBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraChatToolBar.m; sourceTree = "<group>"; };
@@ -1251,6 +1254,18 @@
 		EC54DE22272AA02100ABEE3E /* group_default_avatar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_default_avatar@2x.png"; sourceTree = "<group>"; };
 		EC54DE24272B951A00ABEE3E /* chat_nav_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_nav_add@2x.png"; sourceTree = "<group>"; };
 		EC54DE25272B951A00ABEE3E /* chat_nav_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_nav_add@3x.png"; sourceTree = "<group>"; };
+		EC7A3234272BADE000AF0C19 /* ACDGroupMemberAllViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupMemberAllViewController.h; sourceTree = "<group>"; };
+		EC7A3235272BADE000AF0C19 /* ACDGroupMemberAllViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupMemberAllViewController.m; sourceTree = "<group>"; };
+		EC7A3237272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupMemberMutedListViewController.h; sourceTree = "<group>"; };
+		EC7A3238272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupMemberMutedListViewController.m; sourceTree = "<group>"; };
+		EC7A323A272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupMemberBlockListViewController.h; sourceTree = "<group>"; };
+		EC7A323B272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupMemberBlockListViewController.m; sourceTree = "<group>"; };
+		EC7A323D272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupMemberAdminListViewController.h; sourceTree = "<group>"; };
+		EC7A323E272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupMemberAdminListViewController.m; sourceTree = "<group>"; };
+		EC7A3240272BCBE600AF0C19 /* ACDContainerSearchTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDContainerSearchTableViewController.h; sourceTree = "<group>"; };
+		EC7A3241272BCBE600AF0C19 /* ACDContainerSearchTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDContainerSearchTableViewController.m; sourceTree = "<group>"; };
+		EC7A3243272BD2E600AF0C19 /* ACDGroupMemberNavView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupMemberNavView.h; sourceTree = "<group>"; };
+		EC7A3244272BD2E600AF0C19 /* ACDGroupMemberNavView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupMemberNavView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1343,8 +1358,6 @@
 				3A79D1141E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m */,
 				3A79D1081E77AAF40085AB6E /* AgoraGroupInfoViewController.h */,
 				3A79D1091E77AAF40085AB6E /* AgoraGroupInfoViewController.m */,
-				7F3E7FA1267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.h */,
-				7F3E7FA2267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m */,
 				7F6CC85526568B5700BA60BB /* AgoraAddAdminViewController.h */,
 				7F6CC85326568B5700BA60BB /* AgoraAddAdminViewController.m */,
 				7F6CC85426568B5700BA60BB /* AgoraAddAdminViewController.xib */,
@@ -1403,6 +1416,14 @@
 				EC54DDE62728158B00ABEE3E /* ACDGroupInfoViewController.m */,
 				EC54DE1F272A8AD800ABEE3E /* ACDGroupMembersViewController.h */,
 				EC54DE20272A8AD800ABEE3E /* ACDGroupMembersViewController.m */,
+				EC7A3234272BADE000AF0C19 /* ACDGroupMemberAllViewController.h */,
+				EC7A3235272BADE000AF0C19 /* ACDGroupMemberAllViewController.m */,
+				EC7A3237272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.h */,
+				EC7A3238272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m */,
+				EC7A323A272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.h */,
+				EC7A323B272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.m */,
+				EC7A323D272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.h */,
+				EC7A323E272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.m */,
 				EC432EBA271EC5DC001B31DE /* ACDGroupEnterController.h */,
 				EC432EBB271EC5DC001B31DE /* ACDGroupEnterController.m */,
 				EC54DDD62726DEF400ABEE3E /* ACDJoinGroupViewController.h */,
@@ -2359,6 +2380,8 @@
 				EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */,
 				EC54DCCD272148E300ABEE3E /* AgoraSearchTableViewController.h */,
 				EC54DCCE272148E300ABEE3E /* AgoraSearchTableViewController.m */,
+				EC7A3240272BCBE600AF0C19 /* ACDContainerSearchTableViewController.h */,
+				EC7A3241272BCBE600AF0C19 /* ACDContainerSearchTableViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2410,6 +2433,8 @@
 			children = (
 				EC54DCF627216EBA00ABEE3E /* ACDNaviCustomView.h */,
 				EC54DCF727216EBA00ABEE3E /* ACDNaviCustomView.m */,
+				EC7A3243272BD2E600AF0C19 /* ACDGroupMemberNavView.h */,
+				EC7A3244272BD2E600AF0C19 /* ACDGroupMemberNavView.m */,
 				EC54DCFA272170E600ABEE3E /* ACDCustomBaseView.h */,
 				EC54DCFB272170E600ABEE3E /* ACDCustomBaseView.m */,
 				EC432EEC27210ABC001B31DE /* ACDImageTextButtonView.h */,
@@ -2993,6 +3018,7 @@
 				7F6CC8FB26568D3300BA60BB /* AgoraAlertView.m in Sources */,
 				EC54DCE82721502200ABEE3E /* MISScrollPageStyle.m in Sources */,
 				3AEBE3F11E792FB000B82986 /* AppDelegate.m in Sources */,
+				EC7A3245272BD2E600AF0C19 /* ACDGroupMemberNavView.m in Sources */,
 				EC54DD102722653B00ABEE3E /* ACDCustomCell.m in Sources */,
 				7F6CC89126568C2400BA60BB /* AgoraFaceView.m in Sources */,
 				EC54DD502722A29200ABEE3E /* ACDTextViewCell.m in Sources */,
@@ -3002,6 +3028,7 @@
 				7F6CC8EC26568C8600BA60BB /* AgoraChatsSettingViewController.m in Sources */,
 				EC432EC2271EF1D6001B31DE /* AgoraContactInfoNewViewController.m in Sources */,
 				EC54DD432722951100ABEE3E /* AgoraCreateNewGroupNewViewController.m in Sources */,
+				EC7A3242272BCBE600AF0C19 /* ACDContainerSearchTableViewController.m in Sources */,
 				7F2A1FBA2667417000800ACC /* AgoraBlackListCell.m in Sources */,
 				7F6CC90F26568D8E00BA60BB /* AgoraChatDemoHelper.m in Sources */,
 				EC54DCE72721502200ABEE3E /* MISScrollPageController.m in Sources */,
@@ -3014,6 +3041,7 @@
 				D24327E71DAA395F00EDCDAB /* wav.mm in Sources */,
 				7F6CC87026568B9900BA60BB /* AgoraBaseRefreshTableController.m in Sources */,
 				3A4BB1CB1ED43D7700B07FCA /* AgoraChatroomBansViewController.m in Sources */,
+				EC7A3239272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m in Sources */,
 				3A79D1211E77E4F80085AB6E /* AgoraUpdateGroupNameViewController.m in Sources */,
 				7F6CC8C126568C4B00BA60BB /* AgoraContactsViewController.m in Sources */,
 				7F6CC8EA26568C8600BA60BB /* AgoraAboutViewController.m in Sources */,
@@ -3087,8 +3115,10 @@
 				D24327E61DAA395F00EDCDAB /* amrFileCodec.mm in Sources */,
 				EC54DCCF272148E300ABEE3E /* AgoraSearchTableViewController.m in Sources */,
 				7F2A1FB726673EF300800ACC /* AgoraBlockListViewController.m in Sources */,
+				EC7A3236272BADE000AF0C19 /* ACDGroupMemberAllViewController.m in Sources */,
 				7F0516BE269FDF4000B2C795 /* UIViewController+DarkMode.m in Sources */,
 				3A79D1181E77AB080085AB6E /* AgoraGroupMutesViewController.m in Sources */,
+				EC7A323C272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.m in Sources */,
 				7F6CC91B26568D9B00BA60BB /* AgoraEmojiEmoticons.m in Sources */,
 				7F6CC8F026568C8600BA60BB /* AgoraAccountViewController.m in Sources */,
 				7F13569D2656582E00A181DD /* AgoraMainViewController.m in Sources */,
@@ -3106,7 +3136,6 @@
 				7F6CC91126568D8E00BA60BB /* AgoraRealtimeSearchUtil.m in Sources */,
 				EC432EC5271EF51F001B31DE /* ACDInfoHeaderView.m in Sources */,
 				7F2A1FC02669D70E00800ACC /* AgoraCreateViewController.m in Sources */,
-				7F3E7FA3267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m in Sources */,
 				7F6CC93126568DC300BA60BB /* AgoraCDDeviceManager+Remind.m in Sources */,
 				7F6CC8AF26568C3600BA60BB /* AgoraChatAudioBubbleView.m in Sources */,
 				7F3E7FA0267B2314009CEAB6 /* UIColor+Util.m in Sources */,
@@ -3115,6 +3144,7 @@
 				7F6CC91A26568D9B00BA60BB /* AgoraEmoji.m in Sources */,
 				7FE43CDF26A0445700893D63 /* AgoraChatCustomTableViewController.m in Sources */,
 				EC54DDF12729953300ABEE3E /* ACDRequestCell.m in Sources */,
+				EC7A323F272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.m in Sources */,
 				7F6CC89A26568C2400BA60BB /* AgoraFacialView.m in Sources */,
 				7F6CC8B126568C3600BA60BB /* AgoraChatImageBubbleView.m in Sources */,
 				D2AD8EB41DB4CEF100A0DD3C /* AgoraConversationModel.m in Sources */,
