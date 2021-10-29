@@ -12,7 +12,7 @@
 #import "ACDGroupListViewController.h"
 #import "ACDRequestListViewController.h"
 #import "ACDNaviCustomView.h"
-
+#import "ACDGroupMembersViewController.h"
 #import "AgoraChatDemoHelper.h"
 #import "AgoraApplyManager.h"
 
@@ -21,7 +21,7 @@
 #import "ACDGroupInfoViewController.h"
 
 @interface ACDNewContactsViewController ()<MISScrollPageControllerDataSource,
-MISScrollPageControllerDelegate>
+MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 @property (nonatomic, strong) MISScrollPageController *pageController;
 @property (nonatomic, strong) MISScrollPageSegmentView *segView;
 @property (nonatomic, strong) MISScrollPageContentView *contentView;
@@ -75,17 +75,28 @@ MISScrollPageControllerDelegate>
     }];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    self.navigationController.navigationBarHidden = YES;
+//}
+//
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    self.navigationController.navigationBarHidden = NO;
+//}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.navigationController.navigationBarHidden = NO;
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
+
 
 - (void)goAddPage {
 
@@ -129,10 +140,23 @@ MISScrollPageControllerDelegate>
 
 - (void)goGroupInfoPageWithGroupId:(NSString *)groupId withAccessType:(ACDGroupInfoAccessType)accessType {
     ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
+    vc.delegate = self;
     vc.accessType = accessType;
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+
+#pragma mark ACDGroupInfoViewControllerDelegate
+- (void)checkGroupMemberListWithGroup:(AgoraChatGroup *)group {
+    ACDGroupMembersViewController *vc = ACDGroupMembersViewController.new;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)enterGroupChatWithGroup:(AgoraChatGroup *)group {
+    NSLog(@"%s",__func__);
+}
 
 #pragma mark - scrool pager data source and delegate
 - (NSUInteger)numberOfChildViewControllers {

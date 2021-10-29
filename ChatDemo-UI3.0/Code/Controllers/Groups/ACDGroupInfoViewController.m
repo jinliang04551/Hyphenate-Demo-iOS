@@ -7,14 +7,28 @@
 //
 
 #import "ACDGroupInfoViewController.h"
-#import "AgoraInfoHeaderView.h"
+#import "ACDInfoHeaderView.h"
 #import "ACDJoinGroupCell.h"
+#import "ACDInfoCell.h"
+#import "ACDInfoDetailCell.h"
+#import "ACDInfoSwitchCell.h"
+#import "ACDGroupMembersViewController.h"
+
+#define kGroupInfoHeaderViewHeight 320
 
 @interface ACDGroupInfoViewController ()
-@property (nonatomic, strong) AgoraInfoHeaderView *groupInfoHeaderView;
-@property (nonatomic, strong) AgoraChatGroup *currentGroup;
+@property (nonatomic, strong) ACDInfoHeaderView *groupInfoHeaderView;
+@property (nonatomic, strong) AgoraChatGroup *group;
 @property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) ACDJoinGroupCell *joinGroupCell;
+@property (nonatomic, strong) ACDInfoDetailCell *membersCell;
+@property (nonatomic, strong) ACDInfoSwitchCell *allowSearchCell;
+@property (nonatomic, strong) ACDInfoSwitchCell *allowInviteCell;
+@property (nonatomic, strong) ACDInfoCell *leaveCell;
+@property (nonatomic, strong) ACDInfoCell *transferOwnerCell;
+@property (nonatomic, strong) ACDInfoCell *disbandCell;
+
+@property (nonatomic, strong) NSArray *cells;
 
 @end
 
@@ -42,33 +56,61 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = UIColor.blueColor;
     [self fetchGroupInfo];
 }
 
 - (void)placeSubViews {
-   
+    [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
+
+
 
 #pragma mark NSNotification
 - (void)updateUIWithNotification:(NSNotification *)notification
 {
     id obj = notification.object;
     if (obj && [obj isKindOfClass:[AgoraChatGroup class]]) {
-        self.currentGroup = (AgoraChatGroup *)obj;
+        self.group = (AgoraChatGroup *)obj;
     }
 }
 
-- (void)updateUI {
-    if (self.accessType == ACDGroupInfoAccessTypeContact) {
-            
+- (void)buildCells {
+    if (self.accessType == ACDGroupInfoAccessTypeSearch) {
+        self.cells = @[self.joinGroupCell];
+    }else {
+        if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
+            self.cells = @[self.membersCell,self.allowSearchCell,self.allowInviteCell,self.transferOwnerCell,self.disbandCell];
+        } else if(self.group.permissionType == AgoraChatGroupPermissionTypeAdmin){
+            self.cells = @[self.membersCell,self.allowSearchCell,self.allowInviteCell,self.leaveCell];
+        }else {
+            self.cells = @[self.membersCell,self.leaveCell];
+        }
     }
-    
-    if (self.accessType == ACDGroupInfoAccessTypePublicGroups) {
-        
-    }
-    
+
 }
+
+- (void)updateUI {
+    [self buildCells];
+    self.groupInfoHeaderView.nameLabel.text = self.group.groupName;
+    self.groupInfoHeaderView.userIdLabel.text = [NSString stringWithFormat:@"GroupID: %@",self.group.groupId];
+    self.groupInfoHeaderView.describeLabel.text = self.group.description;
+    [self.table reloadData];
+}
+
 
 #pragma mark action
 - (void)fetchGroupInfo
@@ -78,7 +120,7 @@
     [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
         [weakSelf hideHud];
         if (aError == nil) {
-            weakSelf.currentGroup = aGroup;
+            weakSelf.group = aGroup;
             [weakSelf updateUI];
         }else {
             [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
@@ -86,11 +128,12 @@
     }];
     
     
-    [[AgoraChatClient sharedClient].groupManager getGroupAnnouncementWithId:self.groupId completion:^(NSString *aAnnouncement, AgoraChatError *aError) {
+//    [[AgoraChatClient sharedClient].groupManager getGroupAnnouncementWithId:self.groupId completion:^(NSString *aAnnouncement, AgoraChatError *aError) {
 //        if (!aError) {
 //            [weakSelf reloadUI];
 //        }
-    }];
+//    }];
+    
 }
 
 - (void)fetchGroupMembers
@@ -108,10 +151,152 @@
     }];
 }
 
+
+- (void)reloadUI
+{
+//    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
+//        [self.leaveButton setTitle:NSLocalizedString(@"group.destroy", @"Destroy Group") forState:UIControlStateNormal];
+//    } else {
+//        [self.leaveButton setTitle:NSLocalizedString(@"group.leave", @"Leave Group") forState:UIControlStateNormal];
+//    }
+    
+//    if ([self isCanInvite]) {
+//        self.navigationItem.rightBarButtonItem = self.addMemberItem;
+//    } else {
+//        self.navigationItem.rightBarButtonItem = nil;
+//    }
+    
+//    [self.blockMsgSwitch setOn:self.group.isBlocked animated:YES];
+//    [self.pushSwitch setOn:self.group.isPushNotificationEnabled animated:YES];
+    
+//    [self.tableView reloadData];
+}
+
+- (BOOL)isCanInvite
+{
+    return (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin || self.group.setting.style == AgoraChatGroupStylePrivateMemberCanInvite);
+}
+
+
+- (void)leaveGroup
+{
+    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.destroy", @"dissolution of the group") message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+           
+        }];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self dismissGroupWithGroupId:self.groupId];
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    
+    } else {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.leave", @"Leave group") message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+           
+        }];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            [self leaveGroupWithGroupId:self.groupId];
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+- (void)dismissGroupWithGroupId:(NSString *)groupId {
+    [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+        AgoraChatError *error = [[AgoraChatClient sharedClient].groupManager destroyGroup:groupId];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hideHud];
+            if (error) {
+                [self showHint:NSLocalizedString(@"group.destroyFailure", @"dissolution of group failure")];
+            }
+            else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_END_CHAT object:groupId];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+            }
+        });
+    });
+}
+
+- (void)transferOwner {
+    
+}
+
+- (void)disBandGroup {
+    
+}
+
+- (void)changeGroupName {
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Change Group Name" message:@"Latin letters and numbers only" preferredStyle:UIAlertControllerStyleAlert];
+
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+       
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UITextField *messageTextField = alertController.textFields.firstObject;
+        [self updateGroupWithSubject:messageTextField.text];
+
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)updateGroupWithSubject:(NSString *)subject {
+    
+    ACD_WS
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [[AgoraChatClient sharedClient].groupManager updateGroupSubject:subject forGroup:self.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
+        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:NO];
+        if (!aError) {
+            [weakSelf fetchGroupInfo];
+        }else {
+            [self showAlertWithMessage:aError.description];
+        }
+    }];
+}
+
+- (void)headerViewTapAction {
+   
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+        ACD_WS
+        if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
+            [alertController addAction:[UIAlertAction actionWithTitle:@"Change Group Name" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf changeGroupName];
+            }]];
+        }
+                
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Copy GroupID" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }]];
+
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        }]];
+        
+//    for (UIAlertAction *alertAction in alertController.actions)
+//            [alertAction setValue:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0] forKey:@"_titleTextColor"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"didAlert" object:@{@"alert":alertController}];
+    
+        [self presentViewController:alertController animated:YES completion:nil];
+}
+
 #pragma mark - Join Public Group
 - (void)requestJoinGroup {
-    if (self.currentGroup.setting.style == AgoraChatGroupStylePublicOpenJoin) {
-        [self joinToPublicGroup:self.currentGroup.groupId];
+    if (self.group.setting.style == AgoraChatGroupStylePublicOpenJoin) {
+        [self joinToPublicGroup:self.group.groupId];
     }
     else {
         [self showAlertView];
@@ -126,7 +311,7 @@
                                                completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
            [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
            if (!aError) {
-//               [weakSelf updateUI];
+    //               [weakSelf updateUI];
                
            }
            else {
@@ -161,6 +346,7 @@
 }
 
 - (void)showAlertView {
+    
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.joinPublicGroupMessage", "Requesting message") message:@"" preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
 
@@ -182,19 +368,11 @@
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.accessType == ACDGroupInfoAccessTypePublicGroups) {
-        return 1;
-    }
-    return 1;
+    return self.cells.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (self.accessType == ACDGroupInfoAccessTypePublicGroups) {
-        return self.joinGroupCell;
-    }
-    
-    return nil;
+    return self.cells[indexPath.row];
 }
 
 #pragma mark - UITableViewDelegate
@@ -204,25 +382,24 @@
 }
 
 #pragma mark getter and setter
-- (AgoraInfoHeaderView *)groupInfoHeaderView {
+- (ACDInfoHeaderView *)groupInfoHeaderView {
     if (_groupInfoHeaderView == nil) {
-        _groupInfoHeaderView = [[AgoraInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 180) withType:AgoraHeaderInfoTypeContact];
-        _groupInfoHeaderView.backgroundColor = UIColor.grayColor;
-        
+        _groupInfoHeaderView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kGroupInfoHeaderViewHeight) withType:ACDHeaderInfoTypeGroup];
+        [_groupInfoHeaderView.avatarImageView setImage:ImageWithName(@"group_default_avatar")];
         ACD_WS
-//        _headerView.tapHeaderBlock = ^{
-//
-//        };
-//
-//        _headerView.goChatPageBlock = ^{
-//            AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
-//            [weakSelf.navigationController pushViewController:chatViewController animated:YES];
-//        };
-//
-//        _headerView.goBackBlock = ^{
-//            [weakSelf.navigationController popViewControllerAnimated:YES];
-//
-//        };
+        _groupInfoHeaderView.tapHeaderBlock = ^{
+            [weakSelf headerViewTapAction];
+        };
+
+        _groupInfoHeaderView.goChatPageBlock = ^{
+            if ([weakSelf.delegate respondsToSelector:@selector(enterGroupChatWithGroup:)]) {
+                [weakSelf.delegate enterGroupChatWithGroup:weakSelf.group];
+            }
+        };
+
+        _groupInfoHeaderView.goBackBlock = ^{
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        };
     }
     return _groupInfoHeaderView;
 }
@@ -242,6 +419,16 @@
     return _table;
 }
 
+- (UIView *)headerView {
+    if (_headerView == nil) {
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kGroupInfoHeaderViewHeight)];
+        [_headerView addSubview:self.groupInfoHeaderView];
+        [self.groupInfoHeaderView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(_headerView);
+        }];
+    }
+    return _headerView;
+}
 - (ACDJoinGroupCell *)joinGroupCell {
     if (_joinGroupCell == nil) {
         _joinGroupCell = [[ACDJoinGroupCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDJoinGroupCell reuseIdentifier]];
@@ -255,4 +442,89 @@
     return _joinGroupCell;
 }
 
+- (ACDInfoDetailCell *)membersCell {
+    if (_membersCell == nil) {
+        _membersCell = [[ACDInfoDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoDetailCell reuseIdentifier]];
+        _membersCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [_membersCell.iconImageView setImage:ImageWithName(@"groupInfo_members")];
+        _membersCell.nameLabel.text = @"Members";
+        _membersCell.detailLabel.text = @"100";
+        ACD_WS
+        _membersCell.tapCellBlock = ^{
+//            if ([weakSelf.delegate respondsToSelector:@selector(checkGroupMemberListWithGroup:)]) {
+//                [weakSelf.delegate checkGroupMemberListWithGroup:weakSelf.group];
+//            }
+        ACDGroupMembersViewController *vc = ACDGroupMembersViewController.new;
+        [self.navigationController pushViewController:vc animated:YES];
+            
+        };
+    }
+    return _membersCell;
+}
+
+- (ACDInfoSwitchCell *)allowSearchCell {
+    if (_allowSearchCell == nil) {
+        _allowSearchCell = [[ACDInfoSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoSwitchCell reuseIdentifier]];
+        [_allowSearchCell.iconImageView setImage:ImageWithName(@"groupInfo_search")];
+        _allowSearchCell.nameLabel.text = @"Allow Search";
+
+    }
+    return _allowSearchCell;
+}
+
+
+- (ACDInfoSwitchCell *)allowInviteCell {
+    if (_allowInviteCell == nil) {
+        _allowInviteCell = [[ACDInfoSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoSwitchCell reuseIdentifier]];
+        [_allowInviteCell.iconImageView setImage:ImageWithName(@"groupInfo_invite")];
+        _allowInviteCell.nameLabel.text = @"Allow Members to Invite";
+
+    }
+    return _allowInviteCell;
+}
+
+- (ACDInfoCell *)leaveCell {
+    if (_leaveCell == nil) {
+        _leaveCell = [[ACDInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoCell reuseIdentifier]];
+        [_leaveCell.iconImageView setImage:ImageWithName(@"groupInfo_leave")];
+        _leaveCell.nameLabel.text = @"Leave this Group";
+        ACD_WS
+        _leaveCell.tapCellBlock = ^{
+            
+        };
+
+    }
+    return _leaveCell;
+}
+
+- (ACDInfoCell *)transferOwnerCell {
+    if (_transferOwnerCell == nil) {
+        _transferOwnerCell = [[ACDInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoCell reuseIdentifier]];
+        [_transferOwnerCell.iconImageView setImage:ImageWithName(@"groupInfo_trans")];
+        _transferOwnerCell.nameLabel.text = @"Transfer Ownership";
+        
+    }
+    return _transferOwnerCell;
+}
+
+- (ACDInfoCell *)disbandCell {
+    if (_disbandCell == nil) {
+        _disbandCell = [[ACDInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoCell reuseIdentifier]];
+        [_disbandCell.iconImageView setImage:ImageWithName(@"groupInfo_deband")];
+        _disbandCell.nameLabel.text = @"Disband this Group";
+        _disbandCell.nameLabel.textColor = TextLabelPinkColor;
+    }
+    return _disbandCell;
+
+}
+
+- (NSArray *)cells {
+    if (_cells == nil) {
+        _cells = NSArray.new;
+    }
+    return _cells;
+}
+
 @end
+
+#undef kGroupInfoHeaderViewHeight

@@ -8,19 +8,34 @@
 
 #import "AgoraBaseTableViewController.h"
 
+@protocol  ACDGroupInfoViewControllerDelegate <NSObject>
+
+@optional
+//group member list
+- (void)checkGroupMemberListWithGroup:(AgoraChatGroup *_Nonnull)group;
+//group chat
+- (void)enterGroupChatWithGroup:(AgoraChatGroup *_Nonnull)group;
+//group Description
+- (void)checkGroupDescriptionWithGroup:(AgoraChatGroup *_Nonnull)group;
+//group Notice
+- (void)checkGroupNoticeWithGroup:(AgoraChatGroup *_Nonnull)group;
+
+@end
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ACDGroupInfoAccessType) {
     ACDGroupInfoAccessTypeContact,
     ACDGroupInfoAccessTypeChat,
-    ACDGroupInfoAccessTypePublicGroups,
+    ACDGroupInfoAccessTypeSearch,
 };
 
 
 @interface ACDGroupInfoViewController : AgoraBaseTableViewController
 @property (nonatomic, assign) ACDGroupInfoAccessType accessType;
-
+@property (nonatomic, assign) id<ACDGroupInfoViewControllerDelegate> delegate;
+ 
 - (instancetype)initWithGroupId:(NSString *)aGroupId;
 
 @end

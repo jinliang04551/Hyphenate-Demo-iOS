@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong, readonly) UIView* bottomLine;
+@property (nonatomic, strong, readonly)UITapGestureRecognizer *tapGestureRecognizer;
+@property (nonatomic, copy) void (^tapCellBlock)(void);
 
 - (void)prepare;
 - (void)placeSubViews;

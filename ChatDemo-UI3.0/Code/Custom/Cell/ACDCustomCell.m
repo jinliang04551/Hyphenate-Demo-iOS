@@ -10,6 +10,7 @@
 
 @interface ACDCustomCell ()
 @property (nonatomic, strong) UIView* bottomLine;
+@property (nonatomic, strong)UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
 
@@ -22,6 +23,12 @@
         [self placeSubViews];
     }
     return self;
+}
+
+- (void)tapAction {
+    if (self.tapCellBlock) {
+        self.tapCellBlock();
+    }
 }
 
 - (void)prepare {
@@ -59,8 +66,8 @@
 - (UILabel *)nameLabel {
     if (_nameLabel == nil) {
         _nameLabel = [[UILabel alloc] init];
-        _nameLabel.font = [UIFont systemFontOfSize:16.0f];
-        _nameLabel.numberOfLines = 1;
+//        PingFangSC-Semibold
+        _nameLabel.font = [UIFont fontWithName:@"PingFangSC-Semibold" size:16.0f];
         _nameLabel.textColor = COLOR_HEX(0x0D0D0D);
         _nameLabel.textAlignment = NSTextAlignmentLeft;
         _nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -76,6 +83,13 @@
         _bottomLine.backgroundColor = COLOR_HEX(0xE7E7E7);
     }
     return _bottomLine;
+}
+
+- (UITapGestureRecognizer *)tapGestureRecognizer {
+    if (_tapGestureRecognizer == nil) {
+        _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+    }
+    return _tapGestureRecognizer;
 }
 
 @end

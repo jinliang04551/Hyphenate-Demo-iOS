@@ -13,7 +13,7 @@
 #import "AgoraContactInfoCell.h"
 #import "AgoraChatDemoHelper.h"
 #import "AgoraChatViewController.h"
-#import "AgoraInfoHeaderView.h"
+#import "ACDInfoHeaderView.h"
 
 static NSString *cellIdentify = @"AgoraContactCell";
 
@@ -35,7 +35,7 @@ typedef enum : NSUInteger {
 
 @interface AgoraContactInfoNewViewController ()<UIActionSheetDelegate, AgoraContactsUIProtocol,UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) AgoraInfoHeaderView *headerView;
+@property (nonatomic, strong) ACDInfoHeaderView *headerView;
 @property (nonatomic, strong) AgoraUserModel *model;
 @property (nonatomic, strong) UITableView *table;
 
@@ -231,9 +231,9 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark getter and setter
-- (AgoraInfoHeaderView *)headerView {
+- (ACDInfoHeaderView *)headerView {
     if (_headerView == nil) {
-        _headerView = [[AgoraInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 180) withType:AgoraHeaderInfoTypeContact];
+        _headerView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 180) withType:ACDHeaderInfoTypeContact];
         _headerView.backgroundColor = UIColor.grayColor;
         
         ACD_WS

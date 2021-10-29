@@ -34,7 +34,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-    // set default app tabbar 
+    // set default app tabbar
     [[ACDAppStyle shareAppStyle] defaultStyle];
     
     // Override point for customization after application launch.
@@ -90,18 +90,9 @@
 - (void)loadViewController {
     BOOL isAutoLogin = [AgoraChatClient sharedClient].isAutoLogin;
     if (isAutoLogin) {
-        AgoraMainViewController *main = [[AgoraMainViewController alloc] init];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:main];
-        navigationController.interactivePopGestureRecognizer.delegate = (id)self;
-        self.window.rootViewController = navigationController;
-        [AgoraChatDemoHelper shareHelper].mainVC = main;
-        
+        [self loadMainPage];
     } else {
-//        AgoraLoginViewController *login = [[AgoraLoginViewController alloc] init];
-        AgoraNewLoginViewController *login = [[AgoraNewLoginViewController alloc] init];
-
-        self.window.rootViewController = login;
-        [AgoraChatDemoHelper shareHelper].mainVC = nil;
+        [self loadLoginPage];
     }
     
 }
@@ -112,19 +103,28 @@
     BOOL loginSuccess = [notification.object boolValue];
     if (loginSuccess) {
 
-        AgoraMainViewController *main = [[AgoraMainViewController alloc] init];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:main];
-        navigationController.interactivePopGestureRecognizer.delegate = (id)self;
-        self.window.rootViewController = navigationController;
-        [AgoraChatDemoHelper shareHelper].mainVC = main;
+        [self loadMainPage];
         
     } else {
-//        AgoraLoginViewController *login = [[AgoraLoginViewController alloc] init];
-        AgoraNewLoginViewController *login = [[AgoraNewLoginViewController alloc] init];
-
-        self.window.rootViewController = login;
-        [AgoraChatDemoHelper shareHelper].mainVC = nil;
+        [self loadLoginPage];
     }
+}
+
+- (void)loadMainPage {
+    AgoraMainViewController *main = [[AgoraMainViewController alloc] init];
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:main];
+//    navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+    self.window.rootViewController = main;
+    [AgoraChatDemoHelper shareHelper].mainVC = main;
+}
+
+- (void)loadLoginPage {
+//    AgoraLoginViewController *login = [[AgoraLoginViewController alloc] init];
+    AgoraNewLoginViewController *login = [[AgoraNewLoginViewController alloc] init];
+
+    self.window.rootViewController = login;
+    [AgoraChatDemoHelper shareHelper].mainVC = nil;
+
 }
 
 

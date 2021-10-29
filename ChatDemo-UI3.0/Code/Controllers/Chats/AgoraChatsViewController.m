@@ -45,7 +45,8 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = @"Chats";
+
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -57,15 +58,20 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     
     [self tableViewDidTriggerHeaderRefresh];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"chats" style:UIBarButtonItemStyleDone target:self action:@selector(goEnterGroupPage)];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:ImageWithName(@"chat_nav_add") style:UIBarButtonItemStylePlain target:self action:@selector(goEnterGroupPage)];
 }
 
 
 - (void)goEnterGroupPage {
-    ACDGroupEnterController *vc = ACDGroupEnterController.new;
-    vc.accessType = ACDGroupEnterAccessTypeChat;
-    [self presentViewController:vc animated:YES completion:nil];
+    ACDGroupEnterController *groupEnterVC = ACDGroupEnterController.new;
+    groupEnterVC.accessType = ACDGroupEnterAccessTypeChat;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:groupEnterVC];
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
+
 }
+
+
 
 - (void)queryHasLaunch {
     

@@ -49,4 +49,9 @@
 #define ButtonDisableGrayColor  COLOR_HEX(0x999999)
 #define ButtonEnableBlueColor  COLOR_HEX(0x154DFE)
 
+#define TextLabelBlueColor  COLOR_HEX(0x154DFE)
+#define TextLabelGrayColor  COLOR_HEX(0x999999)
+#define TextLabelBlackColor  COLOR_HEX(0x000000)
+#define TextLabelPinkColor  COLOR_HEX(0xFF14CC)
+
 

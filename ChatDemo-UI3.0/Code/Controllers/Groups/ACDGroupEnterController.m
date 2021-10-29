@@ -95,6 +95,9 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 
 - (void)goPublicGroupList {
     ACDGroupListViewController *vc = ACDGroupListViewController.new;
+    vc.selectedBlock = ^(NSString * _Nonnull groupId) {
+        
+    };
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -119,8 +119,18 @@ static NSString *kGroupName = @"GroupName";
     _chatsVC.tabBarItem.tag = 1;
     _settingsVC.tabBarItem.tag = 2;
 
-    self.viewControllers = @[_contactsVC,_chatsVC,_settingsVC];
-    self.selectedIndex = 0;
+//    self.viewControllers = @[_contactsVC,_chatsVC,_settingsVC];
+//    self.selectedIndex = 0;
+    
+    UINavigationController* nav1 = [[UINavigationController alloc] initWithRootViewController:_contactsVC];
+    UINavigationController* nav2 = [[UINavigationController alloc] initWithRootViewController:_chatsVC];
+    UINavigationController* nav3 = [[UINavigationController alloc] initWithRootViewController:_settingsVC];
+    
+    self.viewControllers = @[nav1, nav2, nav3];
+
+    
+    self.delegate = self;
+
     
     [AgoraChatDemoHelper shareHelper].contactsVC = _contactsVC;
 
@@ -128,21 +138,6 @@ static NSString *kGroupName = @"GroupName";
 
     [AgoraChatDemoHelper shareHelper].chatsVC = _chatsVC;
 
-}
-
-- (void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
-{
-    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIFont systemFontOfSize:11.f], NSFontAttributeName,TabbarNormalColor,NSBackgroundColorAttributeName,
-                                        nil] forState:UIControlStateNormal];
-}
-
-- (void)selectedTapTabBarItems:(UITabBarItem *)tabBarItem
-{
-    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIFont systemFontOfSize:11.f],
-                                        NSFontAttributeName,TabbarSelectedColor,NSBackgroundColorAttributeName,
-                                        nil] forState:UIControlStateSelected];
 }
 
 - (void)setupUnreadMessageCount

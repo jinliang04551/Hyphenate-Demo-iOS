@@ -26,7 +26,7 @@
         _iconImageView.userInteractionEnabled = NO;
         
         _titleLabel = UILabel.new;
-        _titleLabel.textColor = COLOR_HEX(0xFFFFFF);
+        _titleLabel.textColor = TextLabelBlackColor;
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = NFont(12.0f);
 
@@ -43,14 +43,14 @@
         [_iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(_tapBtn.mas_top).offset(5.0);
             make.centerX.equalTo(_tapBtn);
-            make.size.mas_equalTo(44.0);
+            make.size.mas_equalTo(40.0);
         }];
 
         [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(_iconImageView.mas_bottom);
+            make.top.equalTo(_iconImageView.mas_bottom).offset(5.0);
             make.centerX.equalTo(_tapBtn);
+            make.height.equalTo(@12.0f);
             make.bottom.equalTo(_tapBtn.mas_bottom).offset(-5.0);
-            make.height.mas_equalTo(12.0f);
         }];
     }
     return self;

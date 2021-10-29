@@ -6,25 +6,24 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraInfoHeaderView.h"
+#import "ACDInfoHeaderView.h"
 #import "ACDImageTextButtonView.h"
 
 #define kHeaderImageViewHeight  80.0f
 
-@interface AgoraInfoHeaderView ()
+@interface ACDInfoHeaderView ()
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIImageView *backImageView;
-@property (nonatomic, strong) UIButton *chatButton;
-@property (nonatomic, strong) ACDImageTextButtonView *buttonView;
-@property (nonatomic, assign) AgoraHeaderInfoType infoType;
+@property (nonatomic, strong) ACDImageTextButtonView *chatView;
+@property (nonatomic, assign) ACDHeaderInfoType infoType;
 
 @end
 
 
-@implementation AgoraInfoHeaderView
+@implementation ACDInfoHeaderView
 #pragma mark life cycle
 - (instancetype)initWithFrame:(CGRect)frame
-                     withType:(AgoraHeaderInfoType)type {
+                     withType:(ACDHeaderInfoType)type {
     self = [super initWithFrame:frame];
     if (self) {
         self.infoType = type;
@@ -35,27 +34,17 @@
     return self;
 }
 
-- (instancetype)initWithType:(AgoraHeaderInfoType)type {
-    self = [super init];
-    if (self) {
-        self.infoType = type;
-        [self placeAndLayoutSubviews];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHeaderViewAction)];
-        [self addGestureRecognizer:tap];
-    }
-    return self;
-}
 
 - (void)placeAndLayoutSubviews {
-    if (self.infoType == AgoraHeaderInfoTypeContact) {
+    if (self.infoType == ACDHeaderInfoTypeContact) {
         [self placeAndLayoutForContactInfo];
     }
 
-    if (self.infoType == AgoraHeaderInfoTypeGroup) {
+    if (self.infoType == ACDHeaderInfoTypeGroup) {
         [self placeAndLayoutForGroupInfo];
     }
     
-    if (self.infoType == AgoraHeaderInfoTypeMe) {
+    if (self.infoType == ACDHeaderInfoTypeMe) {
         [self placeAndLayoutForMeInfo];
     }
     
@@ -66,38 +55,37 @@
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
     [self addSubview:self.userIdLabel];
-//    [self addSubview:self.chatButton];
-    [self addSubview:self.buttonView];
+    [self addSubview:self.chatView];
     
     [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self).offset(kAgroaPadding * 4.4);
+        make.top.equalTo(self).offset(kAgroaPadding * 2.0);
         make.left.equalTo(self).offset(kAgroaPadding);
         make.size.mas_equalTo(28.0);
     }];
     
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.backButton.mas_bottom).offset(kAgroaPadding * 0.5);
+        make.top.equalTo(self).offset(kAgroaPadding * 6.0);
         make.centerX.equalTo(self);
         make.width.mas_equalTo(140.0);
         make.height.mas_equalTo(140.0);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.avatarImageView.mas_bottom).offset(kAgroaPadding);
-        make.left.equalTo(self).offset(kAgroaPadding * 2);
-        make.right.equalTo(self).offset(-kAgroaPadding * 2);
-        make.height.mas_equalTo(28.0);
+        make.top.equalTo(self.avatarImageView.mas_bottom).offset(kAgroaPadding);
+        make.left.equalTo(self).offset(kAgroaPadding * 5);
+        make.right.equalTo(self).offset(-kAgroaPadding * 5);
+        make.height.equalTo(@28.0);
     }];
     
     [self.userIdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.nameLabel.mas_bottom);
-        make.left.equalTo(self).offset(kAgroaPadding * 2);
-        make.right.equalTo(self).offset(-kAgroaPadding * 2);
-        make.height.mas_equalTo(28.0);
+        make.top.equalTo(self.nameLabel.mas_bottom);
+        make.left.equalTo(self).offset(kAgroaPadding * 5);
+        make.right.equalTo(self).offset(-kAgroaPadding * 5);
+        make.height.mas_equalTo(20.0);
     }];
     
-    [self.buttonView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.userIdLabel.mas_bottom).offset(kAgroaPadding);
+    [self.chatView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.userIdLabel.mas_bottom).offset(kAgroaPadding);
         make.centerX.equalTo(self);
         make.width.mas_equalTo(120.0);
         make.height.mas_equalTo(100.0);
@@ -106,12 +94,53 @@
 }
 
 - (void)placeAndLayoutForGroupInfo {
+    [self addSubview:self.backButton];
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
     [self addSubview:self.userIdLabel];
     [self addSubview:self.describeLabel];
-    [self addSubview:self.chatButton];
+    [self addSubview:self.chatView];
     
+    [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self).offset(kAgroaPadding * 2);
+        make.left.equalTo(self).offset(kAgroaPadding);
+        make.size.mas_equalTo(28.0);
+    }];
+    
+    [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.backButton.mas_bottom).offset(kAgroaPadding);
+        make.centerX.equalTo(self);
+//        make.size.equalTo(@150.0);
+    }];
+    
+    [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.avatarImageView.mas_bottom).offset(kAgroaPadding);
+        make.left.equalTo(self).offset(kAgroaPadding * 5);
+        make.right.equalTo(self).offset(-kAgroaPadding * 5);
+        make.height.equalTo(@28.0);
+    }];
+    
+    [self.userIdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.nameLabel.mas_bottom);
+        make.left.equalTo(self).offset(kAgroaPadding * 5);
+        make.right.equalTo(self).offset(-kAgroaPadding * 5);
+        make.height.equalTo(@20.0);
+    }];
+    
+    [self.describeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.userIdLabel.mas_bottom);
+        make.left.equalTo(self).offset(kAgroaPadding * 5);
+        make.right.equalTo(self).offset(-kAgroaPadding * 5);
+        make.height.equalTo(@20.0);
+    }];
+    
+    
+    [self.chatView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.describeLabel.mas_bottom).offset(kAgroaPadding);
+        make.centerX.equalTo(self);
+        make.width.mas_equalTo(120.0);
+        make.bottom.equalTo(self);
+    }];
 }
 
 - (void)placeAndLayoutForMeInfo {
@@ -162,9 +191,9 @@
 - (UIImageView *)avatarImageView {
     if (_avatarImageView == nil) {
         _avatarImageView = [[UIImageView alloc] init];
-        _avatarImageView.contentMode = UIViewContentModeCenter;
-        _avatarImageView.image = ImageWithName(@"default_avatar");
-        _avatarImageView.backgroundColor = UIColor.yellowColor;
+        _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _avatarImageView.image = ImageWithName(@"group_default_avatar");
+//        _avatarImageView.backgroundColor = UIColor.yellowColor;
     }
     return _avatarImageView;
 }
@@ -177,7 +206,7 @@
         _nameLabel.numberOfLines = 1;
         _nameLabel.textColor = COLOR_HEX(0x0D0D0D);
         _nameLabel.text = @"agoraChat";
-        _nameLabel.backgroundColor = UIColor.blueColor;
+//        _nameLabel.backgroundColor = UIColor.blueColor;
         _nameLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _nameLabel;
@@ -190,7 +219,7 @@
         _userIdLabel.numberOfLines = 1;
         _userIdLabel.textColor = COLOR_HEX(0x999999);
         _userIdLabel.text = @"001";
-        _userIdLabel.backgroundColor = UIColor.redColor;
+//        _userIdLabel.backgroundColor = UIColor.redColor;
         _userIdLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _userIdLabel;
@@ -199,42 +228,26 @@
 - (UILabel *)describeLabel {
     if (_describeLabel == nil) {
         _describeLabel = [[UILabel alloc] init];
-        _describeLabel.font = [UIFont systemFontOfSize:14.0];
-        _describeLabel.numberOfLines = 1;
+        _describeLabel.font = [UIFont systemFontOfSize:14.0f];
         _describeLabel.textColor = COLOR_HEX(0x000000);
         _describeLabel.text = @"xxxxxxxxxxxx";
-        _describeLabel.backgroundColor = UIColor.blueColor;
+//        _describeLabel.backgroundColor = UIColor.blueColor;
         _describeLabel.textAlignment = NSTextAlignmentCenter;
+        _describeLabel.preferredMaxLayoutWidth = KScreenWidth - 200.0f;
     }
     return _describeLabel;
 }
 
-- (UIButton *)chatButton {
-    if (_chatButton == nil) {
-        _chatButton = [[UIButton alloc] init];
-        _chatButton.backgroundColor = UIColor.redColor;
-        _chatButton.titleLabel.font = [UIFont systemFontOfSize:12];
-        [_chatButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_chatButton setTitle:@"chat" forState:UIControlStateNormal];
-        [_chatButton addTarget:self action:@selector(goChatPageAction) forControlEvents:UIControlEventTouchUpInside];
-//        [_chatButton.imageView setImage:ImageWithName(@"message")];
-        [_chatButton setImage:ImageWithName(@"start_chat") forState:UIControlStateNormal];
-
+- (ACDImageTextButtonView *)chatView {
+    if (_chatView == nil) {
+        _chatView = [[ACDImageTextButtonView alloc] init];
+        [_chatView.iconImageView setImage:ImageWithName(@"start_chat")];
+        _chatView.titleLabel.text = @"chat";
+        [_chatView.tapBtn addTarget:self action:@selector(goChatPageAction) forControlEvents:UIControlEventTouchUpInside];
+//        _chatView.backgroundColor = UIColor.yellowColor;
         
     }
-    return _chatButton;
-}
-
-- (ACDImageTextButtonView *)buttonView {
-    if (_buttonView == nil) {
-        _buttonView = [[ACDImageTextButtonView alloc] init];
-        [_buttonView.iconImageView setImage:ImageWithName(@"start_chat")];
-        _buttonView.titleLabel.text = @"chat";
-        [_buttonView.tapBtn addTarget:self action:@selector(goChatPageAction) forControlEvents:UIControlEventTouchUpInside];
-        _buttonView.backgroundColor = UIColor.yellowColor;
-        
-    }
-    return _buttonView;
+    return _chatView;
 }
 
 @end

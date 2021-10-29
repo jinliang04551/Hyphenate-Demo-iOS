@@ -10,18 +10,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, AgoraHeaderInfoType) {
-    AgoraHeaderInfoTypeContact,
-    AgoraHeaderInfoTypeGroup,
-    AgoraHeaderInfoTypeMe,
+typedef NS_ENUM(NSInteger, ACDHeaderInfoType) {
+    ACDHeaderInfoTypeContact,
+    ACDHeaderInfoTypeGroup,
+    ACDHeaderInfoTypeMe,
 };
 
-@interface AgoraInfoHeaderView : UIView
+@interface ACDInfoHeaderView : UIView
 
 - (instancetype)initWithFrame:(CGRect)frame
-                     withType:(AgoraHeaderInfoType)type;
+                     withType:(ACDHeaderInfoType)type;
 
-- (instancetype)initWithType:(AgoraHeaderInfoType)type;
 
 @property (nonatomic, strong) UIImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
