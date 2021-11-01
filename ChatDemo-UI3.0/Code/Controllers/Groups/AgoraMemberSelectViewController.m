@@ -220,8 +220,10 @@
     if (_delegate && [_delegate respondsToSelector:@selector(addSelectOccupants:)]) {
         [_delegate addSelectOccupants:_selectContacts];
     }
+    [self backAction];
+
+//    [self dismissViewControllerAnimated:YES completion:nil];
     
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {

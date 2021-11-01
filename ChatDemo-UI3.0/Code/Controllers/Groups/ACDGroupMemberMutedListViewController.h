@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDGroupMemberMutedListViewController : ACDContainerSearchTableViewController
 
+@property (nonatomic,strong) NSArray *muteList;
+
 @end
 
 NS_ASSUME_NONNULL_END

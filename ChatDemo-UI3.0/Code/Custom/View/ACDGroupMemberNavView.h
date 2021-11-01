@@ -11,7 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDGroupMemberNavView : ACDCustomBaseView
+@property (nonatomic, strong) UILabel* leftLabel;
 @property (nonatomic, strong) UILabel* leftSubLabel;
+@property (nonatomic, strong, readonly) UIButton* rightButton;
 @property (nonatomic, copy) void (^leftButtonBlock)(void);
 @property (nonatomic, copy ) void (^rightButtonBlock)(void);
 

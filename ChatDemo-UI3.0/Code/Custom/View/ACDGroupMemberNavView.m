@@ -10,7 +10,6 @@
 
 @interface ACDGroupMemberNavView ()
 @property (nonatomic, strong) UIImageView* leftImageView;
-@property (nonatomic, strong) UILabel* leftLabel;
 @property (nonatomic, strong) UIButton* leftButton;
 @property (nonatomic, strong) UIButton* rightButton;
 
@@ -125,4 +124,5 @@
     }
     return _rightButton;
 }
+
 @end

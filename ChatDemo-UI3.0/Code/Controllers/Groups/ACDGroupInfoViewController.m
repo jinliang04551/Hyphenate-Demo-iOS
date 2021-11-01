@@ -14,6 +14,8 @@
 #import "ACDInfoSwitchCell.h"
 #import "ACDGroupMembersViewController.h"
 
+#import "AgoraGroupTransferOwnerViewController.h"
+
 #define kGroupInfoHeaderViewHeight 320
 
 @interface ACDGroupInfoViewController ()
@@ -90,6 +92,7 @@
 - (void)buildCells {
     if (self.accessType == ACDGroupInfoAccessTypeSearch) {
         self.cells = @[self.joinGroupCell];
+        self.groupInfoHeaderView.isHideChatButton = YES;
     }else {
         if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
             self.cells = @[self.membersCell,self.allowSearchCell,self.allowInviteCell,self.transferOwnerCell,self.disbandCell];
@@ -107,6 +110,7 @@
     self.groupInfoHeaderView.nameLabel.text = self.group.groupName;
     self.groupInfoHeaderView.userIdLabel.text = [NSString stringWithFormat:@"GroupID: %@",self.group.groupId];
     self.groupInfoHeaderView.describeLabel.text = self.group.description;
+    self.membersCell.detailLabel.text = [@(self.group.occupantsCount) stringValue];
     [self.table reloadData];
 }
 
@@ -135,41 +139,7 @@
     
 }
 
-- (void)fetchGroupMembers
-{
-    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:@"" pageSize:10 completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
-//        [weakSelf hideHud];
-//        [weakSelf tableViewDidFinishTriggerHeader:YES];
-//        if (!aError) {
-//            weakSelf.showMembers = aResult.list;
-//            [weakSelf reloadUI];
-//        } else {
-//            [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
-//        }
-    }];
-}
 
-
-- (void)reloadUI
-{
-//    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
-//        [self.leaveButton setTitle:NSLocalizedString(@"group.destroy", @"Destroy Group") forState:UIControlStateNormal];
-//    } else {
-//        [self.leaveButton setTitle:NSLocalizedString(@"group.leave", @"Leave Group") forState:UIControlStateNormal];
-//    }
-    
-//    if ([self isCanInvite]) {
-//        self.navigationItem.rightBarButtonItem = self.addMemberItem;
-//    } else {
-//        self.navigationItem.rightBarButtonItem = nil;
-//    }
-    
-//    [self.blockMsgSwitch setOn:self.group.isBlocked animated:YES];
-//    [self.pushSwitch setOn:self.group.isPushNotificationEnabled animated:YES];
-    
-//    [self.tableView reloadData];
-}
 
 - (BOOL)isCanInvite
 {
@@ -205,6 +175,7 @@
             else{
                 [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_END_CHAT object:groupId];
                 [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+                [self.navigationController popViewControllerAnimated:YES];
             }
         });
     });
@@ -223,13 +194,15 @@
             else{
                 [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_END_CHAT object:groupId];
                 [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+                [self.navigationController popViewControllerAnimated:YES];
             }
         });
     });
 }
 
 - (void)transferOwner {
-        
+    AgoraGroupTransferOwnerViewController *vc = AgoraGroupTransferOwnerViewController.new;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)disBandGroup {

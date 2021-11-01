@@ -13,9 +13,12 @@
 #import "AgoraCreateNewGroupViewController.h"
 #import "AgoraCreateNewGroupNewViewController.h"
 
-#import "ACDGroupListViewController.h"
+#import "ACDPublicGroupListViewController.h"
 #import "AgoraAddContactViewController.h"
 
+#import "ACDGroupInfoViewController.h"
+
+#import "ACDJoinGroupViewController.h"
 
 static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 
@@ -93,18 +96,27 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)joinPublicGroup {
+    ACDJoinGroupViewController *vc = ACDJoinGroupViewController.new;
+    vc.isSearchGroup = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)goPublicGroupList {
-    ACDGroupListViewController *vc = ACDGroupListViewController.new;
+    ACDPublicGroupListViewController *vc = ACDPublicGroupListViewController.new;
     vc.selectedBlock = ^(NSString * _Nonnull groupId) {
-        
+        ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
+        vc.accessType = ACDGroupInfoAccessTypeSearch;
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+
     };
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)goAddContact {
-    AgoraAddContactViewController *addContactVc = [[AgoraAddContactViewController alloc] initWithNibName:@"AgoraAddContactViewController" bundle:nil];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:addContactVc];
-    [self presentViewController:nav animated:YES completion:nil];
+    ACDJoinGroupViewController *vc = ACDJoinGroupViewController.new;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -171,7 +183,7 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
         }
         
         if (indexPath.row == 1) {
-
+            [self joinPublicGroup];
         }
         
         if (indexPath.row == 2) {
@@ -187,7 +199,7 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
         }
         
         if (indexPath.row == 1) {
-
+            [self joinPublicGroup];
         }
         
         if (indexPath.row == 2) {

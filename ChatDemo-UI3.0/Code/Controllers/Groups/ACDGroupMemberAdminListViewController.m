@@ -37,7 +37,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUI:) name:@"UpdateGroupAdminList" object:nil];
     
-    [self _setupNavigationBar];
+//    [self _setupNavigationBar];
 //    self.showRefreshHeader = YES;
     [self tableViewDidTriggerHeaderRefresh];
 }

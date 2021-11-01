@@ -12,6 +12,8 @@
 #import "AgoraMemberCell.h"
 #import "UIViewController+HUD.h"
 #import "AgoraNotificationNames.h"
+#import "ACDContainerSearchTableViewController+GroupMemberList.h"
+
 
 @interface ACDGroupMemberAllViewController ()
 
@@ -206,6 +208,13 @@
         });
     });
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    [self showMemberActionSheetWithGroup:self.group];
+}
+
 
 #pragma mark - private
 

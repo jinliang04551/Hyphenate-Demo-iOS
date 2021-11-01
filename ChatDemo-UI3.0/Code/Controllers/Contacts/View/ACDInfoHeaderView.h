@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, ACDHeaderInfoType) {
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *userIdLabel;
 @property (nonatomic, strong) UILabel *describeLabel;
+@property (nonatomic, assign) BOOL isHideChatButton;
 @property (nonatomic, copy) void (^tapHeaderBlock)(void);
 @property (nonatomic, copy) void (^goChatPageBlock)(void);
 @property (nonatomic, copy) void (^goBackBlock)(void);

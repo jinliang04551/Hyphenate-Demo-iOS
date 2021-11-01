@@ -45,6 +45,7 @@
 }
 
 - (void)joinButtonAction {
+    self.joinButton.selected = !self.joinButton.selected;
     if (self.joinGroupBlock) {
         self.joinGroupBlock();
     }
@@ -56,7 +57,10 @@
         _joinButton = [[UIButton alloc] init];
         _joinButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
         [_joinButton setTitleColor:ButtonEnableBlueColor forState:UIControlStateNormal];
+        [_joinButton setTitleColor:ButtonDisableGrayColor forState:UIControlStateSelected];
         [_joinButton setTitle:@"Join" forState:UIControlStateNormal];
+        [_joinButton setTitle:@"Joined" forState:UIControlStateSelected];
+        
         [_joinButton addTarget:self action:@selector(joinButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _joinButton;

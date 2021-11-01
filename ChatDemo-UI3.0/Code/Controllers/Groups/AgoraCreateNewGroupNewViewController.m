@@ -26,7 +26,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 @interface AgoraCreateNewGroupNewViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UINavigationControllerDelegate, AgoraGroupUIProtocol>
 
 
-@property (strong, nonatomic) ACDTextFieldCell *titleCell;
+@property (strong, nonatomic) ACDTextFieldCell *groupNameCell;
 @property (strong, nonatomic) ACDTextViewCell *descriptionCell;
 @property (strong, nonatomic) ACDMAXGroupNumberCell *maxGroupNumberCell;
 
@@ -34,11 +34,11 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 @property (nonatomic, strong) NSMutableArray *groupPermissions;
 @property (nonatomic, assign) BOOL isPublic;
 @property (nonatomic, assign) BOOL isAllowMemberInvite;
+@property (nonatomic, strong) NSMutableArray<NSString *> *invitees;
 
 @end
 
-@implementation AgoraCreateNewGroupNewViewController {
-}
+@implementation AgoraCreateNewGroupNewViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -130,7 +130,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 }
 
 - (void)nextButtonAction {
-    if (self.titleCell.titleTextField.text.length == 0) {
+    if (self.groupNameCell.titleTextField.text.length == 0) {
         [self showAlertWithMessage:@"请输入群组标题"];
         return;
     }
@@ -168,7 +168,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == 0) {
-        return self.titleCell;
+        return self.groupNameCell;
     }
     
     if (indexPath.row == 1) {
@@ -220,16 +220,51 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 //    }
 //    [self updateMemberCountLabel];
     
+    for (AgoraUserModel *model in modelArray) {
+        [self.invitees addObject:model.hyphenateId];
+    }
+    
+    AgoraChatGroupOptions *options = [[AgoraChatGroupOptions alloc] init];
+    options.maxUsersCount = KAgora_GROUP_MAgoraBERSCOUNT;
+    if (_isPublic) {
+        options.style = _isAllowMemberInvite ? AgoraChatGroupStylePublicOpenJoin : AgoraChatGroupStylePublicJoinNeedApproval;
+    }
+    else {
+        options.style = _isAllowMemberInvite ? AgoraChatGroupStylePrivateMemberCanInvite : AgoraChatGroupStylePrivateOnlyOwnerInvite;
+    }
+    
+    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"group.inviteToJoin", @"%@ invite you to join the group [%@]"),[AgoraChatClient sharedClient].currentUsername, self.groupNameCell.titleTextField.text];
+
+    ACD_WS
+    [[AgoraChatClient sharedClient].groupManager createGroupWithSubject:self.groupNameCell.titleTextField.text
+                                                     description:self.descriptionCell.contentTextView.text
+                                                        invitees:self.invitees
+                                                         message:message
+                                                         setting:options
+                                                      completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
+      if (!aError) {
+        dispatch_async(dispatch_get_main_queue(), ^(){
+        [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION
+                                                                  object:nil];
+          });
+          
+          [self backAction];
+      }
+      else {
+         [weakSelf showAlertWithMessage:NSLocalizedString(@"group.createFailure", @"Create group failure")];
+     }
+        
+    }];
 }
 
 
 #pragma mark getter
-- (ACDTextFieldCell *)titleCell {
-    if (_titleCell == nil) {
-        _titleCell = ACDTextFieldCell.new;
-        _titleCell.nameLabel.text = @"Group Name";
+- (ACDTextFieldCell *)groupNameCell {
+    if (_groupNameCell == nil) {
+        _groupNameCell = ACDTextFieldCell.new;
+        _groupNameCell.nameLabel.text = @"Group Name";
     }
-    return _titleCell;
+    return _groupNameCell;
 }
 
 - (ACDTextViewCell *)descriptionCell {
@@ -247,5 +282,11 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     return _maxGroupNumberCell;
 }
 
+- (NSMutableArray<NSString *> *)invitees {
+    if (_invitees == nil) {
+        _invitees = [NSMutableArray array];
+    }
+    return _invitees;
+}
 
 @end

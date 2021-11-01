@@ -71,7 +71,7 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
         make.top.equalTo(self.navView.mas_bottom).offset(5);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
-        make.bottom.equalTo(self.view);
+        make.bottom.equalTo(self.view).offset(-44.0f);
     }];
 }
 
@@ -99,6 +99,7 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
     vc.delegate = self;
     vc.accessType = accessType;
+    vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -180,7 +181,8 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 - (ACDGroupListViewController *)groupListVC {
     if (_groupListVC == nil) {
         _groupListVC = ACDGroupListViewController.new;
-        
+        _groupListVC.hidesBottomBarWhenPushed = YES;
+
         ACD_WS
         _groupListVC.selectedBlock = ^(NSString * _Nonnull groupId) {
             [weakSelf goGroupInfoPageWithGroupId:groupId withAccessType:ACDGroupInfoAccessTypeContact];

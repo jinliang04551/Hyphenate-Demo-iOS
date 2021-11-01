@@ -250,6 +250,13 @@
     return _chatView;
 }
 
+- (void)setIsHideChatButton:(BOOL)isHideChatButton {
+    _isHideChatButton = isHideChatButton;
+    if (_isHideChatButton) {
+        self.chatView.hidden = YES;
+    }
+}
+
 @end
 
 #undef kHeaderImageViewHeight

@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDJoinGroupCell : ACDCustomCell
+@property (nonatomic, strong, readonly) UIButton *joinButton;
 @property (nonatomic, copy) void (^joinGroupBlock)();
 
 @end

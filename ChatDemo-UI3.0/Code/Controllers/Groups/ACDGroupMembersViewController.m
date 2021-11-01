@@ -12,6 +12,8 @@
 #import "ACDGroupMemberAdminListViewController.h"
 #import "ACDGroupMemberMutedListViewController.h"
 #import "ACDGroupMemberBlockListViewController.h"
+#import "ACDGroupMemberWhiteListViewController.h"
+
 #import "ACDGroupMembersViewController.h"
 #import "AgoraChatDemoHelper.h"
 #import "AgoraApplyManager.h"
@@ -29,9 +31,14 @@ MISScrollPageControllerDelegate>
 @property (nonatomic,strong) ACDGroupMemberAdminListViewController *adminListVC;
 @property (nonatomic,strong) ACDGroupMemberMutedListViewController *mutedListVC;
 @property (nonatomic,strong) ACDGroupMemberBlockListViewController *blockListVC;
+@property (nonatomic,strong) ACDGroupMemberWhiteListViewController *whiteListVC;
+
 
 @property (nonatomic,strong) ACDGroupMemberNavView *navView;
 @property (nonatomic, strong) AgoraChatGroup *group;
+
+@property (nonatomic, strong) NSMutableArray *navTitleArray;
+@property (nonatomic, strong) NSMutableArray *contentVCArray;
 
 
 @end
@@ -54,7 +61,36 @@ MISScrollPageControllerDelegate>
     
 }
 
-- (void)placeAndLayoutSubviews {
+- (void)placeAndLayoutSubviewsForMember {
+    UIView *container = UIView.new;
+    container.backgroundColor = UIColor.whiteColor;
+    container.clipsToBounds = YES;
+    
+    [self.view addSubview:container];
+    [self.view addSubview:self.navView];
+    [container addSubview:self.allVC.view];
+    
+    CGFloat bottom = 0;
+    if (@available(iOS 11, *)) {
+        bottom =  UIApplication.sharedApplication.windows.firstObject.safeAreaInsets.bottom;
+    }
+    
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
+        make.left.right.equalTo(self.view);
+    }];
+    
+    
+    [container mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.navView.mas_bottom).offset(5);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.bottom.equalTo(self.view);
+    }];
+}
+
+
+- (void)placeAndLayoutSubviewsForAdmin {
     UIView *container = UIView.new;
     container.backgroundColor = UIColor.whiteColor;
     container.clipsToBounds = YES;
@@ -81,6 +117,15 @@ MISScrollPageControllerDelegate>
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
     }];
+}
+
+
+- (void)placeAndLayoutSubviews {
+    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
+        [self placeAndLayoutSubviewsForAdmin];
+    }else {
+        [self placeAndLayoutSubviewsForMember];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -119,16 +164,16 @@ MISScrollPageControllerDelegate>
 
 #pragma mark - scrool pager data source and delegate
 - (NSUInteger)numberOfChildViewControllers {
-    return 4;
+    return self.navTitleArray.count;
 }
 
 - (NSArray*)titlesOfSegmentView {
-    return @[@"All",@"Admin",@"Mute",@"Block"];
+    return self.navTitleArray;
 }
 
 
-- (NSArray*)childViewControllersOfContentView{
-    return @[self.allVC,self.adminListVC,self.mutedListVC,self.blockListVC];
+- (NSArray*)childViewControllersOfContentView {
+    return self.contentVCArray;
 }
 
 #pragma mark -
@@ -153,7 +198,6 @@ MISScrollPageControllerDelegate>
         style.titleFont = NFont(13);
         style.autoAdjustTitlesWidth = YES;
         style.showSegmentViewShadow = YES;
-//        style.segmentViewShadowColor = COLOR_RGB(248,248,248);
         _pageController = [MISScrollPageController scrollPageControllerWithStyle:style dataSource:self delegate:self];
     }
     return _pageController;
@@ -202,10 +246,21 @@ MISScrollPageControllerDelegate>
     return _blockListVC;
 }
 
+- (ACDGroupMemberWhiteListViewController *)whiteListVC {
+    if (_whiteListVC == nil) {
+        _whiteListVC = ACDGroupMemberWhiteListViewController.new;
+    }
+    return _whiteListVC;
+}
 
 - (ACDGroupMemberNavView *)navView {
     if (_navView == nil) {
         _navView = [[ACDGroupMemberNavView alloc] init];
+        _navView.leftLabel.text = @"Members";
+        _navView.leftSubLabel.text = [NSString stringWithFormat:@"(%@)",@(self.group.occupantsCount)];
+        if (_group.permissionType == AgoraChatGroupPermissionTypeMember) {
+            _navView.rightButton.hidden = YES;
+        }
         ACD_WS
         _navView.leftButtonBlock = ^{
             [weakSelf backAction];
@@ -216,6 +271,42 @@ MISScrollPageControllerDelegate>
         };
     }
     return _navView;
+}
+
+- (NSMutableArray *)navTitleArray {
+    if (_navTitleArray == nil) {
+        _navTitleArray = NSMutableArray.new;
+    }
+    return _navTitleArray;
+}
+
+- (NSMutableArray *)contentVCArray {
+    if (_contentVCArray == nil) {
+        _contentVCArray = NSMutableArray.new;
+    }
+    return _contentVCArray;
+}
+
+- (void)setGroup:(AgoraChatGroup *)group {
+    _group = group;
+
+    if (_group.permissionType == AgoraChatGroupPermissionTypeOwner) {
+        self.navTitleArray = [@[@"All",@"Admin",@"Mute",@"Block",@"White"] mutableCopy];
+
+        self.contentVCArray = [@[self.allVC,self.adminListVC,self.mutedListVC,self.blockListVC,self.whiteListVC] mutableCopy];
+    }
+    
+    if (_group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
+        self.navTitleArray = [@[@"All",@"Mute",@"Block",@"White"] mutableCopy];
+
+        self.contentVCArray = [@[self.allVC,self.mutedListVC,self.blockListVC,self.whiteListVC] mutableCopy];
+    }
+    
+    if (_group.permissionType == AgoraChatGroupPermissionTypeMember) {
+        self.navTitleArray = [@[@"All"] mutableCopy];
+        self.contentVCArray = [@[self.allVC] mutableCopy];
+    }
+
 }
 
 @end

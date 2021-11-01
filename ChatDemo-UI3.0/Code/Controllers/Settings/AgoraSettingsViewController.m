@@ -143,6 +143,7 @@
             
         AgoraAccountViewController *accout = [[AgoraAccountViewController alloc] init];
             accout.title = NSLocalizedString(@"title.setting.account", @"Account");
+        accout.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:accout animated:YES];
     } else if (indexPath.row == 3) {
             

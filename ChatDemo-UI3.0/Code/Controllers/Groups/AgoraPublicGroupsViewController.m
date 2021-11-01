@@ -62,6 +62,7 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
 
 - (void)fetchPublicGroups {
 
+    
     __weak typeof(self) weakSelf = self;
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     [[AgoraChatClient sharedClient].groupManager getPublicGroupsFromServerWithCursor:_cursor pageSize:KPUBLICGROUP_PAGE_COUNT completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
