@@ -124,6 +124,7 @@
         [weakSelf hideHud];
         if (aError == nil) {
             weakSelf.group = aGroup;
+            NSLog(@"%s aGroup.occupants:%@",__func__,aGroup.occupants);
             [weakSelf updateUI];
         }else {
             [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
@@ -414,6 +415,7 @@
     }
     return _headerView;
 }
+
 - (ACDJoinGroupCell *)joinGroupCell {
     if (_joinGroupCell == nil) {
         _joinGroupCell = [[ACDJoinGroupCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDJoinGroupCell reuseIdentifier]];
@@ -436,9 +438,6 @@
         _membersCell.detailLabel.text = @"100";
         ACD_WS
         _membersCell.tapCellBlock = ^{
-//            if ([weakSelf.delegate respondsToSelector:@selector(checkGroupMemberListWithGroup:)]) {
-//                [weakSelf.delegate checkGroupMemberListWithGroup:weakSelf.group];
-//            }
         ACDGroupMembersViewController *vc = [[ACDGroupMembersViewController alloc] initWithGroup:weakSelf.group];
         [weakSelf.navigationController pushViewController:vc animated:YES];
             
@@ -452,7 +451,7 @@
         _allowSearchCell = [[ACDInfoSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoSwitchCell reuseIdentifier]];
         [_allowSearchCell.iconImageView setImage:ImageWithName(@"groupInfo_search")];
         _allowSearchCell.nameLabel.text = @"Allow Search";
-
+        
     }
     return _allowSearchCell;
 }
@@ -477,7 +476,6 @@
         _leaveCell.tapCellBlock = ^{
             [weakSelf leaveGroup];
         };
-
     }
     return _leaveCell;
 }
@@ -505,11 +503,10 @@
         _disbandCell.tapCellBlock = ^{
             [weakSelf disBandGroup];
         };
-
     }
     return _disbandCell;
-
 }
+
 
 - (NSArray *)cells {
     if (_cells == nil) {

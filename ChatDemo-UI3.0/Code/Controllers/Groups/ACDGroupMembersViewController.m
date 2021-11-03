@@ -121,11 +121,7 @@ MISScrollPageControllerDelegate>
 
 
 - (void)placeAndLayoutSubviews {
-    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
-        [self placeAndLayoutSubviewsForAdmin];
-    }else {
-        [self placeAndLayoutSubviewsForMember];
-    }
+    [self placeAndLayoutSubviewsForAdmin];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -220,7 +216,7 @@ MISScrollPageControllerDelegate>
 
 - (ACDGroupMemberAllViewController *)allVC {
     if (_allVC == nil) {
-        _allVC = [[ACDGroupMemberAllViewController alloc] initWithGroupId:self.group.groupId];
+        _allVC = [[ACDGroupMemberAllViewController alloc] initWithGroup:self.group];
     }
     return _allVC;
 }
@@ -290,22 +286,9 @@ MISScrollPageControllerDelegate>
 - (void)setGroup:(AgoraChatGroup *)group {
     _group = group;
 
-    if (_group.permissionType == AgoraChatGroupPermissionTypeOwner) {
-        self.navTitleArray = [@[@"All",@"Admin",@"Mute",@"Block",@"White"] mutableCopy];
+    self.navTitleArray = [@[@"All",@"Admin",@"Mute",@"Block",@"White"] mutableCopy];
 
-        self.contentVCArray = [@[self.allVC,self.adminListVC,self.mutedListVC,self.blockListVC,self.whiteListVC] mutableCopy];
-    }
-    
-    if (_group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
-        self.navTitleArray = [@[@"All",@"Mute",@"Block",@"White"] mutableCopy];
-
-        self.contentVCArray = [@[self.allVC,self.mutedListVC,self.blockListVC,self.whiteListVC] mutableCopy];
-    }
-    
-    if (_group.permissionType == AgoraChatGroupPermissionTypeMember) {
-        self.navTitleArray = [@[@"All"] mutableCopy];
-        self.contentVCArray = [@[self.allVC] mutableCopy];
-    }
+    self.contentVCArray = [@[self.allVC,self.adminListVC,self.mutedListVC,self.blockListVC,self.whiteListVC] mutableCopy];
 
 }
 

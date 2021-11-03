@@ -10,9 +10,28 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ACDContainerSearchTableViewController (GroupMemberList)
-- (void)showMemberActionSheetWithGroup:(AgoraChatGroup *)group;
+typedef NS_ENUM(NSInteger, ACDGroupMemberListType) {
+    ACDGroupMemberListTypeALL = 0,
+    ACDGroupMemberListTypeAdmin,
+    ACDGroupMemberListTypeMute,
+    ACDGroupMemberListTypeBlock,
+    ACDGroupMemberListTypeWhite
+};
 
+
+@interface ACDContainerSearchTableViewController (GroupMemberList)
+
+
+/// action sheet operation selected member
+/// @param userId selected member userId
+/// @param memberListType selected member of memberList type
+/// @param group current group
+- (void)actionSheetWithUserId:(NSString *)userId
+               memberListType:(ACDGroupMemberListType)memberListType
+                        group:(AgoraChatGroup *)group
+                   completion:(void (^)(AgoraChatError* error))completion;
+
+    
 @end
 
 NS_ASSUME_NONNULL_END

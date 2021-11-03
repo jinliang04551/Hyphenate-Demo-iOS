@@ -6,7 +6,7 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraContactInfoNewViewController.h"
+#import "ACDContactInfoViewController.h"
 #import "AgoraContactInfoViewController.h"
 #import "UIImage+ImageEffect.h"
 #import "AgoraUserModel.h"
@@ -33,7 +33,7 @@ typedef enum : NSUInteger {
     AgoraContactInfoActionBlackList,
 } AgoraContactInfoAction;
 
-@interface AgoraContactInfoNewViewController ()<UIActionSheetDelegate, AgoraContactsUIProtocol,UITableViewDelegate,UITableViewDataSource>
+@interface ACDContactInfoViewController ()<UIActionSheetDelegate, AgoraContactsUIProtocol,UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) ACDInfoHeaderView *headerView;
 @property (nonatomic, strong) AgoraUserModel *model;
@@ -41,7 +41,7 @@ typedef enum : NSUInteger {
 
 @end
 
-@implementation AgoraContactInfoNewViewController
+@implementation ACDContactInfoViewController
 {
     NSArray *_contactInfo;
     NSArray *_contactActions;
@@ -95,17 +95,6 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark - Action
-
-//- (IBAction)backAction:(id)sender {
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
-//
-//
-//- (IBAction)chatAction:(id)sender {
-//    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:_model.hyphenateId conversationType:AgoraChatConversationTypeChat];
-//    [self.navigationController pushViewController:chatViewController animated:YES];
-//}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.y < 0) {
         CGPoint contentOffset = scrollView.contentOffset;

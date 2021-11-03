@@ -51,10 +51,15 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     container.backgroundColor = UIColor.whiteColor;
     container.clipsToBounds = YES;
     
+//    [self.view addSubview:self.navView];
+//    [self.view addSubview:self.segView];
+//    [self.view addSubview:self.contentView];
+  
     [self.view addSubview:container];
     [self.view addSubview:self.navView];
     [container addSubview:self.segView];
     [container addSubview:self.contentView];
+
     
     CGFloat bottom = 0;
     if (@available(iOS 11, *)) {
@@ -71,8 +76,24 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
         make.top.equalTo(self.navView.mas_bottom).offset(5);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
-        make.bottom.equalTo(self.view).offset(-44.0f);
+        make.bottom.equalTo(self.view).offset(-bottom);
     }];
+    
+//
+//    [self.segView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self.navView.mas_bottom).offset(5);
+//        make.left.equalTo(self.view);
+//        make.right.equalTo(self.view);
+//        make.height.equalTo(@50);
+//    }];
+    
+//    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self.segView.mas_bottom);
+//        make.left.equalTo(self.view);
+//        make.right.equalTo(self.view);
+//        make.bottom.equalTo(self.view).offset(-bottom);
+//    }];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -103,6 +124,25 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)reloadContactRequests {
+//    WEAK_SELF
+//    dispatch_async(dispatch_get_main_queue(), ^(){
+//        NSArray *contactApplys = [[AgoraApplyManager defaultManager] contactApplys];
+//        weakSelf.contactRequests = [NSMutableArray arrayWithArray:contactApplys];
+//        [weakSelf.tableView reloadData];
+//        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
+//    });
+}
+
+- (void)reloadGroupNotifications {
+//    WEAK_SELF
+//    dispatch_async(dispatch_get_main_queue(), ^(){
+//        NSArray *groupApplys = [[AgoraApplyManager defaultManager] groupApplys];
+//        weakSelf.groupNotifications = [NSMutableArray arrayWithArray:groupApplys];
+//        [weakSelf.tableView reloadData];
+//        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
+//    });
+}
 
 #pragma mark ACDGroupInfoViewControllerDelegate
 - (void)checkGroupMemberListWithGroup:(AgoraChatGroup *)group {
@@ -156,7 +196,7 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     return _pageController;
 }
 
-- (MISScrollPageSegmentView*)segView{
+- (MISScrollPageSegmentView*)segView {
     if(!_segView){
         _segView = [self.pageController segmentViewWithFrame:CGRectMake(0, 0, KScreenWidth, 50)];
     }

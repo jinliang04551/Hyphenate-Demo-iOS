@@ -18,6 +18,7 @@
 #import <UserNotifications/UserNotifications.h>
 
 #import "ACDNewContactsViewController.h"
+#import "ACDSettingsViewController.h"
 
 #define kGroupMessageAtList      @"em_at_list"
 #define kGroupMessageAtAll       @"all"
@@ -34,7 +35,8 @@ static NSString *kGroupName = @"GroupName";
     ACDNewContactsViewController *_contactsVC;
 
     AgoraChatsViewController *_chatsVC;
-    AgoraSettingsViewController *_settingsVC;
+//    AgoraSettingsViewController *_settingsVC;
+    ACDSettingsViewController *_settingsVC;
 }
 
 @property (strong, nonatomic) NSDate *lastPlaySoundDate;
@@ -108,7 +110,7 @@ static NSString *kGroupName = @"GroupName";
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     
-    _settingsVC = [[AgoraSettingsViewController alloc] init];
+    _settingsVC = [[ACDSettingsViewController alloc] init];
     _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings"
                                                    image:[ImageWithName(@"TabBar.bundle/tabbar_setting")
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]

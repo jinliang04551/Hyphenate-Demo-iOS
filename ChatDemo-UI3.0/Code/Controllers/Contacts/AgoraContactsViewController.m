@@ -11,7 +11,7 @@
 #import "AgoraContactListSectionHeader.h"
 #import "AgoraAddContactViewController.h"
 //#import "AgoraContactInfoViewController.h"
-#import "AgoraContactInfoNewViewController.h"
+#import "ACDContactInfoViewController.h"
 
 #import "AgoraChatroomsViewController.h"
 #import "AgoraGroupTitleCell.h"
@@ -358,7 +358,7 @@
     }
     if (model) {
 //        AgoraContactInfoViewController *contactInfoVc = [[AgoraContactInfoViewController alloc] initWithUserModel:model];
-        AgoraContactInfoNewViewController *contactInfoVc = [[AgoraContactInfoNewViewController alloc] initWithUserModel:model];
+        ACDContactInfoViewController *contactInfoVc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
 
         contactInfoVc.addBlackListBlock = ^{
             [self reloadContacts];

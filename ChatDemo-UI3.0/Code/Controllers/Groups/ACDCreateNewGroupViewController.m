@@ -6,7 +6,7 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraCreateNewGroupNewViewController.h"
+#import "ACDCreateNewGroupViewController.h"
 #import "AgoraUserModel.h"
 #import "AgoraMemberCollectionCell.h"
 #import "AgoraGroupPermissionCell.h"
@@ -23,7 +23,7 @@
 
 static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell";
 
-@interface AgoraCreateNewGroupNewViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UINavigationControllerDelegate, AgoraGroupUIProtocol>
+@interface ACDCreateNewGroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UINavigationControllerDelegate, AgoraGroupUIProtocol>
 
 
 @property (strong, nonatomic) ACDTextFieldCell *groupNameCell;
@@ -38,7 +38,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 
 @end
 
-@implementation AgoraCreateNewGroupNewViewController
+@implementation ACDCreateNewGroupViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

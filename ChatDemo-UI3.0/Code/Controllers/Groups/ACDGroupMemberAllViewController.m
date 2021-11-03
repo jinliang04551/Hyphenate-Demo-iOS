@@ -9,10 +9,11 @@
 #import "ACDGroupMemberAllViewController.h"
 #import "AgoraGroupOccupantsViewController.h"
 
-#import "AgoraMemberCell.h"
 #import "UIViewController+HUD.h"
 #import "AgoraNotificationNames.h"
 #import "ACDContainerSearchTableViewController+GroupMemberList.h"
+#import "ACDInfoDetailCell.h"
+#import "NSArray+AgoraSortContacts.h"
 
 
 @interface ACDGroupMemberAllViewController ()
@@ -20,18 +21,18 @@
 @property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) AgoraChatGroup *group;
 @property (nonatomic, strong) NSString *cursor;
-
 @property (nonatomic, strong) NSMutableArray *ownerAndAdmins;
 
 @end
 
 @implementation ACDGroupMemberAllViewController
 
-- (instancetype)initWithGroupId:(NSString *)aGroupId
+- (instancetype)initWithGroup:(AgoraChatGroup *)aGroup
 {
     self = [super init];
     if (self) {
-        self.groupId = aGroupId;
+        self.group = aGroup;
+        self.groupId = self.group.groupId;
     }
     
     return self;
@@ -39,67 +40,98 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.title = NSLocalizedString(@"title.occupantList", @"Occupant List");
-    
-    _ownerAndAdmins = [[NSMutableArray alloc] init];
-    
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    backButton.accessibilityIdentifier = @"back";
-    [backButton setImage:[UIImage imageNamed:@"Icon_Back"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
-    
-//    self.showRefreshHeader = YES;
-    [self tableViewDidTriggerHeaderRefresh];
+    [self loadAllMembers];
+    [self.table reloadData];
 }
+
+- (void)loadAllMembers {
+    [self.ownerAndAdmins addObject:self.group.owner];
+    [self.ownerAndAdmins addObject:self.group.adminList];
+
+    [self sortALlMembers];
+}
+
+- (void)sortALlMembers {
+//    NSMutableSet *adminSet = [NSMutableSet setWithArray:self.ownerAndAdmins];
+//    NSMutableSet *memberSet = [NSMutableSet setWithArray:self.group.memberList];
+//    [memberSet minusSet:adminSet];
+//
+//    NSArray *members = [memberSet allObjects];
+    [self sortMembers:self.group.occupants];
+}
+
+
+- (void)sortMembers:(NSArray *)members {
+    if (members.count == 0) {
+        self.dataArray = [@[] mutableCopy];
+        self.sectionTitles = [@[] mutableCopy];
+        self.searchSource = [@[] mutableCopy];
+        return;
+    }
+    
+    if (members.count == 1) {
+        NSString *firstLetter = [self.group.owner substringToIndex:1];
+        [self.dataArray addObject:self.group.owner];
+        self.sectionTitles = [NSMutableArray arrayWithObject:firstLetter];
+        self.searchSource = self.dataArray;
+        return;
+    }
+    
+    NSLog(@"%s members:%@",__func__,members);
+
+    NSMutableArray *sectionTitles = nil;
+    NSMutableArray *searchSource = nil;
+    NSArray *sortArray = [NSArray sortContacts:members
+                                 sectionTitles:&sectionTitles
+                                  searchSource:&searchSource];
+    [self.dataArray removeAllObjects];
+    [self.dataArray addObjectsFromArray:sortArray];
+    self.sectionTitles = [NSMutableArray arrayWithArray:sectionTitles];
+    self.searchSource = [NSMutableArray arrayWithArray:searchSource];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)table {
+    return self.sectionTitles;
 }
 
+- (NSInteger)table:(UITableView *)table sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    return index;
+}
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return [self.ownerAndAdmins count];
-    }
-    
     return [self.dataArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    AgoraMemberCell *cell = (AgoraMemberCell *)[tableView dequeueReusableCellWithIdentifier:@"AgoraMemberCell"];
+    ACDInfoDetailCell *cell = (ACDInfoDetailCell *)[tableView dequeueReusableCellWithIdentifier:[ACDInfoDetailCell reuseIdentifier]];
     if (cell == nil) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:@"AgoraMemberCell" owner:self options:nil] lastObject];
+        cell = [[ACDInfoDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoDetailCell reuseIdentifier]];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    cell.imgView.image = [UIImage imageNamed:@"default_avatar"];
-    
-    NSInteger section = indexPath.section;
-    NSInteger row = indexPath.row;
-    cell.rightLabel.text = nil;
-    if (section == 0) {
-        cell.leftLabel.text = [self.ownerAndAdmins objectAtIndex:row];
-        if (row == 0) {
-            cell.showAccessoryViewInDelete = NO;
-            cell.rightLabel.text = @"owner";
+    NSString *name = self.dataArray[indexPath.row];
+    cell.iconImageView.image = [UIImage imageNamed:@"default_avatar"];
+    cell.nameLabel.text = name;
+
+    if ([self.ownerAndAdmins containsObject:name]) {
+        if (name == self.group.owner) {
+            cell.detailLabel.text = @"owner";
         } else {
-            cell.showAccessoryViewInDelete = [self _isShowCellAccessoryView];
-            cell.rightLabel.text = @"admin";
+            cell.detailLabel.text = @"admin";
         }
-    } else {
-        cell.showAccessoryViewInDelete = [self _isShowCellAccessoryView];
-        cell.leftLabel.text = [self.dataArray objectAtIndex:row];
     }
-    
+
+    ACD_WS
+    cell.tapCellBlock = ^{
+        
+    };
     return cell;
 }
 
@@ -212,7 +244,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    [self showMemberActionSheetWithGroup:self.group];
 }
 
 
@@ -298,6 +329,14 @@
 //            weakSelf.showRefreshFooter = YES;
         }
     }];
+}
+
+
+- (NSMutableArray *)ownerAndAdmins {
+    if (_ownerAndAdmins == nil) {
+        _ownerAndAdmins = NSMutableArray.new;
+    }
+    return _ownerAndAdmins;
 }
 
 

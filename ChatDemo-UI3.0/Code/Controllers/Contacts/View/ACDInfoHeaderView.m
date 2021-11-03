@@ -144,6 +144,30 @@
 }
 
 - (void)placeAndLayoutForMeInfo {
+    [self addSubview:self.avatarImageView];
+    [self addSubview:self.nameLabel];
+    [self addSubview:self.userIdLabel];
+        
+    [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self).offset(kAgroaPadding *4.4);
+        make.centerX.equalTo(self);
+//        make.width.mas_equalTo(140.0);
+//        make.height.mas_equalTo(140.0);
+    }];
+    
+    [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.avatarImageView.mas_bottom).offset(kAgroaPadding);
+        make.left.equalTo(self).offset(kAgroaPadding * 5);
+        make.right.equalTo(self).offset(-kAgroaPadding * 5);
+        make.height.equalTo(@28.0);
+    }];
+    
+    [self.userIdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.nameLabel.mas_bottom);
+        make.left.equalTo(self).offset(kAgroaPadding * 5);
+        make.right.equalTo(self).offset(-kAgroaPadding * 5);
+        make.height.mas_equalTo(20.0);
+    }];
     
 }
 

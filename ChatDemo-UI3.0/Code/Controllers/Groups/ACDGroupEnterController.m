@@ -11,7 +11,7 @@
 #import "ACDGroupEnterCell.h"
 
 #import "AgoraCreateNewGroupViewController.h"
-#import "AgoraCreateNewGroupNewViewController.h"
+#import "ACDCreateNewGroupViewController.h"
 
 #import "ACDPublicGroupListViewController.h"
 #import "AgoraAddContactViewController.h"
@@ -92,7 +92,7 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 
 #pragma mark private method
 - (void)goCreateNewGroup {
-    AgoraCreateNewGroupNewViewController *vc = AgoraCreateNewGroupNewViewController.new;
+    ACDCreateNewGroupViewController *vc = ACDCreateNewGroupViewController.new;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -36,6 +36,7 @@
 #import "AgoraCategory.h"
 #import "AgoraCustomBase.h"
 #import "ACDAppStyle.h"
+#import "NSArray+AgoraSortContacts.h"
 
 
 #endif

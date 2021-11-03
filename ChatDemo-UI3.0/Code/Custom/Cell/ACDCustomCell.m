@@ -57,7 +57,7 @@
 - (UIImageView *)iconImageView {
     if (_iconImageView == nil) {
         _iconImageView = [[UIImageView alloc] init];
-        _iconImageView.contentMode = UIViewContentModeCenter;
+        _iconImageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _iconImageView;
 }

@@ -90,6 +90,7 @@
         _timeLabel.textColor = COLOR_HEX(0x000000);
         _timeLabel.textAlignment = NSTextAlignmentLeft;
         _timeLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        _timeLabel.text = @"2021-11-01";
     }
     return _timeLabel;
 }
@@ -102,6 +103,7 @@
         _contentLabel.textColor = COLOR_HEX(0x000000);
         _contentLabel.textAlignment = NSTextAlignmentLeft;
         _contentLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        _contentLabel.text = @"hhhhhh";
     }
     return _contentLabel;
 }

@@ -7,71 +7,68 @@
 //
 
 #import "ACDContainerSearchTableViewController+GroupMemberList.h"
+typedef void(^actionBlock)();
+
+#define kActionAdminKey   @"ActionAdminKey"
+#define kActionUnAdminKey @"ActionUnAdminKey"
+
+#define kActionMuteKey    @"ActionMuteKey"
+#define kActionUnMuteKey  @"ActionUnMuteKey"
+
+#define kActionBlockKey   @"ActionBlockKey"
+#define kActionUnBlockKey @"ActionUnBlockKey"
+
+#define kActionRemoveFromGroupKey @"ActionRemoveFromGroupKey"
+
 
 @implementation ACDContainerSearchTableViewController (GroupMemberList)
 
-- (void)showMemberActionSheetWithGroup:(AgoraChatGroup *)group {
+- (void)actionSheetWithUserId:(NSString *)userId
+               memberListType:(ACDGroupMemberListType)memberListType
+                        group:(AgoraChatGroup *)group
+                   completion:(void (^)(AgoraChatError* error))completion {
+    //if selected user is currentUsernam, than do nothing
+    if ([userId isEqualToString:AgoraChatClient.sharedClient.currentUsername]) {
+        return;
+    }
+    
+    //admin can not opertion admin
+    if (group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
+        BOOL isAdminUserId = [group.adminList containsObject:userId];
+        if (isAdminUserId) {
+            return;
+        }
+    }
+    
     if (group.permissionType == AgoraChatGroupPermissionTypeMember) {
         return;
     }
     
+//    self.selectedUserId = userId;
+//    self.groupId = group.groupId;
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:userId message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    ACD_WS
     if (group.permissionType == AgoraChatGroupPermissionTypeOwner) {
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Make Admin" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-           
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Mute" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Move to Blocked List" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Move to Allowed List" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
-
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Remove From Group" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        }]];
-        
-        for (UIAlertAction *alertAction in alertController.actions)
-            [alertAction setValue:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0] forKey:@"_titleTextColor"];
+        BOOL isAdmin = [group.adminList containsObject:userId];
+        NSArray *actions = [self ownerWithMemberListType:memberListType selectedIsAdmin:isAdmin alertController:alertController];
+        for (UIAlertAction *action in actions) {
+            [alertController addAction:action];
+        }
         
     }
     
     if (group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Mute" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
+        NSArray *actions = [self adminWithMemberListType:memberListType alertController:alertController];
         
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Move to Blocked List" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Move to Allowed List" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
-
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Remove From Group" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        }]];
-        
-        for (UIAlertAction *alertAction in alertController.actions)
-            [alertAction setValue:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0] forKey:@"_titleTextColor"];
-        
+        for (UIAlertAction *action in actions) {
+            [alertController addAction:action];
+        }
     }
+    
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }]];
     
     [self presentViewController:alertController animated:YES completion:nil];
     return;
@@ -79,11 +76,191 @@
 }
    
 
+-(NSArray *)ownerWithMemberListType:(ACDGroupMemberListType)memberListType
+                    selectedIsAdmin:(BOOL)selectedIsAdmin
+                    alertController:(UIAlertController *)alertController {
+    
+    NSMutableArray *actionArray = NSMutableArray.new;
+    NSDictionary *actionDic = [self alertActionDics];
+    if (memberListType == ACDGroupMemberListTypeALL) {
+        if (selectedIsAdmin) {
+            [actionArray addObject:actionDic[kActionUnAdminKey]];
+            [actionArray addObject:actionDic[kActionMuteKey]];
+            [actionArray addObject:actionDic[kActionBlockKey]];
+            [actionArray addObject:actionDic[kActionRemoveFromGroupKey]];
+    
+        }else {
+            [actionArray addObject:actionDic[kActionAdminKey]];
+            [actionArray addObject:actionDic[kActionMuteKey]];
+            [actionArray addObject:actionDic[kActionBlockKey]];
+            [actionArray addObject:actionDic[kActionRemoveFromGroupKey]];
+        }
+    }
+    
+    if (memberListType == ACDGroupMemberListTypeBlock) {
+        [actionArray addObject:actionDic[kActionUnBlockKey]];
+        [actionArray addObject:actionDic[kActionRemoveFromGroupKey]];
+    }
+
+    if (memberListType == ACDGroupMemberListTypeMute) {
+        [actionArray addObject:actionDic[kActionUnMuteKey]];
+        [actionArray addObject:actionDic[kActionRemoveFromGroupKey]];
+    }
+
+    return [actionArray copy];
+    
+}
+
+
+-(NSArray *)adminWithMemberListType:(ACDGroupMemberListType)memberListType
+               alertController:(UIAlertController *)alertController {
+    
+    NSMutableArray *actionArray = NSMutableArray.new;
+    NSDictionary *actionDic = [self alertActionDics];
+    if (memberListType == ACDGroupMemberListTypeALL) {
+        [actionArray addObject:actionDic[kActionMuteKey]];
+        [actionArray addObject:actionDic[kActionBlockKey]];
+        [actionArray addObject:actionDic[kActionRemoveFromGroupKey]];
+    }
+    
+    if (memberListType == ACDGroupMemberListTypeBlock) {
+        [actionArray addObject:actionDic[kActionUnBlockKey]];
+        [actionArray addObject:actionDic[kActionRemoveFromGroupKey]];
+    }
+
+    if (memberListType == ACDGroupMemberListTypeMute) {
+        [actionArray addObject:actionDic[kActionUnMuteKey]];
+        [actionArray addObject:actionDic[kActionRemoveFromGroupKey]];
+    }
+
+    return [actionArray copy];
+
+}
+
+- (NSDictionary *)alertActionDics {
+        NSMutableDictionary *alertActionDics = NSMutableDictionary.new;
+        UIAlertAction *makeAdminAction = [self alertActionWithTitle:@"Make Admin" completion:^{
+            [self makeAdmin];
+        }];
+        
+        UIAlertAction *makeMuteAction = [self alertActionWithTitle:@"Mute" completion:^{
+            [self makeMute];
+        }];
+
+        UIAlertAction *makeBlockAction = [self alertActionWithTitle:@"Move to Blocked List" completion:^{
+            [self makeBlock];
+        }];
+
+        
+        UIAlertAction *makeRemoveGroupAction = [self alertActionWithTitle:@"Remove From Group" completion:^{
+            [self makeRemoveGroup];
+        }];
+
+    
+        UIAlertAction *makeUnAdminAction = [self alertActionWithTitle:@"Remove as Admin" completion:^{
+            [self makeMute];
+        }];
+    
+        UIAlertAction *makeUnMuteAction = [self alertActionWithTitle:@"Unmute" completion:^{
+            [self makeMute];
+        }];
+
+        
+        UIAlertAction *makeUnBlockAction = [self alertActionWithTitle:@"Remove from Blocked List" completion:^{
+            [self makeMute];
+        }];
+        
+    alertActionDics[kActionAdminKey] = makeAdminAction;
+    alertActionDics[kActionMuteKey] =  makeMuteAction;
+    alertActionDics[kActionBlockKey] = makeBlockAction;
+    alertActionDics[kActionUnAdminKey] = makeUnAdminAction;
+    alertActionDics[kActionUnMuteKey] = makeUnMuteAction;
+    alertActionDics[kActionUnBlockKey] = makeUnBlockAction;
+    alertActionDics[kActionRemoveFromGroupKey] = makeRemoveGroupAction;
+
+    return alertActionDics;
+}
+
+- (UIAlertAction* )alertActionWithTitle:(NSString *)title
+                             completion:(actionBlock)completion {
+    UIAlertAction* alertAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (completion) {
+            completion();
+        }
+    }];
+    return alertAction;
+}
+
+
+- (void)editActionsForRowAtIndexPath:(NSIndexPath *)indexPath actionIndex:(NSInteger)buttonIndex
+{
+//    NSString *userName = @"";
+//    if (indexPath.section == 0) {
+//        userName = [self.ownerAndAdmins objectAtIndex:indexPath.row];
+//    } else {
+//        userName = [self.dataArray objectAtIndex:indexPath.row];
+//    }
+    
+//    [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
+//
+//    __weak typeof(self) weakSelf = self;
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        AgoraChatError *error = nil;
+//        if (buttonIndex == 0) { //Remove
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                if (indexPath.section == 0) {
+//                    [weakSelf.ownerAndAdmins removeObject:userName];
+//                } else {
+//                    [weakSelf.dataArray removeObject:userName];
+//                }
+//            }
+//        } else if (buttonIndex == 1) { //Blacklist
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                if (indexPath.section == 0) {
+//                    [weakSelf.ownerAndAdmins removeObject:userName];
+//                } else {
+//                    [weakSelf.dataArray removeObject:userName];
+//                }
+//            }
+//        } else if (buttonIndex == 2) {  //Mute
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
+//        } else if (buttonIndex == 3) {  //To Admin
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                [weakSelf.ownerAndAdmins addObject:userName];
+//                [weakSelf.dataArray removeObject:userName];
+//            }
+//        }
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf hideHud];
+//            if (!error) {
+//                if (buttonIndex != 2) {
+//                    [weakSelf.table reloadData];
+//                } else {
+//                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
+//                }
+//
+//                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:weakSelf.group];
+//            }
+//            else {
+//                [weakSelf showHint:error.errorDescription];
+//            }
+//        });
+//    });
+    
+}
+
+
+
+
 - (void)makeAdmin {
     
 }
 
-- (void)mute {
+- (void)makeMute {
     
 }
 
@@ -91,4 +268,34 @@
     
 }
 
+
+- (void)makeRemoveGroup {
+//    AgoraChatError *error = nil;
+//    [[AgoraChatClient sharedClient].groupManager removeOccupants:@[self.selectedUserId] fromGroup:group.groupId error:&error];
+}
+
+- (void)unAdmin {
+    
+}
+
+- (void)unMute {
+    
+}
+
+- (void)unBlock {
+    
+}
+
+
 @end
+
+#undef kActionAdminKey
+#undef kActionUnAdminKey
+
+#undef kActionMuteKey
+#undef kActionUnMuteKey
+
+#undef kActionBlockKey
+#undef kActionUnBlockKey
+
+#undef kActionRemoveFromGroupKey

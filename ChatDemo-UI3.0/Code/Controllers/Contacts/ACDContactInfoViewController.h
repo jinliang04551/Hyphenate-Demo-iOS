@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AgoraContactInfoNewViewController : AgoraChatBaseViewController
+@interface ACDContactInfoViewController : AgoraChatBaseViewController
 @property (nonatomic,copy) void (^addBlackListBlock)(void);
 @property (nonatomic,copy) void (^deleteContactBlock)(void);
 
