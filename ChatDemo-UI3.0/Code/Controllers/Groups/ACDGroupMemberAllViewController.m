@@ -33,10 +33,18 @@
     if (self) {
         self.group = aGroup;
         self.groupId = self.group.groupId;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUIWithNotification:) name:KAgora_REFRESH_GROUP_INFO object:nil];
+
     }
     
     return self;
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -52,11 +60,6 @@
 }
 
 - (void)sortALlMembers {
-//    NSMutableSet *adminSet = [NSMutableSet setWithArray:self.ownerAndAdmins];
-//    NSMutableSet *memberSet = [NSMutableSet setWithArray:self.group.memberList];
-//    [memberSet minusSet:adminSet];
-//
-//    NSArray *members = [memberSet allObjects];
     [self sortMembers:self.group.occupants];
 }
 
@@ -95,7 +98,40 @@
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark overload method
+- (void)updateUIWithGroupId:(NSString *)groupId {
+    
+}
+
+
+#pragma mark updateUIWithNotification
+- (void)updateUIWithNotification:(NSNotification *)notify {
+    self.cursor = @"";
+    [self fetchMembersWithCursor:self.cursor isHeader:YES];
+}
+
+
 #pragma mark - Table view data source
+//- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)table {
+//    return self.sectionTitles;
+//}
+//
+//- (NSInteger)table:(UITableView *)table sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+//    return index;
+//}
+//
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    return [self.dataArray count];
+//}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
+    if (self.isSearchState) {
+        return 1;
+    }
+    return  self.sectionTitles.count;
+}
+
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)table {
     return self.sectionTitles;
 }
@@ -104,10 +140,16 @@
     return index;
 }
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.dataArray count];
+- (NSInteger)table:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
+    if (self.isSearchState) {
+        return self.searchResults.count;
+    }
+   
+//    return ((NSArray *)self.dataArray[section]).count;
+    return 1;
 }
+
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ACDInfoDetailCell *cell = (ACDInfoDetailCell *)[tableView dequeueReusableCellWithIdentifier:[ACDInfoDetailCell reuseIdentifier]];
@@ -135,111 +177,111 @@
     return cell;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSInteger section = indexPath.section;
-    NSInteger row = indexPath.row;
-    if (section == 0 && row == 0) {
-        return NO;
-    }
-    
-    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
-        return YES;
-    }
-    
-    return NO;
-}
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    NSInteger section = indexPath.section;
+//    NSInteger row = indexPath.row;
+//    if (section == 0 && row == 0) {
+//        return NO;
+//    }
+//
+//    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
+//        return YES;
+//    }
+//
+//    return NO;
+//}
 
-- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.remove", @"Remove") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [self editActionsForRowAtIndexPath:indexPath actionIndex:0];
-    }];
-    deleteAction.backgroundColor = [UIColor redColor];
-    
-    UITableViewRowAction *blackAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.block", @"Block") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [self editActionsForRowAtIndexPath:indexPath actionIndex:1];
-    }];
-    blackAction.backgroundColor = [UIColor colorWithRed: 50 / 255.0 green: 63 / 255.0 blue: 72 / 255.0 alpha:1.0];
-    
-    UITableViewRowAction *muteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.mute", @"Mute") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [self editActionsForRowAtIndexPath:indexPath actionIndex:2];
-    }];
-    muteAction.backgroundColor = [UIColor colorWithRed: 116 / 255.0 green: 134 / 255.0 blue: 147 / 255.0 alpha:1.0];
-    
-    UITableViewRowAction *toAdminAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.upgrade", @"Up") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [self editActionsForRowAtIndexPath:indexPath actionIndex:3];
-    }];
-    toAdminAction.backgroundColor = [UIColor colorWithRed: 50 / 255.0 green: 63 / 255.0 blue: 72 / 255.0 alpha:1.0];
-    
-    if (indexPath.section == 1) {
-        return @[deleteAction, blackAction, muteAction, toAdminAction];
-    }
-    
-    return @[deleteAction, blackAction, muteAction];
-}
-
+//- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.remove", @"Remove") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+//        [self editActionsForRowAtIndexPath:indexPath actionIndex:0];
+//    }];
+//    deleteAction.backgroundColor = [UIColor redColor];
+//
+//    UITableViewRowAction *blackAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.block", @"Block") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+//        [self editActionsForRowAtIndexPath:indexPath actionIndex:1];
+//    }];
+//    blackAction.backgroundColor = [UIColor colorWithRed: 50 / 255.0 green: 63 / 255.0 blue: 72 / 255.0 alpha:1.0];
+//
+//    UITableViewRowAction *muteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.mute", @"Mute") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+//        [self editActionsForRowAtIndexPath:indexPath actionIndex:2];
+//    }];
+//    muteAction.backgroundColor = [UIColor colorWithRed: 116 / 255.0 green: 134 / 255.0 blue: 147 / 255.0 alpha:1.0];
+//
+//    UITableViewRowAction *toAdminAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.upgrade", @"Up") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+//        [self editActionsForRowAtIndexPath:indexPath actionIndex:3];
+//    }];
+//    toAdminAction.backgroundColor = [UIColor colorWithRed: 50 / 255.0 green: 63 / 255.0 blue: 72 / 255.0 alpha:1.0];
+//
+//    if (indexPath.section == 1) {
+//        return @[deleteAction, blackAction, muteAction, toAdminAction];
+//    }
+//
+//    return @[deleteAction, blackAction, muteAction];
+//}
+//
 #pragma mark - Action
 
-- (void)editActionsForRowAtIndexPath:(NSIndexPath *)indexPath actionIndex:(NSInteger)buttonIndex
-{
-    NSString *userName = @"";
-    if (indexPath.section == 0) {
-        userName = [self.ownerAndAdmins objectAtIndex:indexPath.row];
-    } else {
-        userName = [self.dataArray objectAtIndex:indexPath.row];
-    }
-    
-    [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
-    
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        AgoraChatError *error = nil;
-        if (buttonIndex == 0) { //Remove
-            weakSelf.group = [[AgoraChatClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-            if (!error) {
-                if (indexPath.section == 0) {
-                    [weakSelf.ownerAndAdmins removeObject:userName];
-                } else {
-                    [weakSelf.dataArray removeObject:userName];
-                }
-            }
-        } else if (buttonIndex == 1) { //Blacklist
-            weakSelf.group = [[AgoraChatClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-            if (!error) {
-                if (indexPath.section == 0) {
-                    [weakSelf.ownerAndAdmins removeObject:userName];
-                } else {
-                    [weakSelf.dataArray removeObject:userName];
-                }
-            }
-        } else if (buttonIndex == 2) {  //Mute
-            weakSelf.group = [[AgoraChatClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
-        } else if (buttonIndex == 3) {  //To Admin
-            weakSelf.group = [[AgoraChatClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
-            if (!error) {
-                [weakSelf.ownerAndAdmins addObject:userName];
-                [weakSelf.dataArray removeObject:userName];
-            }
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf hideHud];
-            if (!error) {
-                if (buttonIndex != 2) {
-                    [weakSelf.table reloadData];
-                } else {
-                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
-                }
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:weakSelf.group];
-            }
-            else {
-                [weakSelf showHint:error.errorDescription];
-            }
-        });
-    });
-}
+//- (void)editActionsForRowAtIndexPath:(NSIndexPath *)indexPath actionIndex:(NSInteger)buttonIndex
+//{
+//    NSString *userName = @"";
+//    if (indexPath.section == 0) {
+//        userName = [self.ownerAndAdmins objectAtIndex:indexPath.row];
+//    } else {
+//        userName = [self.dataArray objectAtIndex:indexPath.row];
+//    }
+//
+//    [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
+//
+//    __weak typeof(self) weakSelf = self;
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        AgoraChatError *error = nil;
+//        if (buttonIndex == 0) { //Remove
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                if (indexPath.section == 0) {
+//                    [weakSelf.ownerAndAdmins removeObject:userName];
+//                } else {
+//                    [weakSelf.dataArray removeObject:userName];
+//                }
+//            }
+//        } else if (buttonIndex == 1) { //Blacklist
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                if (indexPath.section == 0) {
+//                    [weakSelf.ownerAndAdmins removeObject:userName];
+//                } else {
+//                    [weakSelf.dataArray removeObject:userName];
+//                }
+//            }
+//        } else if (buttonIndex == 2) {  //Mute
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
+//        } else if (buttonIndex == 3) {  //To Admin
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                [weakSelf.ownerAndAdmins addObject:userName];
+//                [weakSelf.dataArray removeObject:userName];
+//            }
+//        }
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf hideHud];
+//            if (!error) {
+//                if (buttonIndex != 2) {
+//                    [weakSelf.table reloadData];
+//                } else {
+//                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
+//                }
+//
+//                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:weakSelf.group];
+//            }
+//            else {
+//                [weakSelf showHint:error.errorDescription];
+//            }
+//        });
+//    });
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

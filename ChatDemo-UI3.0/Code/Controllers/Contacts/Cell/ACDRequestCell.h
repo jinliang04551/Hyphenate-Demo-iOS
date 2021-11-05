@@ -9,10 +9,13 @@
 #import "ACDCustomCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@class AgoraApplyModel;
 
 @interface ACDRequestCell : ACDCustomCell
-@property (nonatomic, copy) void (^acceptBlock)(void);
-@property (nonatomic, copy) void (^rejectBlock)(void);
+@property (nonatomic, strong) UILabel *timeLabel;
+@property (nonatomic, strong) UILabel *contentLabel;
+@property (nonatomic, copy) void (^acceptBlock)(AgoraApplyModel *model);
+@property (nonatomic, copy) void (^rejectBlock)(AgoraApplyModel *model);
 
 @end
 

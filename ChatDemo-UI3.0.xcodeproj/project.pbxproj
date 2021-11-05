@@ -424,7 +424,7 @@
 		EC432EB6271D9BFD001B31DE /* login.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC432EB5271D9BFD001B31DE /* login.bundle */; };
 		EC432EB8271EADDA001B31DE /* TabBar.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC432EB7271EADDA001B31DE /* TabBar.bundle */; };
 		EC432EBC271EC5DC001B31DE /* ACDGroupEnterController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EBB271EC5DC001B31DE /* ACDGroupEnterController.m */; };
-		EC432EBF271EE73A001B31DE /* ACDNewContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EBE271EE73A001B31DE /* ACDNewContactsViewController.m */; };
+		EC432EBF271EE73A001B31DE /* ACDContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EBE271EE73A001B31DE /* ACDContactsViewController.m */; };
 		EC432EC2271EF1D6001B31DE /* ACDContactInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EC1271EF1D6001B31DE /* ACDContactInfoViewController.m */; };
 		EC432EC5271EF51F001B31DE /* ACDInfoHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EC4271EF51F001B31DE /* ACDInfoHeaderView.m */; };
 		EC432ECD27202996001B31DE /* addContact_disable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC432EC727202996001B31DE /* addContact_disable@3x.png */; };
@@ -540,6 +540,11 @@
 		EC570EAD2730E9D200CBC408 /* General@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC570EA52730E9D200CBC408 /* General@3x.png */; };
 		EC570EB02731295700CBC408 /* default_avatar_setting@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC570EAE2731295700CBC408 /* default_avatar_setting@3x.png */; };
 		EC570EB3273129B100CBC408 /* default_avatar_setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC570EB2273129B100CBC408 /* default_avatar_setting@2x.png */; };
+		EC658DF427338E9700472939 /* ACDContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EC658DF327338E9700472939 /* ACDContactCell.m */; };
+		EC658DF72733BFEA00472939 /* ACDChatNavigationView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC658DF62733BFEA00472939 /* ACDChatNavigationView.m */; };
+		EC658DFA2733CA4500472939 /* nav_chat_right_bar@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC658DF82733CA4500472939 /* nav_chat_right_bar@3x.png */; };
+		EC658DFB2733CA4500472939 /* nav_chat_right_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC658DF92733CA4500472939 /* nav_chat_right_bar@2x.png */; };
+		EC658DFE2733CB7400472939 /* ACDTransferOwnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC658DFD2733CB7400472939 /* ACDTransferOwnerViewController.m */; };
 		EC7A1E43272FD5EB0060B75D /* ACDGroupMemberWhiteListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A1E42272FD5EB0060B75D /* ACDGroupMemberWhiteListViewController.m */; };
 		EC7A3236272BADE000AF0C19 /* ACDGroupMemberAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A3235272BADE000AF0C19 /* ACDGroupMemberAllViewController.m */; };
 		EC7A3239272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A3238272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m */; };
@@ -1127,8 +1132,8 @@
 		EC432EB7271EADDA001B31DE /* TabBar.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TabBar.bundle; sourceTree = "<group>"; };
 		EC432EBA271EC5DC001B31DE /* ACDGroupEnterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupEnterController.h; sourceTree = "<group>"; };
 		EC432EBB271EC5DC001B31DE /* ACDGroupEnterController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupEnterController.m; sourceTree = "<group>"; };
-		EC432EBD271EE73A001B31DE /* ACDNewContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDNewContactsViewController.h; sourceTree = "<group>"; };
-		EC432EBE271EE73A001B31DE /* ACDNewContactsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDNewContactsViewController.m; sourceTree = "<group>"; };
+		EC432EBD271EE73A001B31DE /* ACDContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDContactsViewController.h; sourceTree = "<group>"; };
+		EC432EBE271EE73A001B31DE /* ACDContactsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDContactsViewController.m; sourceTree = "<group>"; };
 		EC432EC0271EF1D6001B31DE /* ACDContactInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDContactInfoViewController.h; sourceTree = "<group>"; };
 		EC432EC1271EF1D6001B31DE /* ACDContactInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDContactInfoViewController.m; sourceTree = "<group>"; };
 		EC432EC3271EF51F001B31DE /* ACDInfoHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDInfoHeaderView.h; sourceTree = "<group>"; };
@@ -1285,6 +1290,14 @@
 		EC570EA52730E9D200CBC408 /* General@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "General@3x.png"; sourceTree = "<group>"; };
 		EC570EAE2731295700CBC408 /* default_avatar_setting@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar_setting@3x.png"; sourceTree = "<group>"; };
 		EC570EB2273129B100CBC408 /* default_avatar_setting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar_setting@2x.png"; sourceTree = "<group>"; };
+		EC658DF227338E9700472939 /* ACDContactCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDContactCell.h; sourceTree = "<group>"; };
+		EC658DF327338E9700472939 /* ACDContactCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDContactCell.m; sourceTree = "<group>"; };
+		EC658DF52733BFEA00472939 /* ACDChatNavigationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDChatNavigationView.h; sourceTree = "<group>"; };
+		EC658DF62733BFEA00472939 /* ACDChatNavigationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDChatNavigationView.m; sourceTree = "<group>"; };
+		EC658DF82733CA4500472939 /* nav_chat_right_bar@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_chat_right_bar@3x.png"; sourceTree = "<group>"; };
+		EC658DF92733CA4500472939 /* nav_chat_right_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_chat_right_bar@2x.png"; sourceTree = "<group>"; };
+		EC658DFC2733CB7400472939 /* ACDTransferOwnerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDTransferOwnerViewController.h; sourceTree = "<group>"; };
+		EC658DFD2733CB7400472939 /* ACDTransferOwnerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDTransferOwnerViewController.m; sourceTree = "<group>"; };
 		EC7A1E41272FD5EB0060B75D /* ACDGroupMemberWhiteListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupMemberWhiteListViewController.h; sourceTree = "<group>"; };
 		EC7A1E42272FD5EB0060B75D /* ACDGroupMemberWhiteListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDGroupMemberWhiteListViewController.m; sourceTree = "<group>"; };
 		EC7A3234272BADE000AF0C19 /* ACDGroupMemberAllViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDGroupMemberAllViewController.h; sourceTree = "<group>"; };
@@ -1397,6 +1410,8 @@
 				3A79D1121E77AB080085AB6E /* AgoraGroupMutesViewController.m */,
 				3A79D1131E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.h */,
 				3A79D1141E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m */,
+				EC658DFC2733CB7400472939 /* ACDTransferOwnerViewController.h */,
+				EC658DFD2733CB7400472939 /* ACDTransferOwnerViewController.m */,
 				3A79D1081E77AAF40085AB6E /* AgoraGroupInfoViewController.h */,
 				3A79D1091E77AAF40085AB6E /* AgoraGroupInfoViewController.m */,
 				7F6CC85526568B5700BA60BB /* AgoraAddAdminViewController.h */,
@@ -1598,6 +1613,8 @@
 				7F6CC8C626568C6E00BA60BB /* AgoraApplyRequestCell.h */,
 				EC54DDEF2729953300ABEE3E /* ACDRequestCell.h */,
 				EC54DDF02729953300ABEE3E /* ACDRequestCell.m */,
+				EC658DF227338E9700472939 /* ACDContactCell.h */,
+				EC658DF327338E9700472939 /* ACDContactCell.m */,
 				7F6CC8CB26568C6F00BA60BB /* AgoraApplyRequestCell.m */,
 				7F6CC8CD26568C6F00BA60BB /* AgoraApplyRequestCell.xib */,
 				7F6CC8CC26568C6F00BA60BB /* AgoraContactCell.h */,
@@ -1895,8 +1912,8 @@
 				7F6CC8BA26568C4A00BA60BB /* AgoraAddContactViewController.h */,
 				7F6CC8B726568C4A00BA60BB /* AgoraAddContactViewController.m */,
 				7F6CC8B926568C4A00BA60BB /* AgoraAddContactViewController.xib */,
-				EC432EBD271EE73A001B31DE /* ACDNewContactsViewController.h */,
-				EC432EBE271EE73A001B31DE /* ACDNewContactsViewController.m */,
+				EC432EBD271EE73A001B31DE /* ACDContactsViewController.h */,
+				EC432EBE271EE73A001B31DE /* ACDContactsViewController.m */,
 				EC54DCC5272143B300ABEE3E /* ACDContactListController.h */,
 				EC54DCC6272143B300ABEE3E /* ACDContactListController.m */,
 				EC54DCEF27215A9D00ABEE3E /* ACDGroupListViewController.h */,
@@ -2381,6 +2398,8 @@
 		EC432ED427202B34001B31DE /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				EC658DF92733CA4500472939 /* nav_chat_right_bar@2x.png */,
+				EC658DF82733CA4500472939 /* nav_chat_right_bar@3x.png */,
 				EC570EB2273129B100CBC408 /* default_avatar_setting@2x.png */,
 				EC570EAE2731295700CBC408 /* default_avatar_setting@3x.png */,
 				EC54DDF327299DF700ABEE3E /* request_reject@2x.png */,
@@ -2490,6 +2509,8 @@
 				EC54DCF727216EBA00ABEE3E /* ACDNaviCustomView.m */,
 				EC7A3243272BD2E600AF0C19 /* ACDGroupMemberNavView.h */,
 				EC7A3244272BD2E600AF0C19 /* ACDGroupMemberNavView.m */,
+				EC658DF52733BFEA00472939 /* ACDChatNavigationView.h */,
+				EC658DF62733BFEA00472939 /* ACDChatNavigationView.m */,
 				EC54DCFA272170E600ABEE3E /* ACDCustomBaseView.h */,
 				EC54DCFB272170E600ABEE3E /* ACDCustomBaseView.m */,
 				EC432EEC27210ABC001B31DE /* ACDImageTextButtonView.h */,
@@ -2688,6 +2709,7 @@
 				D2BF7E501D914DB30090AA66 /* Button_Upload Photo.png in Resources */,
 				D2BF7E8A1D914DB30090AA66 /* Icon_Check@2x.png in Resources */,
 				D2BF7F101D914DB30090AA66 /* logo10@3x.png in Resources */,
+				EC658DFB2733CA4500472939 /* nav_chat_right_bar@2x.png in Resources */,
 				D27AC3491DE3EF13002C6020 /* Icon_error_white@2x.png in Resources */,
 				7F6CC8D126568C6F00BA60BB /* AgoraContactCell.xib in Resources */,
 				D28345121D8FD1D400FD48A9 /* LaunchScreen.storyboard in Resources */,
@@ -2792,6 +2814,7 @@
 				D22B7A341DB0F93300C8DD40 /* iconVideo@2x.png in Resources */,
 				D2BF7E681D914DB30090AA66 /* Button_Minimize disabled.png in Resources */,
 				D2BF7E931D914DB30090AA66 /* Icon_Play@2x.png in Resources */,
+				EC658DFA2733CA4500472939 /* nav_chat_right_bar@3x.png in Resources */,
 				D2BF7E971D914DB30090AA66 /* Icon_Video@3x.png in Resources */,
 				D2BF7E441D914DB30090AA66 /* Button_Add Member.png in Resources */,
 				D2BF7E561D914DB30090AA66 /* Button_Camera switch active.png in Resources */,
@@ -3125,6 +3148,7 @@
 				7F6CC90F26568D8E00BA60BB /* AgoraChatDemoHelper.m in Sources */,
 				EC54DCE72721502200ABEE3E /* MISScrollPageController.m in Sources */,
 				D2426AEB1DCCA70B009C1632 /* UIImageView+HeadImage.m in Sources */,
+				EC658DF72733BFEA00472939 /* ACDChatNavigationView.m in Sources */,
 				7F13569C2656582E00A181DD /* AgoraLaunchViewController.m in Sources */,
 				EC54DCF827216EBA00ABEE3E /* ACDNaviCustomView.m in Sources */,
 				EC54DCCC272144B400ABEE3E /* AgoraBaseTableViewController.m in Sources */,
@@ -3145,7 +3169,7 @@
 				7F6CC8AD26568C3600BA60BB /* AgoraChatLocationBubbleView.m in Sources */,
 				EC54DDD82726DEF400ABEE3E /* ACDJoinGroupViewController.m in Sources */,
 				7F6CC8F626568D2500BA60BB /* AgoraContactListSectionHeader.m in Sources */,
-				EC432EBF271EE73A001B31DE /* ACDNewContactsViewController.m in Sources */,
+				EC432EBF271EE73A001B31DE /* ACDContactsViewController.m in Sources */,
 				7F0516DA26A012DD00B2C795 /* AgoraChatBaseTableview.m in Sources */,
 				7F663CF3265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m in Sources */,
 				EC54DCC7272143B300ABEE3E /* ACDContactListController.m in Sources */,
@@ -3215,6 +3239,7 @@
 				7F2A1FB726673EF300800ACC /* AgoraBlockListViewController.m in Sources */,
 				EC7A3236272BADE000AF0C19 /* ACDGroupMemberAllViewController.m in Sources */,
 				7F0516BE269FDF4000B2C795 /* UIViewController+DarkMode.m in Sources */,
+				EC658DFE2733CB7400472939 /* ACDTransferOwnerViewController.m in Sources */,
 				3A79D1181E77AB080085AB6E /* AgoraGroupMutesViewController.m in Sources */,
 				EC7A323C272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.m in Sources */,
 				7F6CC91B26568D9B00BA60BB /* AgoraEmojiEmoticons.m in Sources */,
@@ -3251,6 +3276,7 @@
 				7F6CC8B226568C3600BA60BB /* AgoraChatTextBubbleView.m in Sources */,
 				7F6CC87B26568C0000BA60BB /* AgoraChatViewController.m in Sources */,
 				EC54DCFC272170E600ABEE3E /* ACDCustomBaseView.m in Sources */,
+				EC658DF427338E9700472939 /* ACDContactCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

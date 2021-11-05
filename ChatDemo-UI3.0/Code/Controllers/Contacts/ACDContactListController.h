@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AgoraSearchTableViewController.h"
+#import "ACDContainerSearchTableViewController.h"
 #import "AgoraBaseRefreshTableController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ACDContactListController : AgoraBaseRefreshTableController
+@interface ACDContactListController : ACDContainerSearchTableViewController
+@property (nonatomic,copy)void (^selectedBlock)(NSString *contactId);
 
 @end
 

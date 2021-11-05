@@ -39,14 +39,14 @@
     
 }
 
+- (void)updateWithObj:(id)obj {
+    
+}
+
 + (NSString *)reuseIdentifier {
     return NSStringFromClass([self class]);
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-}
 
 + (CGFloat)height {
     return 54.0f;

@@ -6,12 +6,12 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraSearchTableViewController.h"
+#import "ACDContainerSearchTableViewController.h"
 #import "ACDTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ACDGroupListViewController : AgoraSearchTableViewController
+@interface ACDGroupListViewController : ACDContainerSearchTableViewController
 @property (nonatomic,copy)void (^selectedBlock)(NSString *groupId);
 
 @end

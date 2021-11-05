@@ -6,7 +6,7 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "ACDNewContactsViewController.h"
+#import "ACDContactsViewController.h"
 #import "MISScrollPage.h"
 #import "ACDContactListController.h"
 #import "ACDGroupListViewController.h"
@@ -19,8 +19,10 @@
 #import "AgoraCreateViewController.h"
 #import "ACDGroupEnterController.h"
 #import "ACDGroupInfoViewController.h"
+#import "ACDContactInfoViewController.h"
+#import "AgoraUserModel.h"
 
-@interface ACDNewContactsViewController ()<MISScrollPageControllerDataSource,
+@interface ACDContactsViewController ()<MISScrollPageControllerDataSource,
 MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 @property (nonatomic, strong) MISScrollPageController *pageController;
 @property (nonatomic, strong) MISScrollPageSegmentView *segView;
@@ -31,10 +33,12 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 @property (nonatomic,strong) ACDRequestListViewController *requestListVC;
 @property (nonatomic,strong) ACDNaviCustomView *navView;
 
+@property (nonatomic, strong) NSMutableArray *contactRequests;
+@property (nonatomic, strong) NSMutableArray *groupNotifications;
 
 @end
 
-@implementation ACDNewContactsViewController
+@implementation ACDContactsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -110,7 +114,6 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 
 - (void)goAddPage {
 
-//    AgoraCreateViewController *groupEnterVC = AgoraCreateViewController.new;
     ACDGroupEnterController *groupEnterVC = ACDGroupEnterController.new;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:groupEnterVC];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
@@ -124,25 +127,46 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)reloadContactRequests {
-//    WEAK_SELF
-//    dispatch_async(dispatch_get_main_queue(), ^(){
-//        NSArray *contactApplys = [[AgoraApplyManager defaultManager] contactApplys];
-//        weakSelf.contactRequests = [NSMutableArray arrayWithArray:contactApplys];
-//        [weakSelf.tableView reloadData];
-//        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
-//    });
+- (void)goContactInfoWithContactId:(NSString *)contactId {
+    AgoraUserModel * model = [[AgoraUserModel alloc] initWithHyphenateId:contactId];
+    ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
+
+    vc.addBlackListBlock = ^{
+        [self reloadContacts];
+    };
+    vc.deleteContactBlock = ^{
+        [self reloadContacts];
+    };
+    
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 
-- (void)reloadGroupNotifications {
-//    WEAK_SELF
-//    dispatch_async(dispatch_get_main_queue(), ^(){
-//        NSArray *groupApplys = [[AgoraApplyManager defaultManager] groupApplys];
-//        weakSelf.groupNotifications = [NSMutableArray arrayWithArray:groupApplys];
-//        [weakSelf.tableView reloadData];
-//        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
-//    });
+
+- (void)reloadContacts {
+    
 }
+
+- (void)reloadContactRequests {
+    ACD_WS
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        NSArray *contactApplys = [[AgoraApplyManager defaultManager] contactApplys];
+        weakSelf.contactRequests = [NSMutableArray arrayWithArray:contactApplys];
+        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
+    });
+}
+
+
+- (void)reloadGroupNotifications {
+    ACD_WS
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        NSArray *groupApplys = [[AgoraApplyManager defaultManager] groupApplys];
+        weakSelf.groupNotifications = [NSMutableArray arrayWithArray:groupApplys];
+        [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
+    });
+}
+
 
 #pragma mark ACDGroupInfoViewControllerDelegate
 - (void)checkGroupMemberListWithGroup:(AgoraChatGroup *)group {
@@ -214,6 +238,10 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 - (ACDContactListController *)contactListVC {
     if (_contactListVC == nil) {
         _contactListVC = ACDContactListController.new;
+        ACD_WS
+        _contactListVC.selectedBlock = ^(NSString * _Nonnull contactId) {
+            [weakSelf goContactInfoWithContactId:contactId];
+        };
     }
     return _contactListVC;
 }

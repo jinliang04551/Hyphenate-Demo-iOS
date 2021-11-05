@@ -90,15 +90,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)addGroupAction {
-    
-    AgoraCreateViewController *publicVc = [[AgoraCreateViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:publicVc];
-    nav.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:nav animated:YES completion:nil];
-
-}
-
 
 #pragma mark - Notification Method
 - (void)refreshGroupList:(NSNotification *)notification {
@@ -171,11 +162,6 @@
 //    [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54.0f;
-}
-
 #pragma mark - Data
 
 - (void)tableViewDidTriggerHeaderRefresh
@@ -226,6 +212,7 @@
         _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
         _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
         _table.clipsToBounds = YES;
+        _table.rowHeight = 54.0f;
     }
     return _table;
 }
@@ -239,36 +226,5 @@
     }
     return _noDataPromptView;
 }
-
-
-
-#pragma mark - MISScrollPageControllerContentSubViewControllerDelegate
-- (BOOL)hasAlreadyLoaded{
-    return NO;
-}
-
-- (void)viewDidLoadedForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidLoadedForIndex ---------- %lu", (unsigned long)index);
-    
-}
-
-- (void)viewWillAppearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewWillAppearForIndex ---------- %lu", (unsigned long)index);
-}
-
-- (void)viewDidAppearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidAppearForIndex ---------- %lu", (unsigned long)index);
-}
-
-- (void)viewWillDisappearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewWillDisappearForIndex ---------- %lu", (unsigned long)index);
-    
-    self.editing = NO;
-}
-
-- (void)viewDidDisappearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidDisappearForIndex ---------- %lu", (unsigned long)index);
-}
-
 
 @end

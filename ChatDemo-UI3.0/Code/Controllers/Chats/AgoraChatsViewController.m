@@ -206,6 +206,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     chatViewController.leaveGroupBlock = ^{
         [self updateUIAfterLeaveGroupWithConversationId:model.conversation.conversationId];
     };
+    chatViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 

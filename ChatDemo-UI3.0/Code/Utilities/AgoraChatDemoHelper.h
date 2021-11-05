@@ -13,13 +13,13 @@
 #import "AgoraPushNotificationViewController.h"
 #import "AgoraChatsViewController.h"
 #import "AgoraSettingsViewController.h"
-#import "ACDNewContactsViewController.h"
+#import "ACDContactsViewController.h"
 
 @interface AgoraChatDemoHelper : NSObject<AgoraChatClientDelegate, AgoraChatContactManagerDelegate, AgoraChatGroupManagerDelegate, AgoraChatManagerDelegate, AgoraChatroomManagerDelegate>
 
 //@property (nonatomic, weak) AgoraContactsViewController *contactsVC;
 
-@property (nonatomic, weak) ACDNewContactsViewController *contactsVC;
+@property (nonatomic, weak) ACDContactsViewController *contactsVC;
 
 @property (nonatomic, weak) AgoraMainViewController *mainVC;
 

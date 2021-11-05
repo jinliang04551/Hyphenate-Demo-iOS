@@ -31,7 +31,6 @@ typedef NS_ENUM(NSInteger, ACDGroupMemberListType) {
                         group:(AgoraChatGroup *)group
                    completion:(void (^)(AgoraChatError* error))completion;
 
-    
 @end
 
 NS_ASSUME_NONNULL_END

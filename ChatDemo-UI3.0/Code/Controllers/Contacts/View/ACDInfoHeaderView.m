@@ -58,16 +58,19 @@
     [self addSubview:self.chatView];
     
     [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(kAgroaPadding * 2.0);
+        make.top.equalTo(self).offset(kAgroaPadding * 4.4);
         make.left.equalTo(self).offset(kAgroaPadding);
         make.size.mas_equalTo(28.0);
     }];
     
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(kAgroaPadding * 6.0);
+//        make.top.equalTo(self).offset(kAgroaPadding * 6.0);
+//        make.centerX.equalTo(self);
+//        make.width.mas_equalTo(140.0);
+//        make.height.mas_equalTo(140.0);
+        make.top.equalTo(self.backButton.mas_bottom).offset(kAgroaPadding);
         make.centerX.equalTo(self);
-        make.width.mas_equalTo(140.0);
-        make.height.mas_equalTo(140.0);
+        make.size.equalTo(@100.0);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -88,8 +91,7 @@
         make.top.equalTo(self.userIdLabel.mas_bottom).offset(kAgroaPadding);
         make.centerX.equalTo(self);
         make.width.mas_equalTo(120.0);
-        make.height.mas_equalTo(100.0);
-        make.bottom.equalTo(self).offset(-kAgroaPadding);
+        make.bottom.equalTo(self);
     }];
 }
 

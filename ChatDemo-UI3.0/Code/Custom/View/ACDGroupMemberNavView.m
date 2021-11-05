@@ -19,6 +19,7 @@
 
 
 - (void)prepare {
+    self.backgroundColor = UIColor.whiteColor;
     [self.leftButton addSubview:self.leftImageView];
     [self.leftButton addSubview:self.leftLabel];
     [self.leftButton addSubview:self.leftSubLabel];

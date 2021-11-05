@@ -7,6 +7,7 @@
 //
 
 #import "ACDContainerSearchTableViewController+GroupMemberList.h"
+
 typedef void(^actionBlock)();
 
 #define kActionAdminKey   @"ActionAdminKey"
@@ -20,6 +21,11 @@ typedef void(^actionBlock)();
 
 #define kActionRemoveFromGroupKey @"ActionRemoveFromGroupKey"
 
+@interface ACDContainerSearchTableViewController ()
+@property (nonatomic, strong) NSString *selectedUserId;
+@property (nonatomic, strong) NSString *groupId;
+
+@end
 
 @implementation ACDContainerSearchTableViewController (GroupMemberList)
 
@@ -44,8 +50,8 @@ typedef void(^actionBlock)();
         return;
     }
     
-//    self.selectedUserId = userId;
-//    self.groupId = group.groupId;
+    self.selectedUserId = userId;
+    self.groupId = group.groupId;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:userId message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -257,35 +263,71 @@ typedef void(^actionBlock)();
 
 
 - (void)makeAdmin {
-    
+    AgoraChatError *error = nil;
+    [[AgoraChatClient sharedClient].groupManager addAdmin:self.selectedUserId toGroup:self.groupId error:&error];
+    [self handleActionTitle:@"add admin" responseError:error];
 }
+
+
+
+
+- (void)unAdmin {
+    AgoraChatError *error = nil;
+    [[AgoraChatClient sharedClient].groupManager removeAdmin:self.selectedUserId fromGroup:self.groupId error:&error];
+    
+    [self handleActionTitle:@"remove admin" responseError:error];
+
+}
+
 
 - (void)makeMute {
+    AgoraChatError *error = nil;
+    [[AgoraChatClient sharedClient].groupManager muteMembers:@[self.selectedUserId] muteMilliseconds:-1 fromGroup:self.groupId error:&error];
     
+    [self handleActionTitle:@"Mute" responseError:error];
+
 }
 
+- (void)unMute {
+    AgoraChatError *error = nil;
+    [[AgoraChatClient sharedClient].groupManager unmuteMembers:@[self.selectedUserId] fromGroup:self.groupId error:&error];
+    [self handleActionTitle:@"unmute" responseError:error];
+
+}
+
+
 - (void)makeBlock {
-    
+    AgoraChatError *error = nil;
+    [[AgoraChatClient sharedClient].groupManager blockOccupants:@[self.selectedUserId] fromGroup:self.groupId error:&error];
+    [self handleActionTitle:@"block" responseError:error];
+
+}
+
+- (void)unBlock {
+    AgoraChatError *error = nil;
+    [[AgoraChatClient sharedClient].groupManager unblockOccupants:@[self.selectedUserId] forGroup:self.groupId error:&error];
+    [self handleActionTitle:@"unBlock" responseError:error];
+
 }
 
 
 - (void)makeRemoveGroup {
-//    AgoraChatError *error = nil;
-//    [[AgoraChatClient sharedClient].groupManager removeOccupants:@[self.selectedUserId] fromGroup:group.groupId error:&error];
+    AgoraChatError *error = nil;
+    [[AgoraChatClient sharedClient].groupManager removeOccupants:@[self.selectedUserId] fromGroup:self.groupId error:&error];
+    [self handleActionTitle:@"remove" responseError:error];
+
 }
 
-- (void)unAdmin {
-    
+- (void)handleActionTitle:(NSString *)title
+            responseError:(AgoraChatError *)error {
+    if (error == nil) {
+        [self showHint:[NSString stringWithFormat:@"%@ success",title]];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:self.groupId];
+    }else {
+        [self showHint:error.errorDescription];
+    }
 }
-
-- (void)unMute {
-    
-}
-
-- (void)unBlock {
-    
-}
-
 
 @end
 

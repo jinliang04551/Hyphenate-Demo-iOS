@@ -18,13 +18,6 @@
 @end
 
 @implementation AgoraSearchTableViewController
-//{
-//    NSMutableArray *_sectionTitles;
-//    NSMutableArray *_searchSource;
-//    NSMutableArray *_searchResults;
-//    BOOL _isSearchState;
-//}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 }

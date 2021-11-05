@@ -16,7 +16,7 @@
 
 #import "AgoraChatroomsViewController.h"
 #import "AgoraGroupTitleCell.h"
-#import "AgoraContactCell.h"
+#import "ACDContactCell.h"
 #import "AgoraUserModel.h"
 #import "AgoraApplyManager.h"
 #import "AgoraGroupsViewController.h"
@@ -24,26 +24,14 @@
 #import "AgoraChatDemoHelper.h"
 #import "AgoraRealtimeSearchUtils.h"
 #import "NSArray+AgoraSortContacts.h"
+#import "ACDContactCell.h"
 
-#define KAgora_CONTACT_BASICSECTION_NUM  3
 
-static NSString *cellIdentify = @"AgoraContactCell";
-
-@interface ACDContactListController ()<MISScrollPageControllerContentSubViewControllerDelegate>
-
-@property (nonatomic, strong) NSMutableArray *contacts;
-@property (nonatomic, strong) NSMutableArray *contactRequests;
-
+@interface ACDContactListController()<UITableViewDelegate,UITableViewDataSource>
 
 @end
 
 @implementation ACDContactListController
-{
-    NSMutableArray *_sectionTitles;
-    NSMutableArray *_searchSource;
-    NSMutableArray *_searchResults;
-    BOOL _isSearchState;
-}
 
 #pragma mark life cycle
 - (instancetype)init {
@@ -56,36 +44,30 @@ static NSString *cellIdentify = @"AgoraContactCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = UIColor.yellowColor;
-
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
     
     [self tableDidTriggerHeaderRefresh];
 }
 
 
 - (void)tableDidTriggerHeaderRefresh {
-    if (_isSearchState) {
-        [self tableViewDidFinishTriggerHeader:YES];
+    if (self.isSearchState) {
+//        [self tableViewDidFinishTriggerHeader:YES];
         return;
     }
     
-    WEAK_SELF
+    ACD_WS
     [[AgoraChatClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, AgoraChatError *aError) {
         if (aError == nil) {
-            [weakSelf tableViewDidFinishTriggerHeader:YES];
-            dispatch_async(dispatch_get_global_queue(0, 0), ^(){
-                dispatch_async(dispatch_get_main_queue(), ^(){
-                    [weakSelf updateContacts:aList];
-                    [weakSelf.tableView reloadData];
-                });
-            });
-        
+//            [weakSelf tableViewDidFinishTriggerHeader:YES];
+//            dispatch_async(dispatch_get_main_queue(), ^(){
+//            });
+            
+            [weakSelf updateContacts:aList];
+            [weakSelf.table reloadData];
+
         }
         else {
-            [weakSelf tableViewDidFinishTriggerHeader:YES];
+//            [weakSelf tableViewDidFinishTriggerHeader:YES];
         }
     }];
 }
@@ -100,8 +82,8 @@ static NSString *cellIdentify = @"AgoraContactCell";
     [self updateContacts:bubbyList];
     WEAK_SELF
     dispatch_async(dispatch_get_main_queue(), ^(){
-        [weakSelf.tableView reloadData];
-        [weakSelf.refreshControl endRefreshing];
+        [weakSelf.table reloadData];
+//        [weakSelf.refreshControl endRefreshing];
     });
 }
 
@@ -118,9 +100,9 @@ static NSString *cellIdentify = @"AgoraContactCell";
 
 - (void)sortContacts:(NSArray *)contacts {
     if (contacts.count == 0) {
-        self.contacts = [@[] mutableCopy];
-        _sectionTitles = [@[] mutableCopy];
-        _searchSource = [@[] mutableCopy];
+        self.dataArray = [@[] mutableCopy];
+        self.sectionTitles = [@[] mutableCopy];
+        self.searchSource = [@[] mutableCopy];
         return;
     }
     
@@ -129,10 +111,10 @@ static NSString *cellIdentify = @"AgoraContactCell";
     NSArray *sortArray = [NSArray sortContacts:contacts
                                  sectionTitles:&sectionTitles
                                   searchSource:&searchSource];
-    [self.contacts removeAllObjects];
-    [self.contacts addObjectsFromArray:sortArray];
-    _sectionTitles = [NSMutableArray arrayWithArray:sectionTitles];
-    _searchSource = [NSMutableArray arrayWithArray:searchSource];
+    [self.dataArray removeAllObjects];
+    [self.dataArray addObjectsFromArray:sortArray];
+    self.sectionTitles = [NSMutableArray arrayWithArray:sectionTitles];
+    self.searchSource = [NSMutableArray arrayWithArray:searchSource];
 }
 
 
@@ -141,189 +123,94 @@ static NSString *cellIdentify = @"AgoraContactCell";
     [self reloadContacts];
 }
 
-#pragma mark - Lazy Method
-- (NSMutableArray *)contacts {
-    if (!_contacts) {
-        _contacts = [NSMutableArray array];
-    }
-    return _contacts;
-}
-
-#pragma mark - Action Method
-- (void)addContactAction {
-    AgoraAddContactViewController *addContactVc = [[AgoraAddContactViewController alloc] initWithNibName:@"AgoraAddContactViewController" bundle:nil];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:addContactVc];
-    [self presentViewController:nav animated:YES completion:nil];
-}
-
-
 #pragma mark - Table view data source
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    if (_isSearchState) {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (self.isSearchState) {
         return 1;
     }
-    return  _sectionTitles.count;
+    return  self.sectionTitles.count;
 }
 
-- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)table {
-    return _sectionTitles;
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    return [self.sectionTitles objectAtIndex:section];
 }
 
-- (NSInteger)table:(UITableView *)table sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+- (NSArray*)sectionIndexTitlesForTableView:(UITableView *)tableView{
+     return self.sectionTitles;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *contentView = UIView.new;
+    contentView.backgroundColor = UIColor.whiteColor;
+    UILabel *label = UILabel.new;
+    label.font = Font(@"PingFangSC-Regular", 15.0f);
+    label.textColor = COLOR_HEX(0x242424);
+    label.text = self.sectionTitles[section];
+    [contentView addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(contentView).insets(UIEdgeInsetsMake(0, 20.0f, 0, -20.0));
+    }];
+    return contentView;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index{
     return index;
 }
 
-- (NSInteger)table:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    if (_isSearchState) {
-        return _searchResults.count;
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (self.isSearchState) {
+        return self.searchResults.count;
     }
-   
-    return ((NSArray *)self.contacts[section]).count;
+    return ((NSArray *)self.dataArray[section]).count;
 }
 
-- (CGFloat)table:(UITableView *)table heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54.0f;
-}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-
-- (UITableViewCell *)table:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    AgoraContactCell *cell = [table dequeueReusableCellWithIdentifier:cellIdentify];
+    ACDContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[ACDContactCell reuseIdentifier]];
     if (cell == nil) {
-        cell = (AgoraContactCell *)[[[NSBundle mainBundle] loadNibNamed:@"AgoraContactCell" owner:self options:nil] lastObject];
+        cell = [[ACDContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDContactCell reuseIdentifier]];
     }
-
-    if (_isSearchState) {
-        cell.model = _searchResults[indexPath.row];
+    if (self.isSearchState) {
+        cell.model = self.searchResults[indexPath.row];
     }else {
-        cell.model = self.contacts[indexPath.row];
+        cell.model = self.dataArray[indexPath.section][indexPath.row];
     }
+    
     return cell;
-
 }
 
 #pragma mark - Table view delegate
-- (void)table:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [table deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == 2 && !_isSearchState) {
-        if (indexPath.row == 0) {
-            AgoraGroupsViewController *groupsVc = [[AgoraGroupsViewController alloc] initWithNibName:@"AgoraGroupsViewController" bundle:nil];
-            [self.navigationController pushViewController:groupsVc animated:YES];
-        } else if (indexPath.row == 1) {
-            AgoraChatroomsViewController *chatroomsVC = [[AgoraChatroomsViewController alloc] init];
-            [self.navigationController pushViewController:chatroomsVC animated:YES];
-        }
-        
-        return;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    AgoraUserModel *model = nil;
+    if (self.isSearchState) {
+        model = self.searchResults[indexPath.row];
+    }else {
+        model = self.dataArray[indexPath.section][indexPath.row];
     }
     
-    AgoraUserModel * model = nil;
-    if (_isSearchState) {
-        model = _searchResults[indexPath.row];
-    }
-    else if (indexPath.section >= KAgora_CONTACT_BASICSECTION_NUM) {
-        NSArray *sectionContacts = _contacts[indexPath.section-KAgora_CONTACT_BASICSECTION_NUM];
-        model = sectionContacts[indexPath.row];
-    }
-    if (model) {
-//        AgoraContactInfoViewController *contactInfoVc = [[AgoraContactInfoViewController alloc] initWithUserModel:model];
-        ACDContactInfoViewController *contactInfoVc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
-
-        contactInfoVc.addBlackListBlock = ^{
-            [self reloadContacts];
-        };
-        contactInfoVc.deleteContactBlock = ^{
-            [self reloadContacts];
-        };
-        [self.navigationController pushViewController:contactInfoVc animated:YES];
+    if (self.selectedBlock) {
+        self.selectedBlock(model.hyphenateId);
     }
 }
 
-#pragma mark
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    [searchBar setShowsCancelButton:YES animated:YES];
-    _isSearchState = YES;
-    self.tableView.userInteractionEnabled = NO;
-    return YES;
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    self.tableView.userInteractionEnabled = YES;
-}
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    self.tableView.userInteractionEnabled = YES;
-    if (searchBar.text.length == 0) {
-        [_searchResults removeAllObjects];
-        [self.tableView reloadData];
-        return;
-    }
-    __weak typeof(self) weakSelf = self;
-    [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchWithSource:_searchSource searchString:searchText resultBlock:^(NSArray *results) {
-        if (results) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _searchResults = [NSMutableArray arrayWithArray:results];
-                [weakSelf.tableView reloadData];
-            });
-        }
-    }];
-}
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    searchBar.text = @"";
-    [searchBar setShowsCancelButton:NO animated:NO];
-    [searchBar resignFirstResponder];
-    [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchDidFinish];
-    _isSearchState = NO;
-    self.tableView.scrollEnabled = !_isSearchState;
-    [self.tableView reloadData];
-}
 
 
 #pragma mark getter and setter
-//- (UITableView *)table {
-//    if (_table == nil) {
-//        _table                 = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
-//        _table.delegate        = self;
-//        _table.dataSource      = self;
-//        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
-//        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-//        _table.backgroundColor = UIColor.redColor;
-//        _table.clipsToBounds = YES;
-//    }
-//    return _table;
-//}
-
-
-#pragma mark - MISScrollPageControllerContentSubViewControllerDelegate
-- (BOOL)hasAlreadyLoaded{
-    return NO;
-}
-
-- (void)viewDidLoadedForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidLoadedForIndex ---------- %lu", (unsigned long)index);
-    
-}
-
-- (void)viewWillAppearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewWillAppearForIndex ---------- %lu", (unsigned long)index);
-}
-
-- (void)viewDidAppearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidAppearForIndex ---------- %lu", (unsigned long)index);
-}
-
-- (void)viewWillDisappearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewWillDisappearForIndex ---------- %lu", (unsigned long)index);
-    
-    self.editing = NO;
-}
-
-- (void)viewDidDisappearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidDisappearForIndex ---------- %lu", (unsigned long)index);
+- (UITableView *)table {
+    if (_table == nil) {
+        _table  = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
+        _table.delegate        = self;
+        _table.dataSource      = self;
+        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
+        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+        _table.clipsToBounds = YES;
+        _table.rowHeight = 54.0f;
+        [_table registerClass:[ACDContactCell class] forCellReuseIdentifier:[ACDContactCell reuseIdentifier]];
+        
+    }
+    return _table;
 }
 
 @end

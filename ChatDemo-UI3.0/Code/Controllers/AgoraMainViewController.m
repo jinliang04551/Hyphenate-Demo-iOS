@@ -17,7 +17,7 @@
 #import "AgoraChatViewController.h"
 #import <UserNotifications/UserNotifications.h>
 
-#import "ACDNewContactsViewController.h"
+#import "ACDContactsViewController.h"
 #import "ACDSettingsViewController.h"
 
 #define kGroupMessageAtList      @"em_at_list"
@@ -32,7 +32,7 @@ static NSString *kGroupName = @"GroupName";
 @interface AgoraMainViewController () <AgoraChatManagerDelegate, AgoraChatGroupManagerDelegate, AgoraChatClientDelegate>
 {
 //    AgoraContactsViewController *_contactsVC;
-    ACDNewContactsViewController *_contactsVC;
+    ACDContactsViewController *_contactsVC;
 
     AgoraChatsViewController *_chatsVC;
 //    AgoraSettingsViewController *_settingsVC;
@@ -94,7 +94,7 @@ static NSString *kGroupName = @"GroupName";
 {
 //    self.title = NSLocalizedString(@"title.contacts", @"Contacts");
 //    _contactsVC = [[AgoraContactsViewController alloc] init];
-    _contactsVC = [[ACDNewContactsViewController alloc] init];
+    _contactsVC = [[ACDContactsViewController alloc] init];
     _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Contacts"
                                                    image:[ImageWithName(@"TabBar.bundle/tabbar_contacts")
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
@@ -116,16 +116,12 @@ static NSString *kGroupName = @"GroupName";
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
                                            selectedImage:[ImageWithName(@"TabBar.bundle/tabbar_settingHL")
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-
-    _contactsVC.tabBarItem.tag = 0;
-    _chatsVC.tabBarItem.tag = 1;
+    _chatsVC.tabBarItem.tag = 0;
+    _contactsVC.tabBarItem.tag = 1;
     _settingsVC.tabBarItem.tag = 2;
-
-//    self.viewControllers = @[_contactsVC,_chatsVC,_settingsVC];
-//    self.selectedIndex = 0;
     
-    UINavigationController* nav1 = [[UINavigationController alloc] initWithRootViewController:_contactsVC];
-    UINavigationController* nav2 = [[UINavigationController alloc] initWithRootViewController:_chatsVC];
+    UINavigationController* nav1 = [[UINavigationController alloc] initWithRootViewController:_chatsVC];
+    UINavigationController* nav2 = [[UINavigationController alloc] initWithRootViewController:_contactsVC];
     UINavigationController* nav3 = [[UINavigationController alloc] initWithRootViewController:_settingsVC];
     
     self.viewControllers = @[nav1, nav2, nav3];

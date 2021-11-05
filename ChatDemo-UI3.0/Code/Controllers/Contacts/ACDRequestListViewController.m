@@ -9,6 +9,8 @@
 #import "ACDRequestListViewController.h"
 #import "MISScrollPage.h"
 #import "ACDRequestCell.h"
+#import "AgoraApplyManager.h"
+#import "AgoraApplyModel.h"
 
 @interface ACDRequestListViewController ()<MISScrollPageControllerContentSubViewControllerDelegate>
 
@@ -20,6 +22,102 @@
     [super viewDidLoad];
     self.view.backgroundColor = UIColor.whiteColor;
 }
+
+
+- (void)updateUI {
+    [self.dataArray removeAllObjects];
+    
+    NSArray *contactApplys = [[AgoraApplyManager defaultManager] contactApplys];
+    NSArray *groupApplys = [[AgoraApplyManager defaultManager] groupApplys];
+    [self.dataArray addObjectsFromArray:contactApplys];
+    [self.dataArray addObjectsFromArray:groupApplys];
+    
+    [self.table reloadData];
+}
+
+#pragma mark action
+- (void)declineAction:(AgoraApplyModel *)model {
+    WEAK_SELF
+    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    switch (model.style) {
+        case AgoraApplyStyle_contact:
+        {
+            [[AgoraChatClient sharedClient].contactManager declineFriendRequestFromUser:model.applyHyphenateId completion:^(NSString *aUsername, AgoraChatError *aError) {
+                [weakSelf declineApplyFinished:aError model:model];
+            }];
+
+            break;
+        }
+        case AgoraApplyStyle_joinGroup:
+        {
+            [[AgoraChatClient sharedClient].groupManager declineJoinGroupRequest:model.groupId sender:model.applyHyphenateId reason:nil completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
+                [weakSelf declineApplyFinished:aError model:model];
+            }];
+            break;
+        }
+        default:
+        {
+            [[AgoraChatClient sharedClient].groupManager declineGroupInvitation:model.groupId inviter:model.applyHyphenateId reason:nil completion:^(AgoraChatError *aError) {
+                [weakSelf declineApplyFinished:aError model:model];
+            }];
+            break;
+        }
+    }
+}
+
+
+- (void)acceptAction:(AgoraApplyModel *)model {
+    WEAK_SELF
+    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    switch (model.style) {
+        case AgoraApplyStyle_contact:
+        {
+            [[AgoraChatClient sharedClient].contactManager approveFriendRequestFromUser:model.applyHyphenateId completion:^(NSString *aUsername, AgoraChatError *aError) {
+                [weakSelf acceptApplyFinished:aError model:model];
+            }];
+            break;
+        }
+        case AgoraApplyStyle_joinGroup:
+        {
+            [[AgoraChatClient sharedClient].groupManager approveJoinGroupRequest:model.groupId sender:model.applyHyphenateId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
+                [weakSelf acceptApplyFinished:aError model:model];
+            }];
+            break;
+        }
+        default:
+        {
+            [[AgoraChatClient sharedClient].groupManager acceptInvitationFromGroup:model.groupId inviter:model.applyHyphenateId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
+                [weakSelf acceptApplyFinished:aError model:model];
+            }];
+            break;
+        }
+    }
+}
+
+- (void)declineApplyFinished:(AgoraChatError *)error
+                       model:(AgoraApplyModel*)model{
+    [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
+    if (!error) {
+        [[AgoraApplyManager defaultManager] removeApplyRequest:model];
+    }
+    else {
+        [self showAlertWithMessage:@"Refused to apply for failure"];
+    }
+    [self updateUI];
+}
+
+- (void)acceptApplyFinished:(AgoraChatError *)error
+                      model:(AgoraApplyModel*)model {
+    [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
+    if (!error) {
+        [[AgoraApplyManager defaultManager] removeApplyRequest:model];
+    }
+    else {
+        [self showAlertWithMessage:@"Failed to agree to apply"];
+    }
+    [self updateUI];
+}
+
 
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -41,6 +139,15 @@
         cell = [[ACDRequestCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
+    AgoraApplyModel *applyModel = self.dataArray[indexPath.row];
+    [cell updateWithObj:applyModel];
+    ACD_WS
+    cell.acceptBlock = ^(AgoraApplyModel * _Nonnull model) {
+        [weakSelf acceptAction:model];
+    };
+    cell.rejectBlock = ^(AgoraApplyModel * _Nonnull model) {
+        [weakSelf declineAction:model];
+    };
     
     return cell;
 }
@@ -49,12 +156,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-}
-
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54.0f;
 }
 
 
@@ -67,38 +168,15 @@
         _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
         _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
         [_table registerClass:[ACDRequestCell class] forCellReuseIdentifier:[ACDRequestCell reuseIdentifier]];
-        
+        _table.rowHeight = 102.0f;
     }
     return _table;
 }
 
-#pragma mark - MISScrollPageControllerContentSubViewControllerDelegate
-- (BOOL)hasAlreadyLoaded{
-    return NO;
-}
-
-- (void)viewDidLoadedForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidLoadedForIndex ---------- %lu", (unsigned long)index);
-    
-}
-
-- (void)viewWillAppearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewWillAppearForIndex ---------- %lu", (unsigned long)index);
-}
 
 - (void)viewDidAppearForIndex:(NSUInteger)index{
     NSLog(@"---------- viewDidAppearForIndex ---------- %lu", (unsigned long)index);
+    [self updateUI];
 }
-
-- (void)viewWillDisappearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewWillDisappearForIndex ---------- %lu", (unsigned long)index);
-    
-    self.editing = NO;
-}
-
-- (void)viewDidDisappearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidDisappearForIndex ---------- %lu", (unsigned long)index);
-}
-
 
 @end

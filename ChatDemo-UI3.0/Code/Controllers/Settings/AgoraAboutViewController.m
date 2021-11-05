@@ -19,6 +19,8 @@
 {
     [super viewDidLoad];
     [self setupNavigationBar];
+    self.title = @"About";
+    
 }
 
 
@@ -40,11 +42,11 @@
     }
     if (indexPath.row == 0) {
         
-        cell.textLabel.text = NSLocalizedString(@"setting.about.appversion", @"App Version");
+        cell.textLabel.text = @"App Version";
         cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     } else if (indexPath.row == 1) {
         
-        cell.textLabel.text = NSLocalizedString(@"setting.about.sdkversion", @"SDK Version");
+        cell.textLabel.text = @"SDK Version";
         cell.detailTextLabel.text = [[AgoraChatClient sharedClient] version];
     }
     

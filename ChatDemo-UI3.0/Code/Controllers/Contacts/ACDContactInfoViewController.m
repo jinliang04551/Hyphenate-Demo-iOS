@@ -14,18 +14,9 @@
 #import "AgoraChatDemoHelper.h"
 #import "AgoraChatViewController.h"
 #import "ACDInfoHeaderView.h"
+#import "ACDInfoCell.h"
 
-static NSString *cellIdentify = @"AgoraContactCell";
-
-#define NAME                NSLocalizedString(@"contact.name", @"Name")
-#define HYPHENATE_ID        NSLocalizedString(@"contact.hyphenateId", @"Hyphenate ID")
-#define APNS_NICKNAME       NSLocalizedString(@"contact.apnsnickname", @"iOS APNS")
-#define DELETE_CONTACT      NSLocalizedString(@"contact.delete", @"Delete Contact")
-#define ADD_BLACKLIST       NSLocalizedString(@"contact.block", @"Black Contact")
-
-#define KContactInfoKey     @"contactInfoKey"
-#define KContactInfoValue   @"contactInfoValue"
-#define KContactInfoTitle   @"contactInfoTitle"
+#define kContactInfoHeaderViewHeight 320.0
 
 typedef enum : NSUInteger {
     AgoraContactInfoActionNone,
@@ -33,19 +24,14 @@ typedef enum : NSUInteger {
     AgoraContactInfoActionBlackList,
 } AgoraContactInfoAction;
 
-@interface ACDContactInfoViewController ()<UIActionSheetDelegate, AgoraContactsUIProtocol,UITableViewDelegate,UITableViewDataSource>
+@interface ACDContactInfoViewController ()<UIActionSheetDelegate, AgoraContactsUIProtocol>
 
-@property (nonatomic, strong) ACDInfoHeaderView *headerView;
 @property (nonatomic, strong) AgoraUserModel *model;
-@property (nonatomic, strong) UITableView *table;
+@property (nonatomic, strong) ACDInfoHeaderView *contactInfoHeaderView;
 
 @end
 
 @implementation ACDContactInfoViewController
-{
-    NSArray *_contactInfo;
-    NSArray *_contactActions;
-}
 
 - (instancetype)initWithUserModel:(AgoraUserModel *)model {
     self = [super init];
@@ -58,11 +44,6 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
-    [self.view addSubview:self.table];
-    [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
     
     [self loadContactInfo];
     
@@ -80,11 +61,11 @@ typedef enum : NSUInteger {
 }
 
 - (void)loadContactInfo {
-    self.headerView.nameLabel.text = _model.nickname;
-    self.headerView.avatarImageView.image = _model.defaultAvatarImage;
+    self.contactInfoHeaderView.nameLabel.text = _model.nickname;
+    self.contactInfoHeaderView.avatarImageView.image = _model.defaultAvatarImage;
     if (_model.avatarURLPath.length > 0) {
         NSURL *avatarUrl = [NSURL URLWithString:_model.avatarURLPath];
-        [self.headerView.avatarImageView sd_setImageWithURL:avatarUrl placeholderImage:_model.defaultAvatarImage];
+        [self.contactInfoHeaderView.avatarImageView sd_setImageWithURL:avatarUrl placeholderImage:_model.defaultAvatarImage];
     }
     
 }
@@ -115,24 +96,63 @@ typedef enum : NSUInteger {
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    AgoraChatCustomBaseCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentify];
+    ACDInfoCell*cell = [tableView dequeueReusableCellWithIdentifier:[ACDInfoCell reuseIdentifier]];
     if (!cell) {
-        cell = [[AgoraChatCustomBaseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentify];
+        cell = [[ACDInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoCell reuseIdentifier]];
     }
     
+    ACD_WS
     if (indexPath.row == 0) {
         [cell.imageView setImage:ImageWithName(@"blocked")];
         cell.textLabel.text = @"block";
+        
+        cell.tapCellBlock = ^{
+            [weakSelf blockAction];
+        };
+
     }
     
     if (indexPath.row == 1) {
         [cell.imageView setImage:ImageWithName(@"delete")];
         cell.textLabel.text = @"delete";
+        cell.tapCellBlock = ^{
+            [weakSelf deleteAction];
+        };
+
     }
 
+    
     return cell;
 }
 
+- (void)blockAction {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Block this contact now?" message:@"When you block this contact, you will not receive any messages from them." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+    }];
+    [alertController addAction:cancelAction];
+    
+    [alertController addAction: [UIAlertAction actionWithTitle:@"Block" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self addBlackList];
+    }]];
+    alertController.modalPresentationStyle = 0;
+    [self presentViewController:alertController animated:YES completion:nil];
+
+}
+
+- (void)deleteAction  {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete this contact now?" message:@"Delete this contact and associated Chats." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+    }];
+    [alertController addAction:cancelAction];
+    
+    [alertController addAction: [UIAlertAction actionWithTitle:@"Delete" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteContact];
+    }]];
+    alertController.modalPresentationStyle = 0;
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 
 #pragma mark - Table view delegate
 
@@ -140,38 +160,16 @@ typedef enum : NSUInteger {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
         
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Block this contact now?" message:@"When you block this contact, you will not receive any messages from them." preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-
-        }];
-        [alertController addAction:cancelAction];
-        
-        [alertController addAction: [UIAlertAction actionWithTitle:@"Block" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self addBlackList];
-        }]];
-        alertController.modalPresentationStyle = 0;
-        [self presentViewController:alertController animated:YES completion:nil];
         
     }
     
     if (indexPath.row == 1) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete this contact now?" message:@"Delete this contact and associated Chats." preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+       
 
-        }];
-        [alertController addAction:cancelAction];
-        
-        [alertController addAction: [UIAlertAction actionWithTitle:@"Delete" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self deleteContact];
-        }]];
-        alertController.modalPresentationStyle = 0;
-        [self presentViewController:alertController animated:YES completion:nil];
-
-    }}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 44.0f;
+    }
+    
 }
+
 
 
 #pragma mark - UIActionSheetDelegate
@@ -220,27 +218,38 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark getter and setter
-- (ACDInfoHeaderView *)headerView {
+- (UIView *)headerView {
     if (_headerView == nil) {
-        _headerView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 180) withType:ACDHeaderInfoTypeContact];
-        _headerView.backgroundColor = UIColor.grayColor;
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kContactInfoHeaderViewHeight)];
+        [_headerView addSubview:self.contactInfoHeaderView];
+        [self.contactInfoHeaderView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(_headerView);
+        }];
+    }
+    return _headerView;
+}
+
+
+- (ACDInfoHeaderView *)contactInfoHeaderView {
+    if (_contactInfoHeaderView == nil) {
+        _contactInfoHeaderView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kContactInfoHeaderViewHeight) withType:ACDHeaderInfoTypeContact];
         
         ACD_WS
-        _headerView.tapHeaderBlock = ^{
+        _contactInfoHeaderView.tapHeaderBlock = ^{
             
         };
         
-        _headerView.goChatPageBlock = ^{
+        _contactInfoHeaderView.goChatPageBlock = ^{
             AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
             [weakSelf.navigationController pushViewController:chatViewController animated:YES];
         };
         
-        _headerView.goBackBlock = ^{
+        _contactInfoHeaderView.goBackBlock = ^{
             [weakSelf.navigationController popViewControllerAnimated:YES];
 
         };
     }
-    return _headerView;
+    return _contactInfoHeaderView;
 }
 
 - (UITableView *)table {
@@ -252,8 +261,7 @@ typedef enum : NSUInteger {
         _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
         _table.backgroundColor = COLOR_HEX(0xFFFFFF);
         _table.tableHeaderView = [self headerView];
-//        [_table registerClass:[self.viewModel cellClass] forCellReuseIdentifier:[self.viewModel cellReuseIdentifier]];
-
+        _table.rowHeight = 54.0f;
     }
     return _table;
 }
@@ -261,15 +269,7 @@ typedef enum : NSUInteger {
 
 @end
 
-
-#undef NAME
-#undef HYPHENATE_ID
-#undef DELETE_CONTACT
-#undef ADD_BLACKLIST
-#undef KContactInfoKey
-#undef KContactInfoValue
-#undef KContactInfoTitle
-
-
+#undef kContactInfoHeaderViewHeight
+    
 
 

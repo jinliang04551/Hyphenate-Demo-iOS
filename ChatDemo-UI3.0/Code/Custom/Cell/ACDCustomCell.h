@@ -17,10 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly)UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic, copy) void (^tapCellBlock)(void);
 
-- (void)prepare;
-- (void)placeSubViews;
 + (NSString *)reuseIdentifier;
 + (CGFloat)height;
+- (void)prepare;
+- (void)placeSubViews;
+- (void)updateWithObj:(id)obj;
 
 @end
 

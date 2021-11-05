@@ -7,12 +7,14 @@
 //
 
 #import "ACDRequestCell.h"
+#import "AgoraApplyModel.h"
+
+#define kAcceptButtonHeight 72.0f
 
 @interface ACDRequestCell ()
-@property (nonatomic, strong) UILabel *timeLabel;
-@property (nonatomic, strong) UILabel *contentLabel;
 @property (nonatomic, strong) UIButton *acceptButton;
 @property (nonatomic, strong) UIButton *rejectButton;
+@property (nonatomic, strong) AgoraApplyModel *model;
 
 @end
 
@@ -25,6 +27,8 @@
     [self.contentView addSubview:self.timeLabel];
     [self.contentView addSubview:self.acceptButton];
     [self.contentView addSubview:self.rejectButton];
+    [self.contentView addSubview:self.bottomLine];
+
 }
 
 
@@ -38,59 +42,80 @@
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(12.0f);
-        make.left.equalTo(self.contentView).offset(16.0f);
-        make.size.equalTo(@58.0f);
+        make.left.equalTo(self.iconImageView.mas_right).offset(kAgroaPadding);
+        make.right.equalTo(self.timeLabel.mas_left);
     }];
 
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).offset(12.0f);
-        make.left.equalTo(self.contentView).offset(16.0f);
-        make.size.equalTo(@58.0f);
+        make.centerY.equalTo(self.nameLabel);
+        make.right.equalTo(self.contentView).offset(-16.0f);
     }];
 
     [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).offset(12.0f);
-        make.left.equalTo(self.contentView).offset(16.0f);
-        make.size.equalTo(@58.0f);
-    }];
-
-    [self.acceptButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).offset(12.0f);
-        make.left.equalTo(self.contentView).offset(16.0f);
-        make.size.equalTo(@58.0f);
+        make.top.equalTo(self.nameLabel.mas_bottom).offset(kAgroaPadding * 0.5);
+        make.left.equalTo(self.nameLabel);
+        make.right.equalTo(self.timeLabel);
     }];
 
     [self.rejectButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).offset(12.0f);
-        make.left.equalTo(self.contentView).offset(16.0f);
-        make.size.equalTo(@58.0f);
+        make.bottom.equalTo(self.contentView).offset(-kAgroaPadding);
+        make.right.equalTo(self.contentView).offset(-16.0f);
+        make.size.equalTo(@28.0f);
     }];
-
+    
+    [self.acceptButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.rejectButton);
+        make.right.equalTo(self.rejectButton.mas_left).offset(-5.0);
+        make.width.equalTo(@kAcceptButtonHeight);
+        make.height.equalTo(@28.0);
+    }];
+    
+    [self.bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.contentView);
+        make.left.equalTo(self.nameLabel);
+        make.right.equalTo(self.contentView);
+        make.height.mas_equalTo(ACD_ONE_PX);
+    }];
 }
 
 #pragma mark action
 - (void)acceptButtonAction {
     if (self.acceptBlock) {
-        self.acceptBlock();
+        self.acceptBlock(self.model);
     }
 }
 
 - (void)rejectButtonAction {
     if (self.rejectBlock) {
-        self.rejectBlock();
+        self.rejectBlock(self.model);
     }
 }
 
+- (void)updateWithObj:(id)obj {
+    self.model = (AgoraApplyModel*)obj;
+    self.nameLabel.text = self.model.applyHyphenateId;
+    self.timeLabel.text = @"Now";
+    self.contentLabel.text = self.model.reason;
+    
+    NSString *iconImageName = @"";
+    if (self.model.style == AgoraApplyStyle_contact) {
+        iconImageName = @"default_avatar";
+    }else {
+        iconImageName = @"group_default_avatar";
+    }
+    [self.iconImageView setImage:ImageWithName(iconImageName)];
+    
+}
 
 #pragma mark getter and setter
 - (UILabel *)timeLabel {
     if (_timeLabel == nil) {
         _timeLabel = [[UILabel alloc] init];
         _timeLabel.font = [UIFont systemFontOfSize:14.0f];
-        _timeLabel.textColor = COLOR_HEX(0x000000);
+        _timeLabel.textColor = TextLabelGrayColor;
         _timeLabel.textAlignment = NSTextAlignmentLeft;
         _timeLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        _timeLabel.text = @"2021-11-01";
+        _timeLabel.text = @"Now";
     }
     return _timeLabel;
 }
@@ -99,8 +124,8 @@
     if (_contentLabel == nil) {
         _contentLabel = [[UILabel alloc] init];
         _contentLabel.font = [UIFont systemFontOfSize:14.0f];
-        _contentLabel.numberOfLines = 0;
-        _contentLabel.textColor = COLOR_HEX(0x000000);
+        _contentLabel.numberOfLines = 2;
+        _contentLabel.textColor = TextLabelGrayColor;
         _contentLabel.textAlignment = NSTextAlignmentLeft;
         _contentLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _contentLabel.text = @"hhhhhh";
@@ -112,11 +137,12 @@
 - (UIButton *)acceptButton {
     if (_acceptButton == nil) {
         _acceptButton = [[UIButton alloc] init];
-        _acceptButton.backgroundColor = UIColor.redColor;
-        _acceptButton.titleLabel.font = [UIFont systemFontOfSize:12.0f];
+        _acceptButton.backgroundColor = ButtonEnableBlueColor;
+        _acceptButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
         [_acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_acceptButton setTitle:@"Accept" forState:UIControlStateNormal];
         [_acceptButton addTarget:self action:@selector(acceptButtonAction) forControlEvents:UIControlEventTouchUpInside];
+        _acceptButton.layer.cornerRadius = 15.0f;
     }
     return _acceptButton;
 }
@@ -124,7 +150,6 @@
 - (UIButton *)rejectButton {
     if (_rejectButton == nil) {
         _rejectButton = [[UIButton alloc] init];
-        _rejectButton.backgroundColor = UIColor.redColor;
         [_rejectButton addTarget:self action:@selector(rejectButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [_rejectButton setImage:ImageWithName(@"request_reject") forState:UIControlStateNormal];
     }
@@ -133,3 +158,4 @@
 
 
 @end
+#undef kAcceptButtonHeight

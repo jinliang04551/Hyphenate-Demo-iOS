@@ -15,6 +15,8 @@
 #import "ACDGroupMembersViewController.h"
 
 #import "AgoraGroupTransferOwnerViewController.h"
+#import "AgoraChatViewController.h"
+#import "ACDTransferOwnerViewController.h"
 
 #define kGroupInfoHeaderViewHeight 320
 
@@ -202,7 +204,7 @@
 }
 
 - (void)transferOwner {
-    AgoraGroupTransferOwnerViewController *vc = AgoraGroupTransferOwnerViewController.new;
+    ACDTransferOwnerViewController *vc = [[ACDTransferOwnerViewController alloc] initWithGroup:self.group];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -272,11 +274,13 @@
         [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         }]];
         
-//    for (UIAlertAction *alertAction in alertController.actions)
-//            [alertAction setValue:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0] forKey:@"_titleTextColor"];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"didAlert" object:@{@"alert":alertController}];
-    
         [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)goGroupChatPage {
+    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:self.group.groupId conversationType:AgoraChatConversationTypeGroupChat];
+    [self.navigationController pushViewController:chatViewController animated:YES];
+
 }
 
 #pragma mark - Join Public Group
@@ -333,14 +337,14 @@
 
 - (void)showAlertView {
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.joinPublicGroupMessage", "Requesting message") message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Requesting message" message:@"" preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
 
     }];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
        
     }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UITextField *messageTextField = alertController.textFields.firstObject;
         [self requestToJoinPublicGroup:self.groupId message:messageTextField.text];
 
@@ -378,9 +382,7 @@
         };
 
         _groupInfoHeaderView.goChatPageBlock = ^{
-            if ([weakSelf.delegate respondsToSelector:@selector(enterGroupChatWithGroup:)]) {
-                [weakSelf.delegate enterGroupChatWithGroup:weakSelf.group];
-            }
+            [weakSelf goGroupChatPage];
         };
 
         _groupInfoHeaderView.goBackBlock = ^{
