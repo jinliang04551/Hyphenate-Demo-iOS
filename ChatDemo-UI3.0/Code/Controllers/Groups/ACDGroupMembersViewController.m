@@ -31,7 +31,6 @@ MISScrollPageControllerDelegate>
 @property (nonatomic,strong) ACDGroupMemberAdminListViewController *adminListVC;
 @property (nonatomic,strong) ACDGroupMemberMutedListViewController *mutedListVC;
 @property (nonatomic,strong) ACDGroupMemberBlockListViewController *blockListVC;
-@property (nonatomic,strong) ACDGroupMemberWhiteListViewController *whiteListVC;
 
 
 @property (nonatomic,strong) ACDGroupMemberNavView *navView;
@@ -230,23 +229,16 @@ MISScrollPageControllerDelegate>
 
 - (ACDGroupMemberMutedListViewController *)mutedListVC {
     if (_mutedListVC == nil) {
-        _mutedListVC = ACDGroupMemberMutedListViewController.new;
+        _mutedListVC = [[ACDGroupMemberMutedListViewController alloc] initWithGroup:self.group];
     }
     return _mutedListVC;
 }
 
 - (ACDGroupMemberBlockListViewController *)blockListVC {
     if (_blockListVC == nil) {
-        _blockListVC = ACDGroupMemberBlockListViewController.new;
+        _blockListVC = [[ACDGroupMemberBlockListViewController alloc] initWithGroup:self.group];
     }
     return _blockListVC;
-}
-
-- (ACDGroupMemberWhiteListViewController *)whiteListVC {
-    if (_whiteListVC == nil) {
-        _whiteListVC = ACDGroupMemberWhiteListViewController.new;
-    }
-    return _whiteListVC;
 }
 
 - (ACDGroupMemberNavView *)navView {
@@ -286,9 +278,9 @@ MISScrollPageControllerDelegate>
 - (void)setGroup:(AgoraChatGroup *)group {
     _group = group;
 
-    self.navTitleArray = [@[@"All",@"Admin",@"Mute",@"Block",@"White"] mutableCopy];
+    self.navTitleArray = [@[@"All",@"Admin",@"Mute",@"Block"] mutableCopy];
 
-    self.contentVCArray = [@[self.allVC,self.adminListVC,self.mutedListVC,self.blockListVC,self.whiteListVC] mutableCopy];
+    self.contentVCArray = [@[self.allVC,self.adminListVC,self.mutedListVC,self.blockListVC] mutableCopy];
 
 }
 

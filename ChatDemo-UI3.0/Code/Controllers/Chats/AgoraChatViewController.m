@@ -30,9 +30,15 @@
 #import "AgoraChatRecallCell.h"
 #import <AVKit/AVKit.h>
 
+#import "ACDChatNavigationView.h"
+#import "ACDContactInfoViewController.h"
+#import "AgoraUserModel.h"
+#import "ACDGroupInfoViewController.h"
+
+
 static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
-@interface AgoraChatViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate,AgoraLocationViewDelegate,AgoraChatManagerDelegate, AgoraChatroomManagerDelegate,AgoraChatBaseCellDelegate,UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource,AgoraChatToolBarNewDelegate>
+@interface AgoraChatViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate,AgoraLocationViewDelegate,AgoraChatManagerDelegate, AgoraChatroomManagerDelegate,AgoraChatBaseCellDelegate,UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource,AgoraChatToolBarNewDelegate,EaseChatViewControllerDelegate>
 
 
 @property (strong, nonatomic) AgoraChatToolBar *chatToolBar;
@@ -54,6 +60,14 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 //need delete Conversation
 @property (assign, nonatomic) BOOL isDeleteConversation;
 
+@property (nonatomic, strong) EaseChatViewController *chatController;
+@property (nonatomic, strong) EaseConversationModel *conversationModel;
+@property (nonatomic, strong) ACDChatNavigationView *navigationView;
+
+@property (nonatomic, assign) AgoraChatConversationType conversationType;
+
+@property (nonatomic, copy) NSString *conversationId;
+
 
 @end
 
@@ -63,8 +77,21 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 {
     self = [super init];
     if (self) {
-        _currentConversation = [[AgoraChatClient sharedClient].chatManager getConversation:conversationId type:type createIfNotExist:YES];
-        [_currentConversation markAllMessagesAsRead:nil];
+//        _currentConversation = [[AgoraChatClient sharedClient].chatManager getConversation:conversationId type:type createIfNotExist:YES];
+//        [_currentConversation markAllMessagesAsRead:nil];
+        
+        self.conversationType = type;
+        self.conversationId = conversationId;
+        
+        _currentConversation = [AgoraChatClient.sharedClient.chatManager getConversation:conversationId type:type createIfNotExist:YES];
+        _conversationModel = [[EaseConversationModel alloc]initWithConversation:_currentConversation];
+        
+        EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
+        _chatController = [EaseChatViewController initWithConversationId:conversationId
+                                                    conversationType:type
+                                                        chatViewModel:viewModel];
+        [_chatController setEditingStatusVisible:YES];
+        _chatController.delegate = self;
         
     }
     return self;
@@ -83,7 +110,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     [self setupSubviews];
     
     [self tableViewDidTriggerHeaderRefresh];
-    [self _setupNavigationBar];
+//    [self _setupNavigationBar];
 
     [[AgoraChatClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[AgoraChatClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
@@ -92,28 +119,57 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     if (_currentConversation.type == AgoraChatConversationTypeChatRoom) {
         [self _joinChatroom:_currentConversation.conversationId];
     }
+    
 }
 
 
 - (void)setupSubviews {
-    [self.tableView addSubview:self.refresh];
-    [self.view addSubview:self.tableView];
-    [self.view addSubview:self.chatToolBar];
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+//    [self.tableView addSubview:self.refresh];
+//    [self.view addSubview:self.tableView];
+//    [self.view addSubview:self.chatToolBar];
+//    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self.view);
+//        make.left.equalTo(self.view);
+//        make.right.equalTo(self.view);
+//        make.bottom.equalTo(self.chatToolBar.mas_top);
+//
+//    }];
+//
+//    [self.chatToolBar mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.view);
+//        make.right.equalTo(self.view);
+//        make.height.mas_equalTo(91);
+//        make.bottom.equalTo(self.view);
+//    }];
+    
+    [self addChildViewController:_chatController];
+    [self.view addSubview:self.navigationView];
+    [self.view addSubview:_chatController.view];
+//    _chatController.view.frame = self.view.bounds;
+    
+    [self.navigationView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view);
-        make.left.equalTo(self.view);
-        make.right.equalTo(self.view);
-        make.bottom.equalTo(self.chatToolBar.mas_top);
-
+        make.left.right.equalTo(self.view);
+        make.bottom.equalTo(_chatController.view.mas_top);
     }];
     
-    [self.chatToolBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view);
-        make.right.equalTo(self.view);
-        make.height.mas_equalTo(91);
-        make.bottom.equalTo(self.view);
+    [_chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(60.0, 0, 0, 0));
     }];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
+
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -1121,6 +1177,142 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
         [self.navigationController popToViewController:self animated:NO];
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+
+
+//#pragma mark - EaseChatViewControllerDelegate
+//
+//
+////对方输入状态
+//- (void)beginTyping
+//{
+//    self.titleDetailLabel.text = @"对方正在输入";
+//}
+//- (void)endTyping
+//{
+//    self.titleDetailLabel.text = nil;
+//}
+//
+//- (NSMutableArray<EaseExtMenuModel *> *)inputBarExtMenuItemArray:(NSMutableArray<EaseExtMenuModel *> *)defaultInputBarItems conversationType:(AgoraChatConversationType)conversationType
+//{
+//    NSMutableArray<EaseExtMenuModel *> *menuArray = [[NSMutableArray<EaseExtMenuModel *> alloc]init];
+//    //相册
+//    [menuArray addObject:[defaultInputBarItems objectAtIndex:0]];
+//    //相机
+//    [menuArray addObject:[defaultInputBarItems objectAtIndex:1]];
+//
+//    return menuArray;
+//}
+//
+//- (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<AgoraChatMessage *> *)messageList
+//{
+//    self.moreMsgId = firstMessageId;
+//    [self loadData:NO];
+//}
+//
+//#pragma mark - data
+//
+//- (void)loadData:(BOOL)isScrollBottom
+//{
+//    __weak typeof(self) weakself = self;
+//    void (^block)(NSArray *aMessages, AgoraChatError *aError) = ^(NSArray *aMessages, AgoraChatError *aError) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakself.chatController refreshTableViewWithData:aMessages isInsertBottom:NO isScrollBottom:isScrollBottom];
+//        });
+//    };
+//
+//
+//    [self.conversation loadMessagesStartFromId:self.moreMsgId count:50 searchDirection:AgoraChatMessageSearchDirectionUp completion:block];
+//}
+//
+//- (void)refreshTableView
+//{
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if(self.view.window)
+//            [self.chatController triggerUserInfoCallBack:YES];
+//    });
+//}
+//
+//
+//- (void)clickCancel
+//{
+//    [self.fullScreenView removeFromSuperview];
+//}
+//
+//- (NSArray *)formatMessages:(NSArray<AgoraChatMessage *> *)aMessages
+//{
+//    NSMutableArray *formated = [[NSMutableArray alloc] init];
+//
+//    for (int i = 0; i < [aMessages count]; i++) {
+//        AgoraChatMessage *msg = aMessages[i];
+//        if (msg.chatType == AgoraChatTypeChat && msg.isReadAcked && (msg.body.type == AgoraChatMessageBodyTypeText || msg.body.type == AgoraChatMessageBodyTypeLocation)) {
+//            [[AgoraChatClient sharedClient].chatManager sendMessageReadAck:msg.messageId toUser:msg.conversationId completion:nil];
+//        }
+//
+//        CGFloat interval = (self.chatController.msgTimelTag - msg.timestamp) / 1000;
+//        if (self.chatController.msgTimelTag < 0 || interval > 60 || interval < -60) {
+//            NSString *timeStr = [EMDateHelper formattedTimeFromTimeInterval:msg.timestamp];
+//            [formated addObject:timeStr];
+//            self.chatController.msgTimelTag = msg.timestamp;
+//        }
+//        EaseMessageModel *model = nil;
+//        model = [[EaseMessageModel alloc] initWithEMMessage:msg];
+//        if (!model) {
+//            model = [[EaseMessageModel alloc]init];
+//        }
+//        model.userDataProfile = [self userData:msg.from];
+//        [formated addObject:model];
+//    }
+//
+//    return formated;
+//}
+//
+
+- (ACDChatNavigationView *)navigationView {
+    if (_navigationView == nil) {
+        _navigationView = [[ACDChatNavigationView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 80.0f)];
+        _navigationView.leftLabel.text = @"123";
+        ACD_WS
+        _navigationView.leftButtonBlock = ^{
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        };
+        
+        _navigationView.chatButtonBlock = ^{
+            [weakSelf goInfoPage];
+        };
+        
+        
+    }
+    return _navigationView;
+}
+
+- (void)goInfoPage {
+    if (self.conversationType == AgoraChatConversationTypeChat) {
+        [self goContactInfoWithContactId:self.conversationId];
+    }
+    
+    if (self.conversationType == AgoraChatConversationTypeGroupChat) {
+        [self goGroupInfoWithGroupId:self.conversationId];
+    }
+
+}
+
+
+- (void)goContactInfoWithContactId:(NSString *)contactId {
+    AgoraUserModel * model = [[AgoraUserModel alloc] initWithHyphenateId:contactId];
+    ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
+    
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
+- (void)goGroupInfoWithGroupId:(NSString *)groupId {
+    ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
+    vc.accessType = ACDGroupInfoAccessTypeChat;
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

@@ -47,25 +47,9 @@
         [[UINavigationBar appearance] setTranslucent:NO];
     }
             
-    // init HyphenateSDK
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:EaseIMAppKey];
     
-    // Hyphenate cert keys
-    NSString *apnsCertName = nil;
-#if ChatDemo_DEBUG
-    apnsCertName = @"ChatDemoDevPush";
-#else
-    apnsCertName = @"ChatDemoProPush";
-#endif
-    
-    [options setApnsCertName:apnsCertName];
-    [options setEnableConsoleLog:YES];
-    [options setIsDeleteMessagesWhenExitGroup:NO];
-    [options setIsDeleteMessagesWhenExitChatRoom:NO];
-    [options setUsingHttpsOnly:YES];
-    
-    [[AgoraChatClient sharedClient] initializeSDKWithOptions:options];
-    
+//    [self initSDK];
+    [self initUIKit];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loginStateChange:)
@@ -86,6 +70,44 @@
     
     return YES;
 }
+
+- (void)initSDK {
+    // init HyphenateSDK
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:EaseIMAppKey];
+    
+    // Hyphenate cert keys
+    NSString *apnsCertName = nil;
+#if ChatDemo_DEBUG
+    apnsCertName = @"ChatDemoDevPush";
+#else
+    apnsCertName = @"ChatDemoProPush";
+#endif
+    
+    [options setApnsCertName:apnsCertName];
+    [options setEnableConsoleLog:YES];
+    [options setIsDeleteMessagesWhenExitGroup:NO];
+    [options setIsDeleteMessagesWhenExitChatRoom:NO];
+    [options setUsingHttpsOnly:YES];
+    
+    [[AgoraChatClient sharedClient] initializeSDKWithOptions:options];
+}
+
+- (void)initUIKit
+{
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:@"easemob-demo#easeim"];
+    options.enableConsoleLog = YES;
+    options.usingHttpsOnly = YES;
+    [EaseChatKitManager initWithAgoraChatOptions:options];
+    if (AgoraChatClient.sharedClient.isLoggedIn && ![AgoraChatClient.sharedClient.currentUsername isEqualToString:@"chong"]) {
+        [AgoraChatClient.sharedClient logout:YES];
+    }
+    
+//    [[AgoraChatClient sharedClient] loginWithUsername:@"chong"
+//                                      password:@"1"
+//                                    completion:nil];
+
+}
+
 
 - (void)loadViewController {
     BOOL isAutoLogin = [AgoraChatClient sharedClient].isAutoLogin;

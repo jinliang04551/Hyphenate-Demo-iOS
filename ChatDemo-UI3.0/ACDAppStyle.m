@@ -23,7 +23,7 @@
 - (void)defaultStyle {
     [UITabBarItem.appearance setTitleTextAttributes:@{
                                                       NSFontAttributeName : NFont(12.0f),
-                                                      NSForegroundColorAttributeName : COLOR_HEX(0xC9CFCF)
+                                                      NSForegroundColorAttributeName : TextLabelBlackColor
                                                       } forState:UIControlStateNormal];
     [UITabBarItem.appearance setTitleTextAttributes:@{
                                                       NSFontAttributeName : NFont(12.0f),

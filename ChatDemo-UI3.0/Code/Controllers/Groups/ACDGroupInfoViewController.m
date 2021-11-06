@@ -80,8 +80,6 @@
     self.navigationController.navigationBarHidden = NO;
 }
 
-
-
 #pragma mark NSNotification
 - (void)updateUIWithNotification:(NSNotification *)notification
 {
@@ -97,9 +95,9 @@
         self.groupInfoHeaderView.isHideChatButton = YES;
     }else {
         if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
-            self.cells = @[self.membersCell,self.allowSearchCell,self.allowInviteCell,self.transferOwnerCell,self.disbandCell];
+            self.cells = @[self.membersCell,self.transferOwnerCell,self.disbandCell];
         } else if(self.group.permissionType == AgoraChatGroupPermissionTypeAdmin){
-            self.cells = @[self.membersCell,self.allowSearchCell,self.allowInviteCell,self.leaveCell];
+            self.cells = @[self.membersCell,self.leaveCell];
         }else {
             self.cells = @[self.membersCell,self.leaveCell];
         }
@@ -204,7 +202,12 @@
 }
 
 - (void)transferOwner {
+    [self goTransferOwnerWithIsLeaveGroup:NO];
+}
+
+- (void)goTransferOwnerWithIsLeaveGroup:(BOOL)isLeaveGroup {
     ACDTransferOwnerViewController *vc = [[ACDTransferOwnerViewController alloc] initWithGroup:self.group];
+    vc.isLeaveGroup = isLeaveGroup;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -214,11 +217,19 @@
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
        
     }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Disband" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    
+    UIAlertAction *disBandAction = [UIAlertAction actionWithTitle:@"Disband" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self dismissGroupWithGroupId:self.groupId];
     }];
+    
+    UIAlertAction *leaveAction = [UIAlertAction actionWithTitle:@"Transfer Ownership and Leave" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self goTransferOwnerWithIsLeaveGroup:YES];
+    }];
+    
+
     [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
+    [alertController addAction:disBandAction];
+    [alertController addAction:leaveAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
 

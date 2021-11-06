@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDGroupMemberBlockListViewController : ACDContainerSearchTableViewController
 
+- (instancetype)initWithGroup:(AgoraChatGroup *)aGroup;
+
 @end
 
 NS_ASSUME_NONNULL_END

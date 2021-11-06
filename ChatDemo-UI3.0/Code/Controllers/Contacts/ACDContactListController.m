@@ -131,27 +131,27 @@
     return  self.sectionTitles.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return [self.sectionTitles objectAtIndex:section];
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+//    return [self.sectionTitles objectAtIndex:section];
+//}
 
 - (NSArray*)sectionIndexTitlesForTableView:(UITableView *)tableView{
      return self.sectionTitles;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *contentView = UIView.new;
-    contentView.backgroundColor = UIColor.whiteColor;
-    UILabel *label = UILabel.new;
-    label.font = Font(@"PingFangSC-Regular", 15.0f);
-    label.textColor = COLOR_HEX(0x242424);
-    label.text = self.sectionTitles[section];
-    [contentView addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(contentView).insets(UIEdgeInsetsMake(0, 20.0f, 0, -20.0));
-    }];
-    return contentView;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    UIView *contentView = UIView.new;
+//    contentView.backgroundColor = UIColor.whiteColor;
+//    UILabel *label = UILabel.new;
+//    label.font = Font(@"PingFangSC-Regular", 15.0f);
+//    label.textColor = COLOR_HEX(0x242424);
+//    label.text = self.sectionTitles[section];
+//    [contentView addSubview:label];
+//    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(contentView).insets(UIEdgeInsetsMake(0, 20.0f, 0, -20.0));
+//    }];
+//    return contentView;
+//}
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index{
     return index;

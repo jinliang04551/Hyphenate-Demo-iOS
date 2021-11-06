@@ -7,6 +7,7 @@
 //
 
 #import "ACDContainerSearchTableViewController+GroupMemberList.h"
+#import <objc/runtime.h>
 
 typedef void(^actionBlock)();
 
@@ -21,9 +22,10 @@ typedef void(^actionBlock)();
 
 #define kActionRemoveFromGroupKey @"ActionRemoveFromGroupKey"
 
+static NSString *selectedUserIdKey = @"selectedUserId";
+static NSString *groupIdKey = @"groupId";
+
 @interface ACDContainerSearchTableViewController ()
-@property (nonatomic, strong) NSString *selectedUserId;
-@property (nonatomic, strong) NSString *groupId;
 
 @end
 
@@ -31,8 +33,7 @@ typedef void(^actionBlock)();
 
 - (void)actionSheetWithUserId:(NSString *)userId
                memberListType:(ACDGroupMemberListType)memberListType
-                        group:(AgoraChatGroup *)group
-                   completion:(void (^)(AgoraChatError* error))completion {
+                        group:(AgoraChatGroup *)group {
     //if selected user is currentUsernam, than do nothing
     if ([userId isEqualToString:AgoraChatClient.sharedClient.currentUsername]) {
         return;
@@ -164,16 +165,16 @@ typedef void(^actionBlock)();
 
     
         UIAlertAction *makeUnAdminAction = [self alertActionWithTitle:@"Remove as Admin" completion:^{
-            [self makeMute];
+            [self unAdmin];
         }];
     
         UIAlertAction *makeUnMuteAction = [self alertActionWithTitle:@"Unmute" completion:^{
-            [self makeMute];
+            [self unMute];
         }];
 
         
         UIAlertAction *makeUnBlockAction = [self alertActionWithTitle:@"Remove from Blocked List" completion:^{
-            [self makeMute];
+            [self unBlock];
         }];
         
     alertActionDics[kActionAdminKey] = makeAdminAction;
@@ -198,70 +199,7 @@ typedef void(^actionBlock)();
 }
 
 
-- (void)editActionsForRowAtIndexPath:(NSIndexPath *)indexPath actionIndex:(NSInteger)buttonIndex
-{
-//    NSString *userName = @"";
-//    if (indexPath.section == 0) {
-//        userName = [self.ownerAndAdmins objectAtIndex:indexPath.row];
-//    } else {
-//        userName = [self.dataArray objectAtIndex:indexPath.row];
-//    }
-    
-//    [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
-//
-//    __weak typeof(self) weakSelf = self;
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        AgoraChatError *error = nil;
-//        if (buttonIndex == 0) { //Remove
-//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-//            if (!error) {
-//                if (indexPath.section == 0) {
-//                    [weakSelf.ownerAndAdmins removeObject:userName];
-//                } else {
-//                    [weakSelf.dataArray removeObject:userName];
-//                }
-//            }
-//        } else if (buttonIndex == 1) { //Blacklist
-//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-//            if (!error) {
-//                if (indexPath.section == 0) {
-//                    [weakSelf.ownerAndAdmins removeObject:userName];
-//                } else {
-//                    [weakSelf.dataArray removeObject:userName];
-//                }
-//            }
-//        } else if (buttonIndex == 2) {  //Mute
-//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
-//        } else if (buttonIndex == 3) {  //To Admin
-//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
-//            if (!error) {
-//                [weakSelf.ownerAndAdmins addObject:userName];
-//                [weakSelf.dataArray removeObject:userName];
-//            }
-//        }
-//
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [weakSelf hideHud];
-//            if (!error) {
-//                if (buttonIndex != 2) {
-//                    [weakSelf.table reloadData];
-//                } else {
-//                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
-//                }
-//
-//                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:weakSelf.group];
-//            }
-//            else {
-//                [weakSelf showHint:error.errorDescription];
-//            }
-//        });
-//    });
-    
-}
-
-
-
-
+#pragma mark actions
 - (void)makeAdmin {
     AgoraChatError *error = nil;
     [[AgoraChatClient sharedClient].groupManager addAdmin:self.selectedUserId toGroup:self.groupId error:&error];
@@ -327,6 +265,25 @@ typedef void(^actionBlock)();
     }else {
         [self showHint:error.errorDescription];
     }
+}
+
+
+#pragma mark getter and setter
+- (void)setSelectedUserId:(NSString *)selectedUserId {
+    objc_setAssociatedObject(self, &selectedUserIdKey, selectedUserId, OBJC_ASSOCIATION_COPY);
+}
+
+- (NSString *)selectedUserId {
+    return objc_getAssociatedObject(self, &selectedUserIdKey);
+}
+
+
+- (void)setGroupId:(NSString *)groupId {
+    objc_setAssociatedObject(self, &groupIdKey, groupId, OBJC_ASSOCIATION_COPY);
+}
+
+- (NSString *)groupId {
+    return objc_getAssociatedObject(self, &groupIdKey);
 }
 
 @end

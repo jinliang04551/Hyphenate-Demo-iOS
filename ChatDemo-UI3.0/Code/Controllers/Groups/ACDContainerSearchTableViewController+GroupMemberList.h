@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, ACDGroupMemberListType) {
 
 @interface ACDContainerSearchTableViewController (GroupMemberList)
 
+@property (nonatomic, strong) NSString *selectedUserId;
+@property (nonatomic, strong) NSString *groupId;
 
 /// action sheet operation selected member
 /// @param userId selected member userId
@@ -28,8 +30,7 @@ typedef NS_ENUM(NSInteger, ACDGroupMemberListType) {
 /// @param group current group
 - (void)actionSheetWithUserId:(NSString *)userId
                memberListType:(ACDGroupMemberListType)memberListType
-                        group:(AgoraChatGroup *)group
-                   completion:(void (^)(AgoraChatError* error))completion;
+                        group:(AgoraChatGroup *)group ;
 
 @end
 

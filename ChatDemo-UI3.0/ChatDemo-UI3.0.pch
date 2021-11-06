@@ -37,6 +37,6 @@
 #import "AgoraCustomBase.h"
 #import "ACDAppStyle.h"
 #import "NSArray+AgoraSortContacts.h"
-
+#import <EaseChatKit/EaseChatKit.h>
 
 #endif

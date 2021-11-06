@@ -103,8 +103,8 @@ typedef enum : NSUInteger {
     
     ACD_WS
     if (indexPath.row == 0) {
-        [cell.imageView setImage:ImageWithName(@"blocked")];
-        cell.textLabel.text = @"block";
+        [cell.iconImageView setImage:ImageWithName(@"blocked")];
+        cell.nameLabel.text = @"block";
         
         cell.tapCellBlock = ^{
             [weakSelf blockAction];
@@ -113,8 +113,8 @@ typedef enum : NSUInteger {
     }
     
     if (indexPath.row == 1) {
-        [cell.imageView setImage:ImageWithName(@"delete")];
-        cell.textLabel.text = @"delete";
+        [cell.iconImageView setImage:ImageWithName(@"delete")];
+        cell.nameLabel.text = @"delete";
         cell.tapCellBlock = ^{
             [weakSelf deleteAction];
         };

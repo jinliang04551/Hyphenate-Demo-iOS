@@ -248,6 +248,8 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
                                                                   object:nil];
           });
           
+          //跳转到聊天页面
+          
           [self backAction];
       }
       else {

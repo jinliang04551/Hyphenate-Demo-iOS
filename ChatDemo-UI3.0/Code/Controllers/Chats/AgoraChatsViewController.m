@@ -18,6 +18,7 @@
 
 #import "ACDGroupEnterController.h"
 
+
 NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 @interface AgoraChatsViewController () <AgoraChatManagerDelegate, AgoraChatGroupManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
@@ -30,6 +31,9 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 @property (strong, nonatomic) NSMutableArray *searchSource;
 @property (strong, nonatomic) UIView *networkStateView;
 @property (assign, nonatomic) BOOL hasLaunched;
+
+@property (nonatomic, strong) EaseConversationsViewController *easeConvsVC;
+@property (nonatomic, strong) EaseConversationViewModel *viewModel;
 
 @end
 
@@ -60,7 +64,28 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:ImageWithName(@"chat_nav_add") style:UIBarButtonItemStylePlain target:self action:@selector(goEnterGroupPage)];
+    
+    [self loadUIKitListPage];
 }
+
+- (void)loadUIKitListPage {
+    self.viewModel = [[EaseConversationViewModel alloc] init];
+    self.viewModel.canRefresh = YES;
+    self.viewModel.badgeLabelPosition = EaseAvatarTopRight;
+    
+    self.easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:self.viewModel];
+    self.easeConvsVC.delegate = self;
+    [self addChildViewController:self.easeConvsVC];
+    [self.view addSubview:self.easeConvsVC.view];
+    [self.easeConvsVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(titleLabel.mas_bottom).offset(15);
+        make.top.equalTo(self.view).offset(15);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.bottom.equalTo(self.view);
+    }];
+}
+
 
 
 - (void)goEnterGroupPage {

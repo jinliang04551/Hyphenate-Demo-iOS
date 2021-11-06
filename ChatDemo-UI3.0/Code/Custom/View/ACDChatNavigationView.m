@@ -8,9 +8,11 @@
 
 #import "ACDChatNavigationView.h"
 
+#define kRedPointViewHeight 8.0f
+
 @interface ACDChatNavigationView ()
 @property (nonatomic, strong) UIImageView* backImageView;
-@property (nonatomic, strong) UIImageView* redImageView;
+@property (nonatomic, strong) UIView* redPointView;
 @property (nonatomic, strong) UIButton* leftButton;
 @property (nonatomic, strong) UIButton* rightButton;
 @property (nonatomic, strong) UIButton* chatButton;
@@ -21,8 +23,9 @@
 
 
 - (void)prepare {
+    
     [self addSubview:self.leftButton];
-    [self addSubview:self.redImageView];
+    [self addSubview:self.redPointView];
     [self addSubview:self.chatButton];
     [self addSubview:self.leftLabel];
     [self addSubview:self.rightButton];
@@ -31,21 +34,24 @@
 
 - (void)placeSubViews {
     [self.leftButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(kAgroaPadding * 4.4);
-        make.left.equalTo(self).offset(kAgroaPadding *1.6);
-//        make.width.equalTo(@100.0);
+        make.top.equalTo(self).offset(kAgroaPadding * 2.0);
+        make.left.equalTo(self).offset(kAgroaPadding);
+        make.width.equalTo(@30.0);
         make.bottom.equalTo(self).offset(-5.0);
+
     }];
     
-    [self.redImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.redPointView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.leftButton).offset(-kAgroaPadding);
-        make.centerX.equalTo(self.leftButton.mas_right);
-
+        make.centerX.equalTo(self.leftButton.mas_right).offset(-kAgroaPadding);
+        make.size.equalTo(@kRedPointViewHeight);
     }];
 
     [self.chatButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.leftButton);
-        make.left.equalTo(self.leftButton).offset(kAgroaPadding * 1.6);
+        make.left.equalTo(self.leftButton.mas_right).offset(kAgroaPadding*0.5);
+        make.width.equalTo(@30.0);
+
     }];
     
     [self.leftLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -91,24 +97,16 @@
     return _leftButton;
 }
 
-
-//- (UIImageView *)backImageView {
-//    if (_backImageView == nil) {
-//        _backImageView = [[UIImageView alloc] init];
-//        _backImageView.contentMode = UIViewContentModeScaleAspectFill;
-//        _backImageView.image = ImageWithName(@"black_goBack");
-//    }
-//    return _backImageView;
-//}
-
-- (UIImageView *)redImageView {
-    if (_redImageView == nil) {
-        _redImageView = [[UIImageView alloc] init];
-        _redImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _redImageView.image = ImageWithName(@"black_goBack");
+- (UIView *)redPointView {
+    if (_redPointView == nil) {
+        _redPointView = UIView.new;
+        _redPointView.backgroundColor = TextLabelPinkColor;
+        _redPointView.layer.cornerRadius = kRedPointViewHeight * 0.5;
+        _redPointView.hidden = YES;
     }
-    return _redImageView;
+    return _redPointView;
 }
+
 
 - (UILabel *)leftLabel {
     if (_leftLabel == nil) {
@@ -117,6 +115,7 @@
         _leftLabel.textAlignment = NSTextAlignmentLeft;
         _leftLabel.font = BFont(18.0f);
         _leftLabel.text = @"leftLabel";
+
     }
     return _leftLabel;
 }
@@ -127,6 +126,7 @@
         _chatButton.contentMode = UIViewContentModeScaleAspectFill;
         [_chatButton setImage:ImageWithName(@"contact_add_contacts") forState:UIControlStateNormal];
         [_chatButton addTarget:self action:@selector(chatButtonAction) forControlEvents:UIControlEventTouchUpInside];
+
     }
     return _chatButton;
 }
@@ -137,8 +137,11 @@
         _rightButton.contentMode = UIViewContentModeScaleAspectFill;
         [_rightButton setImage:ImageWithName(@"nav_chat_right_bar") forState:UIControlStateNormal];
         [_rightButton addTarget:self action:@selector(rightButtonAction) forControlEvents:UIControlEventTouchUpInside];
+        _rightButton.hidden = YES;
     }
     return _rightButton;
 }
 
 @end
+
+#undef kRedPointViewHeight
