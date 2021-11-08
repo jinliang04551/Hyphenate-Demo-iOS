@@ -419,6 +419,16 @@
 		D2F372AB1DD073A800C726E7 /* faceDelete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2F372AA1DD073A800C726E7 /* faceDelete@2x.png */; };
 		D2F372AD1DD0755400C726E7 /* Location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2F372AC1DD0755400C726E7 /* Location@2x.png */; };
 		EC19F52D273558C500F88012 /* ACDModifyAvatarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC19F52C273558C500F88012 /* ACDModifyAvatarViewController.m */; };
+		EC19F5362737C9DC00F88012 /* defatult_avatar_6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F52F2737C9DC00F88012 /* defatult_avatar_6@2x.png */; };
+		EC19F5372737C9DC00F88012 /* defatult_avatar_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F5302737C9DC00F88012 /* defatult_avatar_2@2x.png */; };
+		EC19F5382737C9DC00F88012 /* defatult_avatar_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F5312737C9DC00F88012 /* defatult_avatar_1@2x.png */; };
+		EC19F5392737C9DC00F88012 /* defatult_avatar_7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F5322737C9DC00F88012 /* defatult_avatar_7@2x.png */; };
+		EC19F53A2737C9DC00F88012 /* defatult_avatar_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F5332737C9DC00F88012 /* defatult_avatar_3@2x.png */; };
+		EC19F53B2737C9DC00F88012 /* defatult_avatar_4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F5342737C9DC00F88012 /* defatult_avatar_4@2x.png */; };
+		EC19F53C2737C9DC00F88012 /* defatult_avatar_5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F5352737C9DC00F88012 /* defatult_avatar_5@2x.png */; };
+		EC19F53F2737D0DB00F88012 /* ACDAvatarCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EC19F53E2737D0DB00F88012 /* ACDAvatarCollectionCell.m */; };
+		EC19F5422738C5B600F88012 /* ACDUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EC19F5412738C5B600F88012 /* ACDUtil.m */; };
+		EC19F5452738C60700F88012 /* UIImage+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = EC19F5442738C60700F88012 /* UIImage+Util.m */; };
 		EC432EB4271D852C001B31DE /* AgoraNewLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EB3271D852C001B31DE /* AgoraNewLoginViewController.m */; };
 		EC432EB6271D9BFD001B31DE /* login.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC432EB5271D9BFD001B31DE /* login.bundle */; };
 		EC432EB8271EADDA001B31DE /* TabBar.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC432EB7271EADDA001B31DE /* TabBar.bundle */; };
@@ -1114,6 +1124,19 @@
 		D2F372AC1DD0755400C726E7 /* Location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Location@2x.png"; sourceTree = "<group>"; };
 		EC19F52B273558C500F88012 /* ACDModifyAvatarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDModifyAvatarViewController.h; sourceTree = "<group>"; };
 		EC19F52C273558C500F88012 /* ACDModifyAvatarViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDModifyAvatarViewController.m; sourceTree = "<group>"; };
+		EC19F52F2737C9DC00F88012 /* defatult_avatar_6@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defatult_avatar_6@2x.png"; sourceTree = "<group>"; };
+		EC19F5302737C9DC00F88012 /* defatult_avatar_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defatult_avatar_2@2x.png"; sourceTree = "<group>"; };
+		EC19F5312737C9DC00F88012 /* defatult_avatar_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defatult_avatar_1@2x.png"; sourceTree = "<group>"; };
+		EC19F5322737C9DC00F88012 /* defatult_avatar_7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defatult_avatar_7@2x.png"; sourceTree = "<group>"; };
+		EC19F5332737C9DC00F88012 /* defatult_avatar_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defatult_avatar_3@2x.png"; sourceTree = "<group>"; };
+		EC19F5342737C9DC00F88012 /* defatult_avatar_4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defatult_avatar_4@2x.png"; sourceTree = "<group>"; };
+		EC19F5352737C9DC00F88012 /* defatult_avatar_5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defatult_avatar_5@2x.png"; sourceTree = "<group>"; };
+		EC19F53D2737D0DB00F88012 /* ACDAvatarCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDAvatarCollectionCell.h; sourceTree = "<group>"; };
+		EC19F53E2737D0DB00F88012 /* ACDAvatarCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDAvatarCollectionCell.m; sourceTree = "<group>"; };
+		EC19F5402738C5B600F88012 /* ACDUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDUtil.h; sourceTree = "<group>"; };
+		EC19F5412738C5B600F88012 /* ACDUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDUtil.m; sourceTree = "<group>"; };
+		EC19F5432738C60700F88012 /* UIImage+Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Util.h"; sourceTree = "<group>"; };
+		EC19F5442738C60700F88012 /* UIImage+Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Util.m"; sourceTree = "<group>"; };
 		EC432EB2271D852C001B31DE /* AgoraNewLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraNewLoginViewController.h; sourceTree = "<group>"; };
 		EC432EB3271D852C001B31DE /* AgoraNewLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraNewLoginViewController.m; sourceTree = "<group>"; };
 		EC432EB5271D9BFD001B31DE /* login.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = login.bundle; sourceTree = "<group>"; };
@@ -1835,6 +1858,7 @@
 		D28345251D8FEE3F00FD48A9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				EC19F52E2737C9C000F88012 /* Avatar */,
 				EC570E9D2730E96800CBC408 /* Setting */,
 				EC54DD2827226C0C00ABEE3E /* Group */,
 				EC432ED427202B34001B31DE /* Global */,
@@ -1952,6 +1976,8 @@
 				EC570E972730DA2F00CBC408 /* ACDSettingsViewController.m */,
 				EC19F52B273558C500F88012 /* ACDModifyAvatarViewController.h */,
 				EC19F52C273558C500F88012 /* ACDModifyAvatarViewController.m */,
+				EC19F53D2737D0DB00F88012 /* ACDAvatarCollectionCell.h */,
+				EC19F53E2737D0DB00F88012 /* ACDAvatarCollectionCell.m */,
 				7F6CC8E726568C8600BA60BB /* AgoraSettingsViewController.xib */,
 				D285386C1DB1EBB50027D4E1 /* AgoraBaseSettingController.h */,
 				D285386D1DB1EBB50027D4E1 /* AgoraBaseSettingController.m */,
@@ -2002,6 +2028,10 @@
 				7F663CF2265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m */,
 				7F3E7F9E267B2314009CEAB6 /* UIColor+Util.h */,
 				7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */,
+				EC19F5402738C5B600F88012 /* ACDUtil.h */,
+				EC19F5412738C5B600F88012 /* ACDUtil.m */,
+				EC19F5432738C60700F88012 /* UIImage+Util.h */,
+				EC19F5442738C60700F88012 /* UIImage+Util.m */,
 				7F0516D226A0118600B2C795 /* CustomBase */,
 				D243280A1DAE19F900EDCDAB /* Emoji */,
 				D24327EB1DAA444C00EDCDAB /* Category */,
@@ -2357,6 +2387,20 @@
 			path = ChatCell;
 			sourceTree = "<group>";
 		};
+		EC19F52E2737C9C000F88012 /* Avatar */ = {
+			isa = PBXGroup;
+			children = (
+				EC19F5312737C9DC00F88012 /* defatult_avatar_1@2x.png */,
+				EC19F5302737C9DC00F88012 /* defatult_avatar_2@2x.png */,
+				EC19F5332737C9DC00F88012 /* defatult_avatar_3@2x.png */,
+				EC19F5342737C9DC00F88012 /* defatult_avatar_4@2x.png */,
+				EC19F5352737C9DC00F88012 /* defatult_avatar_5@2x.png */,
+				EC19F52F2737C9DC00F88012 /* defatult_avatar_6@2x.png */,
+				EC19F5322737C9DC00F88012 /* defatult_avatar_7@2x.png */,
+			);
+			path = Avatar;
+			sourceTree = "<group>";
+		};
 		EC432EC627202996001B31DE /* AddContact */ = {
 			isa = PBXGroup;
 			children = (
@@ -2699,6 +2743,7 @@
 				D2BF7F1C1D914DB30090AA66 /* logo4.png in Resources */,
 				D2BF7F161D914DB30090AA66 /* logo2.png in Resources */,
 				D2BF7E301D914DB30090AA66 /* Icon_New chat@2x.png in Resources */,
+				EC19F53B2737C9DC00F88012 /* defatult_avatar_4@2x.png in Resources */,
 				D2BF7E501D914DB30090AA66 /* Button_Upload Photo.png in Resources */,
 				D2BF7E8A1D914DB30090AA66 /* Icon_Check@2x.png in Resources */,
 				D2BF7F101D914DB30090AA66 /* logo10@3x.png in Resources */,
@@ -2810,6 +2855,7 @@
 				EC658DFA2733CA4500472939 /* nav_chat_right_bar@3x.png in Resources */,
 				D2BF7E971D914DB30090AA66 /* Icon_Video@3x.png in Resources */,
 				D2BF7E441D914DB30090AA66 /* Button_Add Member.png in Resources */,
+				EC19F53A2737C9DC00F88012 /* defatult_avatar_3@2x.png in Resources */,
 				D2BF7E561D914DB30090AA66 /* Button_Camera switch active.png in Resources */,
 				D2BF7E4F1D914DB30090AA66 /* Button_Radio@3x.png in Resources */,
 				7F6CC8D526568C6F00BA60BB /* AgoraContactInfoCell.xib in Resources */,
@@ -2824,6 +2870,7 @@
 				D2BF7ECE1D914DB30090AA66 /* Icon_Clear.png in Resources */,
 				EC54DE14272A7DEB00ABEE3E /* groupInfo_deband@2x.png in Resources */,
 				D2BF7ED41D914DB30090AA66 /* Icon_Search.png in Resources */,
+				EC19F5382737C9DC00F88012 /* defatult_avatar_1@2x.png in Resources */,
 				D2BF7EA51D914DB30090AA66 /* Icon_Audio@2x.png in Resources */,
 				D2BF7E5D1D914DB30090AA66 /* Button_Camera switch@2x.png in Resources */,
 				EC54DCC127211A4300ABEE3E /* delete@3x.png in Resources */,
@@ -2861,6 +2908,7 @@
 				D2BF7F2A1D914DB30090AA66 /* logo8@3x.png in Resources */,
 				D2BF7EB21D914DB30090AA66 /* Icon_File@3x.png in Resources */,
 				D2BF7EC81D914DB30090AA66 /* Icon_Add.png in Resources */,
+				EC19F5362737C9DC00F88012 /* defatult_avatar_6@2x.png in Resources */,
 				7166347B1DB0EFEE00C92E27 /* AgoraRefreshFootViewCell.xib in Resources */,
 				D2BF7E751D914DB30090AA66 /* Button_Mute@2x.png in Resources */,
 				D2BF7E4D1D914DB30090AA66 /* Button_Radio.png in Resources */,
@@ -2974,6 +3022,7 @@
 				7F6CC89626568C2400BA60BB /* AgoraChatEmojiView.xib in Resources */,
 				D2BF7F1A1D914DB30090AA66 /* logo3@2x.png in Resources */,
 				D2BF7E8E1D914DB30090AA66 /* Icon_Current Location pin@3x.png in Resources */,
+				EC19F5372737C9DC00F88012 /* defatult_avatar_2@2x.png in Resources */,
 				D2BF7E7D1D914DB30090AA66 /* Button_Speaker.png in Resources */,
 				D2BF7E5B1D914DB30090AA66 /* Button_Camera switch disabled@3x.png in Resources */,
 				EC432EF127210E1A001B31DE /* start_chat@2x.png in Resources */,
@@ -3007,6 +3056,7 @@
 				EC54DDF527299DF700ABEE3E /* request_reject@2x.png in Resources */,
 				D2BF7EA31D914DB30090AA66 /* Disabled@3x.png in Resources */,
 				D2BF7F0D1D914DB30090AA66 /* logo1.png in Resources */,
+				EC19F53C2737C9DC00F88012 /* defatult_avatar_5@2x.png in Resources */,
 				D2BF7ECB1D914DB30090AA66 /* Icon_Back.png in Resources */,
 				D20E26D91DCA011C00B3FAC6 /* icon_info@3x.png in Resources */,
 				D2BF7E701D914DB30090AA66 /* Button_Mute active@3x.png in Resources */,
@@ -3033,6 +3083,7 @@
 				714E9DC91DD32DAA009D1E2D /* default_group_avatar@2x.png in Resources */,
 				D2BF7E2C1D914DB30090AA66 /* Icon_Invitations.png in Resources */,
 				D2BF7EAB1D914DB30090AA66 /* Icon_Camera@2x.png in Resources */,
+				EC19F5392737C9DC00F88012 /* defatult_avatar_7@2x.png in Resources */,
 				D2BF7E3C1D914DB30090AA66 /* Swipe_Exit@2x.png in Resources */,
 				D2BF7E5E1D914DB30090AA66 /* Button_Camera switch@3x.png in Resources */,
 				D2BF7F2D1D914DB30090AA66 /* logo9@3x.png in Resources */,
@@ -3172,6 +3223,7 @@
 				D24327E71DAA395F00EDCDAB /* wav.mm in Sources */,
 				EC570E982730DA2F00CBC408 /* ACDSettingsViewController.m in Sources */,
 				7F6CC87026568B9900BA60BB /* AgoraBaseRefreshTableController.m in Sources */,
+				EC19F5422738C5B600F88012 /* ACDUtil.m in Sources */,
 				3A4BB1CB1ED43D7700B07FCA /* AgoraChatroomBansViewController.m in Sources */,
 				EC7A3296272E597100AF0C19 /* ACDContainerSearchTableViewController+GroupMemberList.m in Sources */,
 				EC7A3239272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m in Sources */,
@@ -3194,6 +3246,7 @@
 				3A79D1191E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m in Sources */,
 				EC54DDD22726C41A00ABEE3E /* ACDGroupNewCell.m in Sources */,
 				7F6CC86826568B8B00BA60BB /* AgoraMemberCollectionCell.m in Sources */,
+				EC19F53F2737D0DB00F88012 /* ACDAvatarCollectionCell.m in Sources */,
 				7F663CEA265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m in Sources */,
 				3A4BB1CD1ED43D7700B07FCA /* AgoraChatroomMembersViewController.m in Sources */,
 				EC54DDDE2727A8F900ABEE3E /* ACDAppStyle.m in Sources */,
@@ -3211,6 +3264,7 @@
 				7F6CC8D326568C6F00BA60BB /* AgoraApplyRequestCell.m in Sources */,
 				EC54DCEC2721502200ABEE3E /* MISScrollPageSegmentTitleView.m in Sources */,
 				3A4BB1B01ED3DD6F00B07FCA /* AgoraChatroomCell.m in Sources */,
+				EC19F5452738C60700F88012 /* UIImage+Util.m in Sources */,
 				7F6CC8BD26568C4B00BA60BB /* AgoraContactInfoViewController.m in Sources */,
 				EC570E9C2730E0B500CBC408 /* ACDSettingLogoutCell.m in Sources */,
 				D24327F11DAA444C00EDCDAB /* UIViewController+DismissKeyboard.m in Sources */,

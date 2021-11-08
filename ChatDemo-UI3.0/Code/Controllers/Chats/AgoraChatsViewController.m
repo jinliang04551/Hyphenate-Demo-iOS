@@ -228,6 +228,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
 
     AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.conversation.conversationId conversationType:model.conversation.type];
+    chatViewController.navTitle = model.title;
     chatViewController.leaveGroupBlock = ^{
         [self updateUIAfterLeaveGroupWithConversationId:model.conversation.conversationId];
     };

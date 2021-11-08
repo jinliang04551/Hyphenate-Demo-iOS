@@ -95,7 +95,6 @@
     }
     
     NSString *name = self.dataArray[indexPath.row];
-    cell.iconImageView.image = [UIImage imageNamed:@"default_avatar"];
     cell.nameLabel.text = name;
 
     if (name == self.group.owner) {

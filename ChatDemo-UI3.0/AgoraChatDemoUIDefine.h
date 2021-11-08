@@ -54,6 +54,6 @@
 //消息撤回
 #define MSG_EXT_RECALL @"agora_recall"
 
-
+#define kAvatarHeight 40.0f
 
 #endif /* EMChatDemoUIDefine_h */

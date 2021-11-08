@@ -19,10 +19,9 @@
 - (void)placeSubViews {
     
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).offset(kAgroaPadding * 0.5);
+        make.centerY.equalTo(self.contentView);
         make.left.equalTo(self.contentView).offset(16.0f);
-        make.width.equalTo(@40.0f);
-        make.bottom.equalTo(self.contentView).offset(-kAgroaPadding * 0.5);
+        make.size.mas_equalTo(kAvatarHeight);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -9,7 +9,8 @@
 #import "ACDInfoHeaderView.h"
 #import "ACDImageTextButtonView.h"
 
-#define kHeaderImageViewHeight  80.0f
+#define kMeHeaderImageViewHeight  140.0f
+
 
 @interface ACDInfoHeaderView ()
 @property (nonatomic, strong) UIButton *backButton;
@@ -51,6 +52,8 @@
 }
 
 - (void)placeAndLayoutForContactInfo {
+    self.avatarImageView.layer.cornerRadius = 100 * 0.5;
+
     [self addSubview:self.backButton];
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
@@ -64,10 +67,6 @@
     }];
     
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self).offset(kAgroaPadding * 6.0);
-//        make.centerX.equalTo(self);
-//        make.width.mas_equalTo(140.0);
-//        make.height.mas_equalTo(140.0);
         make.top.equalTo(self.backButton.mas_bottom).offset(kAgroaPadding);
         make.centerX.equalTo(self);
         make.size.equalTo(@100.0);
@@ -146,15 +145,16 @@
 }
 
 - (void)placeAndLayoutForMeInfo {
+    self.avatarImageView.layer.cornerRadius = kMeHeaderImageViewHeight * 0.5;
+    
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
     [self addSubview:self.userIdLabel];
         
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(kAgroaPadding *4.4);
+        make.top.equalTo(self).offset(kAgroaPadding *5.0);
         make.centerX.equalTo(self);
-//        make.width.mas_equalTo(140.0);
-//        make.height.mas_equalTo(140.0);
+        make.size.mas_equalTo(kMeHeaderImageViewHeight);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -219,7 +219,7 @@
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
         _avatarImageView.image = ImageWithName(@"group_default_avatar");
-//        _avatarImageView.backgroundColor = UIColor.yellowColor;
+        _avatarImageView.clipsToBounds = YES;
     }
     return _avatarImageView;
 }
@@ -285,6 +285,6 @@
 
 @end
 
-#undef kHeaderImageViewHeight
+#undef kMeHeaderImageViewHeight
 
 

@@ -16,7 +16,8 @@
 
 
 #define NEXT_TITLE   NSLocalizedString(@"common.next", @"Next")
-#define DONE_TITLE   NSLocalizedString(@"common.done", @"Done")
+
+#define DONE_TITLE   @"Done"
 
 @interface AgoraMemberSelectViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, AgoraGroupUIProtocol>
 @property (strong, nonatomic) IBOutlet UIView *headerView;
@@ -107,11 +108,11 @@
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _doneBtn.frame = CGRectMake(0, 0, 44, 44);
     [self updateDoneUserInteractionEnabled:NO];
-//    NSString *title = NEXT_TITLE;
-//    if (_style == AgoraContactSelectStyle_Invite) {
-//        title = DONE_TITLE;
-//    }
     NSString *title = @"create";
+    if (_style == AgoraContactSelectStyle_Invite) {
+        title = DONE_TITLE;
+    }
+
     [_doneBtn setTitle:title forState:UIControlStateNormal];
     [_doneBtn setTitle:title forState:UIControlStateHighlighted];
     _doneBtn.titleLabel.font = [UIFont systemFontOfSize:13];

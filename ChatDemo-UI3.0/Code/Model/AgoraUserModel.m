@@ -21,7 +21,9 @@
     if (self) {
         _hyphenateId = hyphenateId;
         _nickname = @"";
-        _defaultAvatarImage = [UIImage imageNamed:@"default_avatar.png"];
+//        _defaultAvatarImage = [UIImage imageNamed:@"default_avatar.png"];
+
+        _defaultAvatarImage = [UIImage imageWithColor:[self generateRandomColor] size:CGSizeMake(40.0, 40.0)];
         
         [self fetchUserInfoData];
     }
@@ -46,6 +48,33 @@
         return _nickname;
     }
     return _hyphenateId;
+}
+
+- (UIColor *)generateRandomColor {
+        int randomIndex = arc4random() % 5 + 1;
+        UIColor *avatarColor = nil;
+        switch (randomIndex) {
+            case 1:
+                avatarColor = AvatarLightBlueColor;
+                break;
+            case 2:
+                avatarColor = AvatarLightYellowColor;
+                break;
+            case 3:
+                avatarColor = AvatarLightGreenColor;
+                break;
+            case 4:
+                avatarColor = AvatarLightGrayColor;
+                break;
+            case 5:
+                avatarColor = AvatarLightOrangeColor;
+                break;
+
+            default:
+                avatarColor = AvatarLightBlueColor;
+                break;
+        }
+    return avatarColor;
 }
 
 @end

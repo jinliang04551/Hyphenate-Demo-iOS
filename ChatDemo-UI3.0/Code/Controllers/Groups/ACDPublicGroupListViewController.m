@@ -139,16 +139,6 @@
     if (self.selectedBlock) {
         self.selectedBlock(model.group.groupId);
     }
-    
-    
-//    AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:model.hyphenateId type:AgoraChatConversationTypeGroupChat createIfNotExist:YES];
-//    NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-//    [ext setObject:model.subject forKey:@"subject"];
-//    [ext setObject:[NSNumber numberWithBool:model.group.isPublic] forKey:@"isPublic"];
-//    conversation.ext = ext;
-//
-//    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:AgoraChatConversationTypeGroupChat];
-//    [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
 
@@ -157,7 +147,6 @@
 }
 
 #pragma mark - Data
-
 - (void)tableViewDidTriggerHeaderRefresh
 {
     self.page = 1;

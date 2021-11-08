@@ -66,7 +66,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 @property (nonatomic, assign) AgoraChatConversationType conversationType;
 
-@property (nonatomic, copy) NSString *conversationId;
+@property (nonatomic, strong) NSString *conversationId;
 
 
 @end
@@ -1272,7 +1272,8 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 - (ACDChatNavigationView *)navigationView {
     if (_navigationView == nil) {
         _navigationView = [[ACDChatNavigationView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 80.0f)];
-        _navigationView.leftLabel.text = @"123";
+    
+        _navigationView.leftLabel.text = self.navTitle;
         ACD_WS
         _navigationView.leftButtonBlock = ^{
             [weakSelf.navigationController popViewControllerAnimated:YES];

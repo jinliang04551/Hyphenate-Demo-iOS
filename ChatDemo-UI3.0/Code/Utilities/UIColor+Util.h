@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIColor (Util)
 + (UIColor *)colorWithHexString:(NSString *)color;
++ (UIColor *)avatarRandomColor;
 
 @end
 

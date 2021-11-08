@@ -256,7 +256,7 @@
     if (_loginButton == nil) {
         _loginButton = [[UIButton alloc] init];
         _loginButton.titleLabel.font = [UIFont systemFontOfSize:12];
-        [_loginButton setTitle:NSLocalizedString(@"login.loginButton.login", @"LOG IN") forState:UIControlStateNormal];
+        [_loginButton setTitle:@"LOG IN" forState:UIControlStateNormal];
         [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _loginButton.backgroundColor = COLOR_HEX(0x114EFF);
         [_loginButton addTarget:self action:@selector(doLogin) forControlEvents:UIControlEventTouchUpInside];

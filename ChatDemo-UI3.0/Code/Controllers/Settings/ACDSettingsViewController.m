@@ -17,9 +17,11 @@
 #import "ACDSettingLogoutCell.h"
 #import "AgoraAboutViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "ACDModifyAvatarViewController.h"
 
 #define kInfoHeaderViewHeight 320.0
 #define kHeaderInSection  30.0
+
 
 typedef enum : NSUInteger {
     AgoraContactInfoActionNone,
@@ -63,9 +65,16 @@ typedef enum : NSUInteger {
                 self.userInfoHeaderView.nameLabel.text = self.myNickName;
                 self.userInfoHeaderView.userIdLabel.text = [NSString stringWithFormat:@"AgoraID: %@",self.userInfo.userId];
                 if (self.userInfo.avatarUrl) {
-                    [self.userInfoHeaderView.avatarImageView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.avatarUrl] placeholderImage:[UIImage imageNamed:@"default_avatar_setting"]];
+                    [self.userInfoHeaderView.avatarImageView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.avatarUrl] placeholderImage:ImageWithName(@"defatult_avatar_1")];
                 }else {
-                    [self.userInfoHeaderView.avatarImageView sd_setImageWithURL:nil placeholderImage:ImageWithName(@"default_avatar_setting")];
+                    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+                    
+                    NSString *imageName = [userDefault valueForKey:[NSString stringWithFormat:@"%@_avatar",self.userInfo.userId]];
+                             
+                    if (imageName) {
+                        imageName = @"defatult_avatar_1";
+                    }
+                    [self.userInfoHeaderView.avatarImageView sd_setImageWithURL:nil placeholderImage:ImageWithName(imageName)];
                 }
                 [self.table reloadData];
             });
@@ -125,9 +134,9 @@ typedef enum : NSUInteger {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
         ACD_WS
-//        [alertController addAction:[UIAlertAction actionWithTitle:@"Change Avatar" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//            [weakSelf changeAvatar];
-//        }]];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Change Avatar" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf changeAvatar];
+        }]];
     
         [alertController addAction:[UIAlertAction actionWithTitle:@"Change Nickname" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakSelf changeNickName];
@@ -145,9 +154,21 @@ typedef enum : NSUInteger {
 }
 
 - (void)changeAvatar {
-    self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
-    [self presentViewController:self.imagePicker animated:YES completion:NULL];
+    ACDModifyAvatarViewController *vc = ACDModifyAvatarViewController.new;
+    vc.selectedBlock = ^(NSString * _Nonnull imageName) {
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        [userDefault setValue:imageName forKey:[NSString stringWithFormat:@"%@_avatar",self.userInfo.userId]];
+        [userDefault synchronize];
+        
+        [self.userInfoHeaderView.avatarImageView setImage:ImageWithName(imageName)];
+    };
+    
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+//    self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+//    self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
+//    [self presentViewController:self.imagePicker animated:YES completion:NULL];
 }
 
 
@@ -281,9 +302,6 @@ typedef enum : NSUInteger {
 }
 
 
-#pragma mark - UIActionSheetDelegate
-
-
 #pragma mark getter and setter
 - (UITableView *)table {
     if (_table == nil) {
@@ -315,6 +333,7 @@ typedef enum : NSUInteger {
 - (ACDInfoHeaderView *)userInfoHeaderView {
     if (_userInfoHeaderView == nil) {
         _userInfoHeaderView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kInfoHeaderViewHeight) withType:ACDHeaderInfoTypeMe];
+        
         ACD_WS
         _userInfoHeaderView.tapHeaderBlock = ^{
             [weakSelf headerViewTapAction];

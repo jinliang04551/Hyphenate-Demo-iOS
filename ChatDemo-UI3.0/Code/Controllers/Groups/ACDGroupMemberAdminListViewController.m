@@ -74,7 +74,6 @@
     }
     
     NSString *name = self.dataArray[indexPath.row];
-    cell.iconImageView.image = [UIImage imageNamed:@"default_avatar"];
     cell.nameLabel.text = name;
     ACD_WS
     cell.tapCellBlock = ^{

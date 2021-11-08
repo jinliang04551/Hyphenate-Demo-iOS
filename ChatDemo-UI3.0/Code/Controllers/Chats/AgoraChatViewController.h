@@ -12,8 +12,11 @@
 @interface AgoraChatViewController : AgoraChatBaseViewController
 
 @property (nonatomic, strong, readonly) NSString *conversationId;
+@property (nonatomic, strong) NSString *navTitle;
+
 @property (nonatomic, strong) void(^leaveGroupBlock)(void);
 
 - (instancetype)initWithConversationId:(NSString*)conversationId conversationType:(AgoraChatConversationType)type;
+
 
 @end

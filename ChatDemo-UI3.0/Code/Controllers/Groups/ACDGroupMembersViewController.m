@@ -19,10 +19,10 @@
 #import "AgoraApplyManager.h"
 #import "ACDGroupMemberNavView.h"
 #import "AgoraMemberSelectViewController.h"
-
+#import "AgoraUserModel.h"
 
 @interface ACDGroupMembersViewController ()<MISScrollPageControllerDataSource,
-MISScrollPageControllerDelegate>
+MISScrollPageControllerDelegate,AgoraGroupUIProtocol>
 @property (nonatomic, strong) MISScrollPageController *pageController;
 @property (nonatomic, strong) MISScrollPageSegmentView *segView;
 @property (nonatomic, strong) MISScrollPageContentView *contentView;
@@ -38,6 +38,7 @@ MISScrollPageControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *navTitleArray;
 @property (nonatomic, strong) NSMutableArray *contentVCArray;
+@property (nonatomic, strong) NSMutableArray *inviteArray;
 
 
 @end
@@ -79,7 +80,6 @@ MISScrollPageControllerDelegate>
         make.left.right.equalTo(self.view);
     }];
     
-    
     [container mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.navView.mas_bottom).offset(5);
         make.left.equalTo(self.view);
@@ -87,7 +87,6 @@ MISScrollPageControllerDelegate>
         make.bottom.equalTo(self.view);
     }];
 }
-
 
 - (void)placeAndLayoutSubviewsForAdmin {
     UIView *container = UIView.new;
@@ -108,7 +107,6 @@ MISScrollPageControllerDelegate>
         make.top.equalTo(self.view);
         make.left.right.equalTo(self.view);
     }];
-    
     
     [container mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.navView.mas_bottom).offset(5);
@@ -143,8 +141,31 @@ MISScrollPageControllerDelegate>
 }
 
 - (void)addGroupMember {
-    AgoraMemberSelectViewController *vc = AgoraMemberSelectViewController.new;
-    [self.navigationController pushViewController:vc animated:YES];
+    AgoraMemberSelectViewController *selectVC = [[AgoraMemberSelectViewController alloc] initWithInvitees:@[] maxInviteCount:0];
+    selectVC.style = AgoraContactSelectStyle_Invite;
+    selectVC.title = @"Add Members";
+    selectVC.delegate = self;
+    [self.navigationController pushViewController:selectVC animated:YES];
+
+}
+
+#pragma mark - AgoraGroupUIProtocol
+- (void)addSelectOccupants:(NSArray<AgoraUserModel *> *)modelArray {
+        
+    for (AgoraUserModel *model in modelArray) {
+        [self.inviteArray addObject:model.hyphenateId];
+    }
+    
+    ACD_WS
+    [[AgoraChatClient sharedClient].groupManager addMembers:self.inviteArray toGroup:weakSelf.group.groupId message:@"" completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
+        [weakSelf hideHud];
+        if (aError) {
+            [self showHint:aError.description];
+        } else {
+                
+        }
+    }];
+    
 }
 
 #pragma mark ACDGroupInfoViewControllerDelegate
@@ -284,4 +305,10 @@ MISScrollPageControllerDelegate>
 
 }
 
+- (NSMutableArray *)inviteArray {
+    if (_inviteArray == nil) {
+        _inviteArray = NSMutableArray.new;
+    }
+    return _inviteArray;
+}
 @end

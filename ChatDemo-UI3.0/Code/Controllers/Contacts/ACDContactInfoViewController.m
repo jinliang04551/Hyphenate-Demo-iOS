@@ -241,6 +241,7 @@ typedef enum : NSUInteger {
         
         _contactInfoHeaderView.goChatPageBlock = ^{
             AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
+            chatViewController.navTitle = weakSelf.model.nickname;
             [weakSelf.navigationController pushViewController:chatViewController animated:YES];
         };
         

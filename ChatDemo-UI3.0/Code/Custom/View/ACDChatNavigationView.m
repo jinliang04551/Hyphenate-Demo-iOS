@@ -9,13 +9,13 @@
 #import "ACDChatNavigationView.h"
 
 #define kRedPointViewHeight 8.0f
+#define kChatImageViewHeight  34.0f
 
 @interface ACDChatNavigationView ()
 @property (nonatomic, strong) UIImageView* backImageView;
 @property (nonatomic, strong) UIView* redPointView;
 @property (nonatomic, strong) UIButton* leftButton;
 @property (nonatomic, strong) UIButton* rightButton;
-@property (nonatomic, strong) UIButton* chatButton;
 
 @end
 
@@ -124,9 +124,13 @@
     if (_chatButton == nil) {
         _chatButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 8, 15)];
         _chatButton.contentMode = UIViewContentModeScaleAspectFill;
-        [_chatButton setImage:ImageWithName(@"contact_add_contacts") forState:UIControlStateNormal];
         [_chatButton addTarget:self action:@selector(chatButtonAction) forControlEvents:UIControlEventTouchUpInside];
-
+        [_chatButton addSubview:self.chatImageView];
+        [self.chatImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(_chatButton);
+            make.centerY.equalTo(_chatButton);
+            make.size.equalTo(@kChatImageViewHeight);
+        }];
     }
     return _chatButton;
 }
@@ -142,6 +146,19 @@
     return _rightButton;
 }
 
+- (UIImageView *)chatImageView {
+    if (_chatImageView == nil) {
+        _chatImageView = UIImageView.new;
+        _chatImageView.layer.cornerRadius = kChatImageViewHeight *0.5;
+        _chatImageView.clipsToBounds = YES;
+        
+        UIImage *image = [UIImage imageWithColor:COLOR_HEX(0xFAA69B) size:CGSizeMake(kChatImageViewHeight, kChatImageViewHeight)];
+        [_chatImageView setImage:image];
+    }
+    return _chatImageView;
+}
+
 @end
 
 #undef kRedPointViewHeight
+#undef kChatImageViewHeight

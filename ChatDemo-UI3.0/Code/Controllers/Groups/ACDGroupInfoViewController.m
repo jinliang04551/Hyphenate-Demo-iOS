@@ -290,6 +290,7 @@
 
 - (void)goGroupChatPage {
     AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:self.group.groupId conversationType:AgoraChatConversationTypeGroupChat];
+    chatViewController.navTitle = self.group.groupName;
     [self.navigationController pushViewController:chatViewController animated:YES];
 
 }

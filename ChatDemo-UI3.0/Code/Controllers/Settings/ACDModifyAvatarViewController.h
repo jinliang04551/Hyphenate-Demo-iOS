@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDModifyAvatarViewController : UIViewController
 
+@property (nonatomic, strong) void(^selectedBlock)(NSString *imageName);
+
 @end
 
 NS_ASSUME_NONNULL_END
