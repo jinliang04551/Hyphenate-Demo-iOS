@@ -29,6 +29,7 @@
 #define ACD_ONE_PX  (1.0f / [UIScreen mainScreen].scale)
 
 #define KScreenHeight [[UIScreen mainScreen] bounds].size.height
+
 #define KScreenWidth  [[UIScreen mainScreen] bounds].size.width
 
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
@@ -55,5 +56,26 @@
 #define MSG_EXT_RECALL @"agora_recall"
 
 #define kAvatarHeight 40.0f
+
+
+#define kIs_iphone (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+
+#define kIs_iPhoneX KScreenWidth >=375.0f && KScreenHeight >=812.0f&& kIs_iphone
+
+#define kStatusBarHeight (CGFloat)(kIs_iPhoneX?(44.0):(20.0))
+
+#define kNavBarHeight (44)
+
+#define kNavBarAndStatusBarHeight (CGFloat)(kIs_iPhoneX?(88.0):(64.0))
+
+#define kTabBarHeight (CGFloat)(kIs_iPhoneX?(49.0 + 34.0):(49.0))
+
+#define kTopBarSafeHeight (CGFloat)(kIs_iPhoneX?(44.0):(0))
+
+#define kBottomSafeHeight (CGFloat)(kIs_iPhoneX?(34.0):(0))
+
+#define kTopBarDifHeight (CGFloat)(kIs_iPhoneX?(24.0):(0))
+
+#define kNavAndTabHeight (kNavBarAndStatusBarHeight + kTabBarHeight)
 
 #endif /* EMChatDemoUIDefine_h */

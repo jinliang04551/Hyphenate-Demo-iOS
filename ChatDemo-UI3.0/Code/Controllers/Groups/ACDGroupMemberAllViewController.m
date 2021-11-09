@@ -44,12 +44,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self useRefresh];
     [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)updateUIWithResultList:(NSArray *)sourceList IsHeader:(BOOL)isHeader {
     
-    NSLog(@"%s sourceList:%@ isHeader:%@",__func__,sourceList,@(isHeader));
     if (isHeader) {
         [self.dataArray removeAllObjects];
         [self.dataArray addObject:self.group.owner];
@@ -57,7 +57,7 @@
     }
     
     [self.dataArray addObjectsFromArray:sourceList];
-
+    self.searchSource = self.dataArray;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -117,6 +117,15 @@
     
 }
 
+#pragma mark refresh and load more
+- (void)didStartRefresh {
+    [self tableViewDidTriggerHeaderRefresh];
+}
+
+- (void)didStartLoadMore {
+    [self tableViewDidTriggerFooterRefresh];
+}
+
 
 #pragma mark - private
 - (void)tableViewDidTriggerHeaderRefresh
@@ -128,8 +137,6 @@
 
 - (void)tableViewDidTriggerFooterRefresh
 {
-    NSLog(@"%s",__func__);
-    
     [self fetchMembersWithCursor:self.cursor isHeader:NO];
 }
 
@@ -137,27 +144,31 @@
 - (void)fetchMembersWithCursor:(NSString *)aCursor
                       isHeader:(BOOL)aIsHeader
 {
-    NSLog(@"%s aCursor:%@ aIsHeader:%@",__func__,aCursor,@(aIsHeader));
-    NSInteger pageSize = 50;
+    NSInteger pageSize = 5;
     
     ACD_WS
-    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    [self showHudInView:self.view hint:@"Load data..."];
     [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         weakSelf.cursor = aResult.cursor;
         [weakSelf hideHud];
-//        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+
+        [self endRefresh];
+        
         if (!aError) {
             [weakSelf updateUIWithResultList:aResult.list IsHeader:aIsHeader];
         } else {
-            [weakSelf showHint:NSLocalizedString(@"group.member.fetchFail", @"Failed to get the group details, please try again later")];
+            [weakSelf showHint:@"Failed to get the group details, please try again later"];
         }
         
+        [weakSelf.table reloadData];
+
         if ([aResult.list count] < pageSize) {
-//            weakSelf.showRefreshFooter = NO;
-            [weakSelf.table reloadData];
+            [weakSelf endLoadMore];
+            [weakSelf loadMoreCompleted];
         } else {
-//            weakSelf.showRefreshFooter = YES;
+            [weakSelf useLoadMore];
         }
+
     }];
 }
 

@@ -38,16 +38,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-        
-//    self.showRefreshHeader = YES;
+    
+    [self useRefresh];
     if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
         [self tableViewDidTriggerHeaderRefresh];
     }
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+#pragma mark refresh and load more
+- (void)didStartRefresh {
+    [self tableViewDidTriggerHeaderRefresh];
+}
+
+- (void)didStartLoadMore {
+    [self tableViewDidTriggerFooterRefresh];
+}
+
 
 #pragma mark updateUIWithNotification
 - (void)updateUIWithNotification:(NSNotification *)notify {
@@ -114,7 +125,9 @@
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     [[AgoraChatClient sharedClient].groupManager getGroupMuteListFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, AgoraChatError *aError) {
         [weakSelf hideHud];
-//        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+        
+        [self endRefresh];
+
         if (!aError) {
             if (aIsHeader) {
                 [weakSelf.dataArray removeAllObjects];
@@ -128,9 +141,9 @@
         }
         
         if ([aMembers count] < pageSize) {
-//            self.showRefreshFooter = NO;
+            [self endLoadMore];
         } else {
-//            self.showRefreshFooter = YES;
+            [self useLoadMore];
         }
     }];
 }

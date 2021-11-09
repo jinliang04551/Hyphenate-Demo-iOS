@@ -60,6 +60,7 @@
 }
 
 - (void)loadGroupsFromServer {
+    [self useRefresh];
     [self tableViewDidTriggerHeaderRefresh];
 }
 
@@ -152,8 +153,16 @@
     }
 }
 
-#pragma mark - Data
+#pragma mark refresh and load more
+- (void)didStartRefresh {
+    [self tableViewDidTriggerHeaderRefresh];
+}
 
+- (void)didStartLoadMore {
+    [self tableViewDidTriggerFooterRefresh];
+}
+
+#pragma mark - Data
 - (void)tableViewDidTriggerHeaderRefresh
 {
     self.page = 1;
@@ -169,22 +178,34 @@
 - (void)fetchJoinedGroupWithPage:(NSInteger)aPage
                         isHeader:(BOOL)aIsHeader
 {
-    __weak typeof(self) weakSelf = self;
+    ACD_WS
     if (!aIsHeader) {
         [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     }
     
-    [[AgoraChatClient sharedClient].groupManager getJoinedGroupsFromServerWithPage:self.page pageSize:50 completion:^(NSArray *aList, AgoraChatError *aError) {
+    NSInteger pageSize = 50;
+    [[AgoraChatClient sharedClient].groupManager getJoinedGroupsFromServerWithPage:self.page pageSize:pageSize completion:^(NSArray *aList, AgoraChatError *aError) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
-//        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+
+        [self endRefresh];
+        
         if (!aError && aList.count > 0) {
-            [weakSelf.dataArray removeAllObjects];
+            if (aIsHeader) {
+                [weakSelf.dataArray removeAllObjects];
+            }
             for (AgoraChatGroup *group in aList) {
                 AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:group];
                 if (model) {
                     [weakSelf.dataArray addObject:model];
                 }
             }
+            
+            if (aList.count <= pageSize) {
+                [self useLoadMore];
+            }else {
+                [self endLoadMore];
+            }
+            
             weakSelf.searchSource = [NSMutableArray arrayWithArray:weakSelf.dataArray];
             dispatch_async(dispatch_get_main_queue(), ^(){
                 [weakSelf.table reloadData];

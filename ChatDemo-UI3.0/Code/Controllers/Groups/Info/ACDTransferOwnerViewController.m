@@ -133,6 +133,8 @@
         [self transferWithNewOwner:self.aOwner];
     }];
         
+    [transferAction setValue:TextLabelPinkColor forKey:@"titleTextColor"];
+
     [alertController addAction:cancelAction];
     [alertController addAction:transferAction];
     [self presentViewController:alertController animated:YES completion:nil];
@@ -150,7 +152,9 @@
     UIAlertAction *transferAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
     }];
-        
+    
+    [transferAction setValue:TextLabelPinkColor forKey:@"titleTextColor"];
+
     [alertController addAction:cancelAction];
     [alertController addAction:transferAction];
     [self presentViewController:alertController animated:YES completion:nil];

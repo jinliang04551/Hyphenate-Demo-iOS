@@ -6,18 +6,18 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraSearchTableViewController.h"
+#import "ACDSearchTableViewController.h"
 #import "AgoraRealtimeSearchUtils.h"
 
 #define kSearchBarHeight 40.0f
 
-@interface AgoraSearchTableViewController ()<UISearchBarDelegate>
+@interface ACDSearchTableViewController ()<UISearchBarDelegate>
 @property (nonatomic, strong) NSMutableArray *searchResults;
 @property (nonatomic, assign) BOOL isSearchState;
 
 @end
 
-@implementation AgoraSearchTableViewController
+@implementation ACDSearchTableViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
 }

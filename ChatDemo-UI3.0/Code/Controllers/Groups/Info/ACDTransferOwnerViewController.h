@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AgoraSearchTableViewController.h"
+#import "ACDSearchTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ACDTransferOwnerViewController : AgoraSearchTableViewController
+@interface ACDTransferOwnerViewController : ACDSearchTableViewController
 @property (nonatomic,copy) void(^transferOwnerBlock)(void);
 
 @property (nonatomic,assign) BOOL isLeaveGroup;

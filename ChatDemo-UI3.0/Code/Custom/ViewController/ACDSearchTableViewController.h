@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AgoraSearchTableViewController : AgoraBaseTableViewController
+@interface ACDSearchTableViewController : AgoraBaseTableViewController
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) int page;

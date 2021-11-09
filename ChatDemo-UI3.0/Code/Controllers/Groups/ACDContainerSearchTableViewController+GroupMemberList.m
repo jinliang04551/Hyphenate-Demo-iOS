@@ -159,7 +159,7 @@ static NSString *groupIdKey = @"groupId";
 //            [self makeMute];
 //        }];
 
-    UIAlertAction *makeMuteAction = [UIAlertAction alertActionWithTitle:@"Mute" iconImage:ImageWithName(@"Mute") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+    UIAlertAction *makeMuteAction = [UIAlertAction alertActionWithTitle:@"Mute" iconImage:ImageWithName(@"mute") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
         [self makeMute];
     }];
     

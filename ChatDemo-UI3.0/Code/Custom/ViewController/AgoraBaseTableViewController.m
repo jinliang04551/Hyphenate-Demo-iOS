@@ -219,7 +219,7 @@
         UILabel* label = [[UILabel alloc] init];
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont systemFontOfSize:14.0];
-        label.text = @"正在加载...";
+        label.text = @"loading";
         [label sizeToFit];
 
         //frame

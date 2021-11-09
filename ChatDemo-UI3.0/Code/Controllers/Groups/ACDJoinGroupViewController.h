@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AgoraSearchTableViewController.h"
+#import "ACDSearchTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ACDJoinGroupViewController : AgoraSearchTableViewController
+@interface ACDJoinGroupViewController : ACDSearchTableViewController
 @property (nonatomic, assign) BOOL isSearchGroup;
 
 @end

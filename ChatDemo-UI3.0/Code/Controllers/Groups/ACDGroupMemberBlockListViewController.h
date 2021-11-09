@@ -6,7 +6,7 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraSearchTableViewController.h"
+#import "ACDSearchTableViewController.h"
 #import "ACDContainerSearchTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN

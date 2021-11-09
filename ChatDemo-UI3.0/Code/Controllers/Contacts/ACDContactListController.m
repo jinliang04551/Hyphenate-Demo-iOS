@@ -45,12 +45,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self useRefresh];
+    
     [self tableDidTriggerHeaderRefresh];
 }
 
+#pragma mark refresh and load more
+- (void)didStartRefresh {
+    [self tableDidTriggerHeaderRefresh];
+}
 
 - (void)tableDidTriggerHeaderRefresh {
     if (self.isSearchState) {
+        [self endRefresh];
 //        [self tableViewDidFinishTriggerHeader:YES];
         return;
     }
@@ -58,16 +65,13 @@
     ACD_WS
     [[AgoraChatClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, AgoraChatError *aError) {
         if (aError == nil) {
-//            [weakSelf tableViewDidFinishTriggerHeader:YES];
-//            dispatch_async(dispatch_get_main_queue(), ^(){
-//            });
-            
             [weakSelf updateContacts:aList];
             [weakSelf.table reloadData];
         }
         else {
 //            [weakSelf tableViewDidFinishTriggerHeader:YES];
         }
+        [weakSelf endRefresh];
     }];
 }
 

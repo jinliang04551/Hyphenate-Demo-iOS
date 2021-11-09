@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AgoraSearchTableViewController.h"
+#import "ACDSearchTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, ACDGroupEnterAccessType) {
     ACDGroupEnterAccessTypeChat,  // from tab chat right bar
 };
 
-@interface ACDGroupEnterController : AgoraSearchTableViewController
+@interface ACDGroupEnterController : ACDSearchTableViewController
 @property (nonatomic, assign) ACDGroupEnterAccessType accessType;
 
 @end

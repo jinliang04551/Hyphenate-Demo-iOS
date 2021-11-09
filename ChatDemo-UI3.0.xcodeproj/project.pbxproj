@@ -478,7 +478,7 @@
 		EC54DCC427211A4300ABEE3E /* blocked@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DCC027211A4300ABEE3E /* blocked@3x.png */; };
 		EC54DCC7272143B300ABEE3E /* ACDContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCC6272143B300ABEE3E /* ACDContactListController.m */; };
 		EC54DCCC272144B400ABEE3E /* AgoraBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */; };
-		EC54DCCF272148E300ABEE3E /* AgoraSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCCE272148E300ABEE3E /* AgoraSearchTableViewController.m */; };
+		EC54DCCF272148E300ABEE3E /* ACDSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCCE272148E300ABEE3E /* ACDSearchTableViewController.m */; };
 		EC54DCE62721502200ABEE3E /* MISScrollPageCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCD32721502200ABEE3E /* MISScrollPageCollectionView.m */; };
 		EC54DCE72721502200ABEE3E /* MISScrollPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCD52721502200ABEE3E /* MISScrollPageController.m */; };
 		EC54DCE82721502200ABEE3E /* MISScrollPageStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCD92721502200ABEE3E /* MISScrollPageStyle.m */; };
@@ -1216,8 +1216,8 @@
 		EC54DCC6272143B300ABEE3E /* ACDContactListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDContactListController.m; sourceTree = "<group>"; };
 		EC54DCCA272144B400ABEE3E /* AgoraBaseTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraBaseTableViewController.h; sourceTree = "<group>"; };
 		EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraBaseTableViewController.m; sourceTree = "<group>"; };
-		EC54DCCD272148E300ABEE3E /* AgoraSearchTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraSearchTableViewController.h; sourceTree = "<group>"; };
-		EC54DCCE272148E300ABEE3E /* AgoraSearchTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraSearchTableViewController.m; sourceTree = "<group>"; };
+		EC54DCCD272148E300ABEE3E /* ACDSearchTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDSearchTableViewController.h; sourceTree = "<group>"; };
+		EC54DCCE272148E300ABEE3E /* ACDSearchTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDSearchTableViewController.m; sourceTree = "<group>"; };
 		EC54DCD32721502200ABEE3E /* MISScrollPageCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MISScrollPageCollectionView.m; sourceTree = "<group>"; };
 		EC54DCD42721502200ABEE3E /* UIView+MISHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MISHelper.h"; sourceTree = "<group>"; };
 		EC54DCD52721502200ABEE3E /* MISScrollPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MISScrollPageController.m; sourceTree = "<group>"; };
@@ -2534,8 +2534,8 @@
 				EC54DDE327280ECF00ABEE3E /* ACDTableViewController.m */,
 				EC54DCCA272144B400ABEE3E /* AgoraBaseTableViewController.h */,
 				EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */,
-				EC54DCCD272148E300ABEE3E /* AgoraSearchTableViewController.h */,
-				EC54DCCE272148E300ABEE3E /* AgoraSearchTableViewController.m */,
+				EC54DCCD272148E300ABEE3E /* ACDSearchTableViewController.h */,
+				EC54DCCE272148E300ABEE3E /* ACDSearchTableViewController.m */,
 				EC7A3240272BCBE600AF0C19 /* ACDContainerSearchTableViewController.h */,
 				EC7A3241272BCBE600AF0C19 /* ACDContainerSearchTableViewController.m */,
 			);
@@ -3390,7 +3390,7 @@
 				7F6CC8AB26568C3600BA60BB /* AgoraChatVideoBubbleView.m in Sources */,
 				7F6CC93426568DC300BA60BB /* AgoraAudioRecorderUtil.m in Sources */,
 				D24327E61DAA395F00EDCDAB /* amrFileCodec.mm in Sources */,
-				EC54DCCF272148E300ABEE3E /* AgoraSearchTableViewController.m in Sources */,
+				EC54DCCF272148E300ABEE3E /* ACDSearchTableViewController.m in Sources */,
 				7F2A1FB726673EF300800ACC /* AgoraBlockListViewController.m in Sources */,
 				EC7A3236272BADE000AF0C19 /* ACDGroupMemberAllViewController.m in Sources */,
 				7F0516BE269FDF4000B2C795 /* UIViewController+DarkMode.m in Sources */,

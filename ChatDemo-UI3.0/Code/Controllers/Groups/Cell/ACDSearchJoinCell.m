@@ -36,7 +36,7 @@
     [self.addButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.nameLabel);
         make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.6);
-        make.width.equalTo(@50.0);
+        make.width.equalTo(@100.0);
         make.height.equalTo(@30.0f);
     }];
 }

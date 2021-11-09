@@ -8,7 +8,7 @@
 
 #import "ACDJoinGroupViewController.h"
 #import "ACDSearchResultView.h"
-#import "AgoraSearchTableViewController.h"
+#import "ACDSearchTableViewController.h"
 #import "AgoraRealtimeSearchUtils.h"
 #import "ACDSearchJoinCell.h"
 
@@ -28,6 +28,24 @@
     }else {
         self.title = @"Add Contacts";
     }
+}
+
+- (void)joinToPublicGroup:(NSString *)groupId {
+    ACD_WS
+    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow
+                         animated:YES];
+    [[AgoraChatClient sharedClient].groupManager joinPublicGroup:groupId
+                                               completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
+           [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
+           if (!aError) {
+               
+           }
+           else {
+               NSString *msg = NSLocalizedString(@"group.requestFailure", @"Failed to apply to the group");
+               [weakSelf showAlertWithMessage:msg];
+           }
+       }
+     ];
 }
 
 
@@ -79,7 +97,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ACDSearchJoinCell *cell =  [[ACDSearchJoinCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDSearchJoinCell reuseIdentifier]];
     
     NSString *title = @"";
     if (self.isSearchGroup) {
@@ -87,21 +104,9 @@
     }else {
         title = [NSString stringWithFormat:@"AgoraID：%@",self.searchSource[0]];
     }
-    
-    cell.nameLabel.text = title;
-    ACD_WS
-    cell.addGroupBlock = ^{
-        if (weakSelf.isSearchGroup) {
-//                [weakSelf addGroup];
 
-        }else {
-            [weakSelf sendAddContact:weakSelf.searchSource[0]];
-        }
-    };
-    return cell;
-    
-//    self.searchJoincell.nameLabel.text = title;
-//    return self.searchJoincell;
+    self.searchJoincell.nameLabel.text = title;
+    return self.searchJoincell;
 }
 
 
@@ -121,7 +126,7 @@
         ACD_WS
         _searchJoincell.addGroupBlock = ^{
             if (weakSelf.isSearchGroup) {
-//                [weakSelf addGroup];
+                [weakSelf joinToPublicGroup:weakSelf.searchSource[0]];
 
             }else {
                 [weakSelf sendAddContact:weakSelf.searchSource[0]];
