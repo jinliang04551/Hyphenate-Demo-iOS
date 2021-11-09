@@ -273,19 +273,26 @@
     
         ACD_WS
         if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
-            [alertController addAction:[UIAlertAction actionWithTitle:@"Change Group Name" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf changeGroupName];
-            }]];
+            
+            UIAlertAction *changeNicknameAction = [UIAlertAction alertActionWithTitle:@"Change Group Name" iconImage:ImageWithName(@"action_icon_edit") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+                [self changeGroupName];
+            }];
+            [alertController addAction:changeNicknameAction];
+
         }
                 
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Copy GroupID" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }]];
-
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        }]];
-        
-        [self presentViewController:alertController animated:YES completion:nil];
+    
+    UIAlertAction *copyAction = [UIAlertAction alertActionWithTitle:@"Copy GroupID" iconImage:ImageWithName(@"action_icon_copy") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [UIPasteboard generalPasteboard].string = self.group.groupId;
+    }];
+   
+    
+    [alertController addAction:copyAction];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)goGroupChatPage {

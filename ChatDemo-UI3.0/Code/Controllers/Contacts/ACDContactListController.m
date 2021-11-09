@@ -64,7 +64,6 @@
             
             [weakSelf updateContacts:aList];
             [weakSelf.table reloadData];
-
         }
         else {
 //            [weakSelf tableViewDidFinishTriggerHeader:YES];

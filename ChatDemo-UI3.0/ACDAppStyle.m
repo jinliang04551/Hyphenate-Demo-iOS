@@ -31,6 +31,8 @@
                                                       } forState:UIControlStateSelected];
 //    UITabBar.appearance.backgroundImage = IMAGE_HEX(0xFFFFFF);
 //    UITabBar.appearance.shadowImage = IMAGE_HEX(0xFFFFFF);
+    
+    UITabBarItem.appearance.badgeColor = TextLabelPinkColor;
 }
 
 

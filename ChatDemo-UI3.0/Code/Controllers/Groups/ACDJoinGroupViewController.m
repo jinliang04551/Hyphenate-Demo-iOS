@@ -70,11 +70,17 @@
 
 
 #pragma mark - Table view data source
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 54.0f;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.searchSource.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ACDSearchJoinCell *cell =  [[ACDSearchJoinCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDSearchJoinCell reuseIdentifier]];
+    
     NSString *title = @"";
     if (self.isSearchGroup) {
         title = [NSString stringWithFormat:@"GroupID：%@",self.searchSource[0]];
@@ -82,8 +88,20 @@
         title = [NSString stringWithFormat:@"AgoraID：%@",self.searchSource[0]];
     }
     
-    self.searchJoincell.nameLabel.text = title;
-    return self.searchJoincell;
+    cell.nameLabel.text = title;
+    ACD_WS
+    cell.addGroupBlock = ^{
+        if (weakSelf.isSearchGroup) {
+//                [weakSelf addGroup];
+
+        }else {
+            [weakSelf sendAddContact:weakSelf.searchSource[0]];
+        }
+    };
+    return cell;
+    
+//    self.searchJoincell.nameLabel.text = title;
+//    return self.searchJoincell;
 }
 
 

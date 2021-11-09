@@ -64,8 +64,10 @@ static AgoraChatDemoHelper *helper = nil;
     if (_contactsVC) {
         if (unreadCount > 0) {
             _contactsVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%i",(int)unreadCount];
+            [_contactsVC navBarUnreadRequestIsShow:YES];
         }else{
             _contactsVC.tabBarItem.badgeValue = nil;
+            [_contactsVC navBarUnreadRequestIsShow:NO];
         }
     }
 }

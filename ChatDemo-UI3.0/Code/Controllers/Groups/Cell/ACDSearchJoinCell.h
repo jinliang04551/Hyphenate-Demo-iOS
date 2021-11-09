@@ -11,7 +11,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDSearchJoinCell : ACDCustomCell
-@property (nonatomic, strong, readonly) UIButton *addButton;
 @property (nonatomic, copy) void (^addGroupBlock)(void);
 
 @end

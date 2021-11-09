@@ -18,8 +18,10 @@
 - (void)prepare {
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.addButton];
+    
 //    self.nameLabel.backgroundColor = UIColor.blueColor;
 //    self.contentView.backgroundColor = UIColor.grayColor;
+//    self.addButton.backgroundColor = UIColor.yellowColor;
 }
 
 - (void)placeSubViews {
@@ -37,7 +39,6 @@
         make.width.equalTo(@50.0);
         make.height.equalTo(@30.0f);
     }];
-    
 }
 
 - (void)addButtonAction {
@@ -58,7 +59,6 @@
         [_addButton setTitle:@"Applied" forState:UIControlStateSelected];
         
         [_addButton addTarget:self action:@selector(addButtonAction) forControlEvents:UIControlEventTouchUpInside];
-
     }
     return _addButton;
 }

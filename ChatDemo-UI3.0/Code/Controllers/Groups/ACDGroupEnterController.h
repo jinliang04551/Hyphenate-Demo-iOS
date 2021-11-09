@@ -9,16 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "AgoraSearchTableViewController.h"
 
-@protocol  ACDGroupEnterControllerDelegate <NSObject>
-
-@optional
-- (void)enterCreateNewGroupPage;
-- (void)enterJoinGroupPage;
-- (void)enterPublicGroupPage;
-- (void)enterAddContactsPage;
-@end
-
-
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ACDGroupEnterAccessType) {
@@ -28,7 +18,6 @@ typedef NS_ENUM(NSInteger, ACDGroupEnterAccessType) {
 
 @interface ACDGroupEnterController : AgoraSearchTableViewController
 @property (nonatomic, assign) ACDGroupEnterAccessType accessType;
-@property (nonatomic, assign) id<ACDGroupEnterControllerDelegate> delegate;
 
 @end
 

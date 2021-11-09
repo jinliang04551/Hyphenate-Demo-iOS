@@ -115,7 +115,8 @@
 
     [_doneBtn setTitle:title forState:UIControlStateNormal];
     [_doneBtn setTitle:title forState:UIControlStateHighlighted];
-    _doneBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+    _doneBtn.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [_doneBtn setTitleColor:TextLabelBlueColor forState:UIControlStateNormal];
     
     [_doneBtn addTarget:self action:@selector(selectDoneAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:_doneBtn];
@@ -161,8 +162,8 @@
 - (void)updateDoneUserInteractionEnabled:(BOOL)userInteractionEnabled {
     _doneBtn.userInteractionEnabled = userInteractionEnabled;
     if (userInteractionEnabled) {
-        [_doneBtn setTitleColor:KermitGreenTwoColor forState:UIControlStateNormal];
-        [_doneBtn setTitleColor:KermitGreenTwoColor forState:UIControlStateHighlighted];
+        [_doneBtn setTitleColor:TextLabelBlueColor forState:UIControlStateNormal];
+        [_doneBtn setTitleColor:TextLabelBlueColor forState:UIControlStateHighlighted];
     }
     else {
         [_doneBtn setTitleColor:CoolGrayColor forState:UIControlStateNormal];

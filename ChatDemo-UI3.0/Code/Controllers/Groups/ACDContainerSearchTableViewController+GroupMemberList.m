@@ -146,37 +146,67 @@ static NSString *groupIdKey = @"groupId";
 
 - (NSDictionary *)alertActionDics {
         NSMutableDictionary *alertActionDics = NSMutableDictionary.new;
-        UIAlertAction *makeAdminAction = [self alertActionWithTitle:@"Make Admin" completion:^{
-            [self makeAdmin];
-        }];
-        
-        UIAlertAction *makeMuteAction = [self alertActionWithTitle:@"Mute" completion:^{
-            [self makeMute];
-        }];
-
-        UIAlertAction *makeBlockAction = [self alertActionWithTitle:@"Move to Blocked List" completion:^{
-            [self makeBlock];
-        }];
-
-        
-        UIAlertAction *makeRemoveGroupAction = [self alertActionWithTitle:@"Remove From Group" completion:^{
-            [self makeRemoveGroup];
-        }];
+//        UIAlertAction *makeAdminAction = [self alertActionWithTitle:@"Make Admin" completion:^{
+//            [self makeAdmin];
+//        }];
+  
+    UIAlertAction *makeAdminAction = [UIAlertAction alertActionWithTitle:@"Make Admin" iconImage:ImageWithName(@"admin") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [self makeAdmin];
+    }];
 
     
-        UIAlertAction *makeUnAdminAction = [self alertActionWithTitle:@"Remove as Admin" completion:^{
-            [self unAdmin];
-        }];
-    
-        UIAlertAction *makeUnMuteAction = [self alertActionWithTitle:@"Unmute" completion:^{
-            [self unMute];
-        }];
+//        UIAlertAction *makeMuteAction = [self alertActionWithTitle:@"Mute" completion:^{
+//            [self makeMute];
+//        }];
 
+    UIAlertAction *makeMuteAction = [UIAlertAction alertActionWithTitle:@"Mute" iconImage:ImageWithName(@"Mute") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [self makeMute];
+    }];
+    
+//        UIAlertAction *makeBlockAction = [self alertActionWithTitle:@"Move to Blocked List" completion:^{
+//            [self makeBlock];
+//        }];
+
+    UIAlertAction *makeBlockAction = [UIAlertAction alertActionWithTitle:@"Move to Blocked List" iconImage:ImageWithName(@"blocked") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [self makeBlock];
+    }];
+    
         
-        UIAlertAction *makeUnBlockAction = [self alertActionWithTitle:@"Remove from Blocked List" completion:^{
-            [self unBlock];
-        }];
+//        UIAlertAction *makeRemoveGroupAction = [self alertActionWithTitle:@"Remove From Group" completion:^{
+//            [self makeRemoveGroup];
+//        }];
+//
+    UIAlertAction *makeRemoveGroupAction = [UIAlertAction alertActionWithTitle:@"Remove From Group" iconImage:ImageWithName(@"remove") textColor:TextLabelPinkColor alignment:NSTextAlignmentLeft completion:^{
+        [self makeRemoveGroup];
+    }];
+
+    
+//        UIAlertAction *makeUnAdminAction = [self alertActionWithTitle:@"Remove as Admin" completion:^{
+//            [self unAdmin];
+//        }];
+    
+    UIAlertAction *makeUnAdminAction = [UIAlertAction alertActionWithTitle:@"Remove as Admin" iconImage:ImageWithName(@"remove_admin") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [self unAdmin];
+    }];
+
+    
+//        UIAlertAction *makeUnMuteAction = [self alertActionWithTitle:@"Unmute" completion:^{
+//            [self unMute];
+//        }];
+
+    UIAlertAction *makeUnMuteAction = [UIAlertAction alertActionWithTitle:@"Unmute" iconImage:ImageWithName(@"Unmute") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [self unMute];
+    }];
+    
         
+//        UIAlertAction *makeUnBlockAction = [self alertActionWithTitle:@"Remove from Blocked List" completion:^{
+//            [self unBlock];
+//        }];
+    
+    UIAlertAction *makeUnBlockAction = [UIAlertAction alertActionWithTitle:@"Remove from Blocked List" iconImage:ImageWithName(@"Unblock") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [self unBlock];
+    }];
+    
     alertActionDics[kActionAdminKey] = makeAdminAction;
     alertActionDics[kActionMuteKey] =  makeMuteAction;
     alertActionDics[kActionBlockKey] = makeBlockAction;
@@ -188,15 +218,15 @@ static NSString *groupIdKey = @"groupId";
     return alertActionDics;
 }
 
-- (UIAlertAction* )alertActionWithTitle:(NSString *)title
-                             completion:(actionBlock)completion {
-    UIAlertAction* alertAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (completion) {
-            completion();
-        }
-    }];
-    return alertAction;
-}
+//- (UIAlertAction* )alertActionWithTitle:(NSString *)title
+//                             completion:(actionBlock)completion {
+//    UIAlertAction* alertAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        if (completion) {
+//            completion();
+//        }
+//    }];
+//    return alertAction;
+//}
 
 
 #pragma mark actions

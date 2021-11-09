@@ -21,7 +21,6 @@
     if (self) {
         _hyphenateId = hyphenateId;
         _nickname = @"";
-//        _defaultAvatarImage = [UIImage imageNamed:@"default_avatar.png"];
 
         _defaultAvatarImage = [UIImage imageWithColor:[self generateRandomColor] size:CGSizeMake(40.0, 40.0)];
         

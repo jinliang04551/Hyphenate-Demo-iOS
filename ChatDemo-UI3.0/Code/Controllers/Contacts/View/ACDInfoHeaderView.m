@@ -95,6 +95,8 @@
 }
 
 - (void)placeAndLayoutForGroupInfo {
+    self.avatarImageView.image = ImageWithName(@"group_default_avatar");
+
     [self addSubview:self.backButton];
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
@@ -218,7 +220,6 @@
     if (_avatarImageView == nil) {
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _avatarImageView.image = ImageWithName(@"group_default_avatar");
         _avatarImageView.clipsToBounds = YES;
     }
     return _avatarImageView;

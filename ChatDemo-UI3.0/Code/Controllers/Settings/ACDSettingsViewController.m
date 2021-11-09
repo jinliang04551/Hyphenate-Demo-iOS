@@ -131,26 +131,31 @@ typedef enum : NSUInteger {
 
 - (void)headerViewTapAction {
    
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-        ACD_WS
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Change Avatar" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf changeAvatar];
-        }]];
     
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Change Nickname" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf changeNickName];
-        }]];
+    UIAlertAction *changeAvatarAction = [UIAlertAction alertActionWithTitle:@"Change Avatar" iconImage:ImageWithName(@"action_icon_change_avatar") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [self changeAvatar];
+    }];
     
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Copy AgoraID" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-             
-        }]];
+    
+    UIAlertAction *changeNicknameAction = [UIAlertAction alertActionWithTitle:@"Change Nickname" iconImage:ImageWithName(@"action_icon_edit") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [self changeNickName];
+    }];
 
-        [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        }]];
-        
+    UIAlertAction *copyAction = [UIAlertAction alertActionWithTitle:@"Copy AgoraID" iconImage:ImageWithName(@"action_icon_copy") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [UIPasteboard generalPasteboard].string = self.userInfo.userId;
+    }];
+   
     
-        [self presentViewController:alertController animated:YES completion:nil];
+    [alertController addAction:changeAvatarAction];
+    [alertController addAction:changeNicknameAction];
+    [alertController addAction:copyAction];
+
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)changeAvatar {
