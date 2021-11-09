@@ -18,13 +18,7 @@
             _group = (AgoraChatGroup *)obj;
             _hyphenateId = _group.groupId;
             _subject = _group.groupName;
-            
-            
-            UIImage *originImage = ImageWithName(@"group_default_avatar");
-            
-            _defaultAvatarImage = [originImage acd_scaleToAssignSize:CGSizeMake(kAvatarHeight, kAvatarHeight)];
-            
-//            _defaultAvatarImage = [UIImage imageNamed:@"default_group_avatar.png"];
+            _defaultAvatarImage = [UIImage imageNamed:@"default_group_avatar.png"];
         }
         return self;
     }

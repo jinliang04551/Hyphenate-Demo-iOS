@@ -10,6 +10,7 @@
 #import "AgoraLoginViewController.h"
 
 #import "UIViewController+DismissKeyboard.h"
+#import "AgoraChatHttpRequest.h"
 
 #define kMaxLimitLength 64
 
@@ -92,83 +93,73 @@
     }
     [self.view endEditing:YES];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[AgoraChatClient sharedClient] loginWithUsername:_usernameTextField.text
-                                      password:_passwordTextField.text
-                                    completion:^(NSString *aUsername, AgoraChatError *aError) {
-                                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                                        if (!aError) {
-                                            [[AgoraChatClient sharedClient].options setIsAutoLogin:YES];
-                                            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
-                                        } else {
-                                            NSString *alertStr = NSLocalizedString(@"login.failure", @"Login failure");
-                                            switch (aError.code)
-                                            {
-                                                case AgoraChatErrorUserNotFound:
-                                                    alertStr = aError.errorDescription;
-                                                    break;
-                                                case AgoraChatErrorNetworkUnavailable:
-                                                    alertStr = NSLocalizedString(@"error.connectNetworkFail", @"No network connection!");
-                                                    break;
-                                                case AgoraChatErrorServerNotReachable:
-                                                    alertStr = NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!");
-                                                    break;
-                                                case AgoraChatErrorUserAuthenticationFailed:
-                                                    alertStr = NSLocalizedString(@"login.failure.password.notmatch", @"Password does not match username");
-                                                    break;
-                                                case AgoraChatErrorServerTimeout:
-                                                    alertStr = NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!");
-                                                    break;
-                                                default:
-                                                    alertStr = NSLocalizedString(@"login.failure", @"Login failure");
-                                                    break;
-                                            }
-                                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
-                                            [alert show];
-                                        }
-                                    }];
+    
+    void (^finishBlock) (NSString *aName, AgoraChatError *aError) = ^(NSString *aName, AgoraChatError *aError) {
+        if (!aError) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.succeed", @"Sign in succeed") delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
+                [alertError show];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES userInfo:@{@"userName":aName,@"nickName":_passwordTextField.text}];
+            });
+            return ;
+        }
+        
+        NSString *errorDes = NSLocalizedString(@"login.failure", @"login failure");
+        switch (aError.code) {
+            case AgoraChatErrorServerNotReachable:
+                errorDes = NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!");
+                break;
+            case AgoraChatErrorNetworkUnavailable:
+                errorDes = NSLocalizedString(@"error.connectNetworkFail", @"No network connection!");
+                break;
+            case AgoraChatErrorServerTimeout:
+                errorDes = NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!");
+                break;
+            case AgoraChatErrorUserAlreadyExist:
+                errorDes = NSLocalizedString(@"login.taken", @"Username taken");
+                break;
+            default:
+                errorDes = NSLocalizedString(@"login.failure", @"login failure");
+                break;
+        }
+        UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:errorDes delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
+        [alertError show];
+    };
+    
+    if ([AgoraChatClient sharedClient].isLoggedIn) {
+        [[AgoraChatClient sharedClient] logout:YES];
+    }
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    //unify token login
+    __weak typeof(self) weakself = self;
+    [[AgoraChatHttpRequest sharedManager] loginToApperServer:[_usernameTextField.text lowercaseString] nickName:_passwordTextField.text completion:^(NSInteger statusCode, NSString * _Nonnull response) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSString *alertStr = nil;
+            if (response && response.length > 0 && statusCode) {
+                NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *responsedict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+                NSString *token = [responsedict objectForKey:@"accessToken"];
+                NSString *loginName = [responsedict objectForKey:@"chatUserName"];
+                if (token && token.length > 0) {
+                    [[AgoraChatClient sharedClient] loginWithUsername:[loginName lowercaseString] agoraToken:token completion:finishBlock];
+                    return;
+                } else {
+                    alertStr = NSLocalizedString(@"login analysis token failure", @"analysis token failure");
+                }
+            } else {
+                alertStr = NSLocalizedString(@"login appserver failure", @"Sign in appserver failure");
+            }
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"loginAppServer.ok", @"Ok"), nil];
+            [alert show];
+        });
+    }];
 }
 
 - (IBAction)doSignUp:(id)sender
 {
-    if ([self _isEmpty]) {
-        return;
-    }
     
-
-    [self.view endEditing:YES];
-    WEAK_SELF
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[AgoraChatClient sharedClient] registerWithUsername:_usernameTextField.text
-                                         password:_passwordTextField.text
-                                       completion:^(NSString *aUsername, AgoraChatError *aError) {
-                                           NSString *alertStr = nil;
-                                           [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
-                                           if (!aError) {
-                                               alertStr = NSLocalizedString(@"login.signup.succeed", @"Sign in succeed");
-                                           } else {
-                                               alertStr = NSLocalizedString(@"login.signup.failure", @"Sign up failure");
-                                               switch (aError.code)
-                                               {
-                                                   case AgoraChatErrorServerNotReachable:
-                                                       alertStr = NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!");
-                                                       break;
-                                                   case AgoraChatErrorNetworkUnavailable:
-                                                       alertStr = NSLocalizedString(@"error.connectNetworkFail", @"No network connection!");
-                                                       break;
-                                                   case AgoraChatErrorServerTimeout:
-                                                       alertStr = NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!");
-                                                       break;
-                                                   case AgoraChatErrorUserAlreadyExist:
-                                                       alertStr = NSLocalizedString(@"login.taken", @"Username taken");
-                                                       break;
-                                                   default:
-                                                       alertStr = NSLocalizedString(@"login.signup.failure", @"Sign up failure");
-                                                       break;
-                                               }
-                                           }
-                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
-                                           [alert show];
-                                       }];
 }
 
 - (IBAction)doChangeState:(id)sender
@@ -217,12 +208,12 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (self.isRigisterState) {
         if (_usernameTextField.isFirstResponder &&_usernameTextField.text.length >= kMaxLimitLength) {
-            [WHToast showErrorWithMessage:NSLocalizedString(@"register.userName.outOfLimit", @"Username length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
+            [WHToast showMessage:NSLocalizedString(@"register.userName.outOfLimit", @"Username length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
 
         }
         
         if (_passwordTextField.isFirstResponder && _passwordTextField.text.length >= kMaxLimitLength) {
-            [WHToast showErrorWithMessage:NSLocalizedString(@"register.password.outOfLimit", @"Password length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
+            [WHToast showMessage:NSLocalizedString(@"register.password.outOfLimit", @"Password length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
         }
     }
     return YES;

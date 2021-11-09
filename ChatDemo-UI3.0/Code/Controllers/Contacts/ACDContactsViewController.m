@@ -18,7 +18,6 @@
 
 #import "AgoraCreateViewController.h"
 #import "ACDGroupEnterController.h"
-
 #import "ACDGroupInfoViewController.h"
 #import "ACDContactInfoViewController.h"
 #import "AgoraUserModel.h"
@@ -116,7 +115,6 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 - (void)goAddPage {
 
     ACDGroupEnterController *groupEnterVC = ACDGroupEnterController.new;
-    
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:groupEnterVC];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
@@ -169,9 +167,6 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     });
 }
 
-- (void)navBarUnreadRequestIsShow:(BOOL)isShow {
-    [self.segView reloadTitleRedPointWithISShow:isShow withTitleIndex:2];
-}
 
 #pragma mark ACDGroupInfoViewControllerDelegate
 - (void)checkGroupMemberListWithGroup:(AgoraChatGroup *)group {

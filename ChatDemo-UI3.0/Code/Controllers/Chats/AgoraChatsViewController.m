@@ -11,12 +11,13 @@
 
 #import "UIViewController+DismissKeyboard.h"
 #import "AgoraRealtimeSearchUtil.h"
-#import "AgoraChatViewController.h"
 #import "AgoraConversationModel.h"
 #import "AgoraNotificationNames.h"
 #import "AgoraChatsCell.h"
 
 #import "ACDGroupEnterController.h"
+
+#import "ACDChatViewController.h"
 
 
 NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
@@ -227,11 +228,8 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
 
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.conversation.conversationId conversationType:model.conversation.type];
-    chatViewController.navTitle = model.title;
-    chatViewController.leaveGroupBlock = ^{
-        [self updateUIAfterLeaveGroupWithConversationId:model.conversation.conversationId];
-    };
+    ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:model.conversation.conversationId conversationType:model.conversation.type];
+
     chatViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatViewController animated:YES];
 }

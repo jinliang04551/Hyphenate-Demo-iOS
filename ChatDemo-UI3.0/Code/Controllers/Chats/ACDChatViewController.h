@@ -12,6 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDChatViewController : UIViewController
 
+@property (nonatomic, strong) AgoraChatConversation *conversation;
+@property (nonatomic, strong) EaseChatViewController *chatController;
+
+- (instancetype)initWithConversationId:(NSString *)conversationId conversationType:(AgoraChatConversationType)conType;
+
+- (NSArray *)formatMessages:(NSArray<AgoraChatMessage *> *)aMessages;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -20,8 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)reloadGroupNotifications;
 
-- (void)navBarUnreadRequestIsShow:(BOOL)isShow;
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -22,8 +22,9 @@ end
     pod 'MJRefresh'
     pod 'Masonry'
     pod 'WHToast'
+    pod 'FMDB'
 #    pod 'AgoraChat'
-    pod 'EaseChatKit',  :path => "../kit"
+    pod 'EaseChatKit',  :path => "../EaseChatKit"
 
 end
 

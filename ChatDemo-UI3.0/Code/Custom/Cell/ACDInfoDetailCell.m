@@ -19,12 +19,12 @@
 }
 
 - (void)placeSubViews {
-    [self generateRandomAvatar];
     
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.contentView);
+        make.top.equalTo(self.contentView).offset(kAgroaPadding * 0.5);
         make.left.equalTo(self.contentView).offset(16.0f);
-        make.size.mas_equalTo(kAvatarHeight);
+        make.width.equalTo(@40.0f);
+        make.bottom.equalTo(self.contentView).offset(-kAgroaPadding * 0.5);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -40,12 +40,6 @@
     
 }
 
-- (void)generateRandomAvatar {
-    self.iconImageView.layer.cornerRadius = kAvatarHeight * 0.5;
-    UIColor *avatarColor = [UIColor avatarRandomColor];
-    UIImage *image = [UIImage imageWithColor:avatarColor size:CGSizeMake(kAvatarHeight, kAvatarHeight)];
-    [self.iconImageView setImage:image];
-}
 
 #pragma mark getter and setter
 - (UILabel *)detailLabel {

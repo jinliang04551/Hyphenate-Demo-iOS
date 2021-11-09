@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ACDTransferOwnerViewController : AgoraSearchTableViewController
 @property (nonatomic,copy) void(^transferOwnerBlock)(void);
 
-@property (nonatomic,assign) BOOL isLeaveGroup;
-
-
 - (instancetype)initWithGroup:(AgoraChatGroup *)aGroup;
 @end
 

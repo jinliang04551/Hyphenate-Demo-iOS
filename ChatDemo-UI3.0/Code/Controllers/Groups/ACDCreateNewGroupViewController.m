@@ -35,9 +35,6 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 @property (nonatomic, assign) BOOL isPublic;
 @property (nonatomic, assign) BOOL isAllowMemberInvite;
 @property (nonatomic, strong) NSMutableArray<NSString *> *invitees;
-@property (nonatomic, strong) UIButton *createBtn;
-
-
 
 @end
 
@@ -56,7 +53,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 }
 
 - (void)setupNavbar {
-    self.title =  @"New Group";
+    self.title = NSLocalizedString(@"title.newGroup", @"New Group");
     
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     leftBtn.frame = CGRectMake(0, 0, 20, 20);
@@ -66,14 +63,14 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     UIBarButtonItem *leftBar = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
     [self.navigationItem setLeftBarButtonItem:leftBar];
     
-    self.createBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.createBtn.frame = CGRectMake(0, 0, 50, 40);
-    self.createBtn.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    [self.createBtn setTitleColor:ButtonDisableGrayColor forState:UIControlStateNormal];
-    [self.createBtn setTitle:@"Next" forState:UIControlStateNormal];
-    [self.createBtn setTitle:@"Next" forState:UIControlStateHighlighted];
-    [self.createBtn addTarget:self action:@selector(nextButtonAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:self.createBtn];
+    UIButton *createBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    createBtn.frame = CGRectMake(0, 0, 50, 40);
+    createBtn.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [createBtn setTitleColor:ButtonDisableGrayColor forState:UIControlStateNormal];
+    [createBtn setTitle:@"Next" forState:UIControlStateNormal];
+    [createBtn setTitle:@"Next" forState:UIControlStateHighlighted];
+    [createBtn addTarget:self action:@selector(nextButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:createBtn];
     
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                                                                 target:nil
@@ -81,19 +78,6 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     rightSpace.width = -2;
     [self.navigationItem setRightBarButtonItems:@[rightSpace,rightBar]];
 }
-
-- (void)updateCreateButtonUserInteractionEnabled:(BOOL)userInteractionEnabled {
-    self.createBtn.userInteractionEnabled = userInteractionEnabled;
-    if (userInteractionEnabled) {
-        [self.createBtn setTitleColor:TextLabelBlueColor forState:UIControlStateNormal];
-        [self.createBtn setTitleColor:TextLabelBlueColor forState:UIControlStateHighlighted];
-    }
-    else {
-        [self.createBtn setTitleColor:CoolGrayColor forState:UIControlStateNormal];
-        [self.createBtn setTitleColor:CoolGrayColor forState:UIControlStateHighlighted];
-    }
-}
-
 
 - (void)initBasicData {
     _occupants = [NSMutableArray array];
@@ -263,8 +247,6 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
         [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION
                                                                   object:nil];
           });
-          
-          //跳转到聊天页面
           
           [self backAction];
       }

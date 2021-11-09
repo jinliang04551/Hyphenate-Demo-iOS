@@ -16,14 +16,18 @@
 
 #import "AgoraLaunchViewController.h"
 #import "AgoraChatDEMoHelper.h"
+#import "AgoraChatHttpRequest.h"
 
 
 #define EaseIMAppKey @"easemob-demo#easeim"
 #define ChatDemoUIAppKey @"easemob-demo#chatdemoui"
-#define MeiDongAppKey @"1193210624041558#chat-demo"
+#define HongKongAppkey @"52366312#441909"
+#define MeidongAppkey @"41351358#427351"
 
 
 @interface AppDelegate () <AgoraChatClientDelegate,UNUserNotificationCenterDelegate>
+@property (nonatomic, strong) NSString *userName;
+@property (nonatomic, strong) NSString *nickName;
 
 @end
 
@@ -73,7 +77,7 @@
 
 - (void)initSDK {
     // init HyphenateSDK
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:EaseIMAppKey];
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:MeidongAppkey];
     
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -88,19 +92,31 @@
     [options setIsDeleteMessagesWhenExitGroup:NO];
     [options setIsDeleteMessagesWhenExitChatRoom:NO];
     [options setUsingHttpsOnly:YES];
+    [options setIsAutoLogin:YES];
     
     [[AgoraChatClient sharedClient] initializeSDKWithOptions:options];
 }
 
 - (void)initUIKit
 {
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:@"easemob-demo#easeim"];
-    options.enableConsoleLog = YES;
-    options.usingHttpsOnly = YES;
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:MeidongAppkey];
+    
+    // Hyphenate cert keys
+    NSString *apnsCertName = nil;
+#if ChatDemo_DEBUG
+    apnsCertName = @"ChatDemoDevPush";
+#else
+    apnsCertName = @"ChatDemoProPush";
+#endif
+    
+    [options setApnsCertName:apnsCertName];
+    [options setEnableDeliveryAck:YES];
+    [options setEnableConsoleLog:YES];
+    [options setIsDeleteMessagesWhenExitGroup:NO];
+    [options setIsDeleteMessagesWhenExitChatRoom:NO];
+    [options setUsingHttpsOnly:YES];
+    [options setIsAutoLogin:YES];
     [EaseChatKitManager initWithAgoraChatOptions:options];
-    if (AgoraChatClient.sharedClient.isLoggedIn && ![AgoraChatClient.sharedClient.currentUsername isEqualToString:@"chong"]) {
-        [AgoraChatClient.sharedClient logout:YES];
-    }
     
 //    [[AgoraChatClient sharedClient] loginWithUsername:@"chong"
 //                                      password:@"1"
@@ -122,6 +138,9 @@
 
 - (void)loginStateChange:(NSNotification *)notification
 {
+    self.userName = (NSString *)notification.userInfo[@"userName"];
+    self.nickName = (NSString *)notification.userInfo[@"nickName"];
+    
     BOOL loginSuccess = [notification.object boolValue];
     if (loginSuccess) {
 
@@ -129,6 +148,105 @@
         
     } else {
         [self loadLoginPage];
+    }
+}
+
+- (void)tokenWillExpire:(int)aErrorCode
+{
+    if (aErrorCode == AgoraChatErrorTokeWillExpire) {
+        NSLog(@"%@", [NSString stringWithFormat:@"========= token expire rennew token ! code : %d",aErrorCode]);
+        [[AgoraChatHttpRequest sharedManager] loginToApperServer:self.userName nickName:self.nickName completion:^(NSInteger statusCode, NSString * _Nonnull response) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString *alertStr = nil;
+                if (response && response.length > 0) {
+                    NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
+                    NSDictionary *responsedict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+                    NSString *token = [responsedict objectForKey:@"accessToken"];
+                    if (token && token.length > 0) {
+                        alertStr = NSLocalizedString(@"login appserver succeed", @"login appserver succeed");
+                        if (aErrorCode == AgoraChatErrorTokeWillExpire) {
+                            AgoraChatError *error = [[AgoraChatClient sharedClient] renewToken:token];
+                            if (error) {
+                                alertStr = NSLocalizedString(@"renew token failure", @"renew token failure");
+                            } else {
+                                alertStr = NSLocalizedString(@"renew token success", @"renew token success");
+                            }
+                        }
+                    } else {
+                        alertStr = NSLocalizedString(@"login analysis token failure", @"analysis token failure");
+                    }
+                } else {
+                    alertStr = NSLocalizedString(@"login appserver failure", @"Sign in appserver failure");
+                }
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"renewToken.ok", @"Ok"), nil];
+                [alert show];
+            });
+        }];
+    }
+}
+
+- (void)tokenDidExpire:(int)aErrorCode
+{
+    if (aErrorCode == AgoraChatErrorTokenExpire || aErrorCode == 401) {
+        void (^finishBlock) (NSString *aName, AgoraChatError *aError) = ^(NSString *aName, AgoraChatError *aError) {
+            if (!aError) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.succeed", @"Sign in succeed") delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
+                    [alertError show];
+                });
+                return ;
+            }
+            
+            NSString *errorDes = NSLocalizedString(@"login.failure", @"login failure");
+            switch (aError.code) {
+                case AgoraChatErrorServerNotReachable:
+                    errorDes = NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!");
+                    break;
+                case AgoraChatErrorNetworkUnavailable:
+                    errorDes = NSLocalizedString(@"error.connectNetworkFail", @"No network connection!");
+                    break;
+                case AgoraChatErrorServerTimeout:
+                    errorDes = NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!");
+                    break;
+                case AgoraChatErrorUserAlreadyExist:
+                    errorDes = NSLocalizedString(@"login.taken", @"Username taken");
+                    break;
+                default:
+                    errorDes = NSLocalizedString(@"login.failure", @"login failure");
+                    break;
+            }
+            UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:errorDes delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
+            [alertError show];
+        };
+        
+        if ([AgoraChatClient sharedClient].isLoggedIn) {
+            [[AgoraChatClient sharedClient] logout:YES];
+        }
+        
+        if (self.userName.length == 0 || self.nickName.length == 0) return;
+        //unify token login
+        __weak typeof(self) weakself = self;
+        [[AgoraChatHttpRequest sharedManager] loginToApperServer:self.userName nickName:self.nickName completion:^(NSInteger statusCode, NSString * _Nonnull response) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString *alertStr = nil;
+                if (response && response.length > 0) {
+                    NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
+                    NSDictionary *responsedict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+                    NSString *token = [responsedict objectForKey:@"accessToken"];
+                    NSString *loginName = [responsedict objectForKey:@"chatUserName"];
+                    if (token && token.length > 0) {
+                        [[AgoraChatClient sharedClient] loginWithUsername:[loginName lowercaseString] agoraToken:token completion:finishBlock];
+                        return;
+                    } else {
+                        alertStr = NSLocalizedString(@"login analysis token failure", @"analysis token failure");
+                    }
+                } else {
+                    alertStr = NSLocalizedString(@"login appserver failure", @"Sign in appserver failure");
+                }
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"loginAppServer.ok", @"Ok"), nil];
+                [alert show];
+            });
+        }];
     }
 }
 
@@ -220,7 +338,7 @@
     completionHandler();
 }
 
-#pragma mark - EMPushManagerDelegateDevice
+#pragma mark - AgoraChatPushManagerDelegateDevice
 
 // 打印收到的apns信息
 -(void)didReceiveRemoteNotification:(NSDictionary *)userInfo

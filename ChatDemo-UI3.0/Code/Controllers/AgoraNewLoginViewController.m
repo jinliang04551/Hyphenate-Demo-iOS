@@ -7,6 +7,7 @@
 //
 
 #import "AgoraNewLoginViewController.h"
+#import "AgoraChatHttpRequest.h"
 
 #define kLoginButtonHeight 48.0f
 
@@ -118,40 +119,67 @@
     }
     [self.view endEditing:YES];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[AgoraChatClient sharedClient] loginWithUsername:_usernameTextField.text
-                                      password:_passwordTextField.text
-                                    completion:^(NSString *aUsername, AgoraChatError *aError) {
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-    if (!aError) {
-        [[AgoraChatClient sharedClient].options setIsAutoLogin:YES];
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
-    } else {
-        NSString *alertStr = NSLocalizedString(@"login.failure", @"Login failure");
-        switch (aError.code)
-        {
-            case AgoraChatErrorUserNotFound:
-                alertStr = aError.errorDescription;
+    
+    void (^finishBlock) (NSString *aName, AgoraChatError *aError) = ^(NSString *aName, AgoraChatError *aError) {
+        if (!aError) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.succeed", @"Sign in succeed") delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
+                [alertError show];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES userInfo:@{@"userName":aName,@"nickName":_passwordTextField.text}];
+            });
+            return ;
+        }
+        
+        NSString *errorDes = NSLocalizedString(@"login.failure", @"login failure");
+        switch (aError.code) {
+            case AgoraChatErrorServerNotReachable:
+                errorDes = NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!");
                 break;
             case AgoraChatErrorNetworkUnavailable:
-                alertStr = NSLocalizedString(@"error.connectNetworkFail", @"No network connection!");
-                break;
-            case AgoraChatErrorServerNotReachable:
-                alertStr = NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!");
-                break;
-            case AgoraChatErrorUserAuthenticationFailed:
-                alertStr = NSLocalizedString(@"login.failure.password.notmatch", @"Password does not match username");
+                errorDes = NSLocalizedString(@"error.connectNetworkFail", @"No network connection!");
                 break;
             case AgoraChatErrorServerTimeout:
-                alertStr = NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!");
+                errorDes = NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!");
+                break;
+            case AgoraChatErrorUserAlreadyExist:
+                errorDes = NSLocalizedString(@"login.taken", @"Username taken");
                 break;
             default:
-                alertStr = NSLocalizedString(@"login.failure", @"Login failure");
+                errorDes = NSLocalizedString(@"login.failure", @"login failure");
                 break;
         }
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
-        [alert show];
-     }
-        
+        UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:errorDes delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
+        [alertError show];
+    };
+    
+    if ([AgoraChatClient sharedClient].isLoggedIn) {
+        [[AgoraChatClient sharedClient] logout:YES];
+    }
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    //unify token login
+    __weak typeof(self) weakself = self;
+    [[AgoraChatHttpRequest sharedManager] loginToApperServer:[_usernameTextField.text lowercaseString] nickName:_passwordTextField.text completion:^(NSInteger statusCode, NSString * _Nonnull response) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSString *alertStr = nil;
+            if (response && response.length > 0 && statusCode) {
+                NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *responsedict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+                NSString *token = [responsedict objectForKey:@"accessToken"];
+                NSString *loginName = [responsedict objectForKey:@"chatUserName"];
+                if (token && token.length > 0) {
+                    [[AgoraChatClient sharedClient] loginWithUsername:[loginName lowercaseString] agoraToken:token completion:finishBlock];
+                    return;
+                } else {
+                    alertStr = NSLocalizedString(@"login analysis token failure", @"analysis token failure");
+                }
+            } else {
+                alertStr = NSLocalizedString(@"login appserver failure", @"Sign in appserver failure");
+            }
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"loginAppServer.ok", @"Ok"), nil];
+            [alert show];
+        });
     }];
     
 }
@@ -256,7 +284,7 @@
     if (_loginButton == nil) {
         _loginButton = [[UIButton alloc] init];
         _loginButton.titleLabel.font = [UIFont systemFontOfSize:12];
-        [_loginButton setTitle:@"LOG IN" forState:UIControlStateNormal];
+        [_loginButton setTitle:NSLocalizedString(@"login.loginButton.login", @"LOG IN") forState:UIControlStateNormal];
         [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _loginButton.backgroundColor = COLOR_HEX(0x114EFF);
         [_loginButton addTarget:self action:@selector(doLogin) forControlEvents:UIControlEventTouchUpInside];

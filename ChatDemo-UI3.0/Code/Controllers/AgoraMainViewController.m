@@ -10,7 +10,7 @@
 #import "AgoraMainViewController.h"
 
 #import "AgoraContactsViewController.h"
-#import "AgoraChatsViewController.h"
+#import "ACDChatsViewController.h"
 #import "AgoraSettingsViewController.h"
 #import "AgoraChatDemoHelper.h"
 #import "AgoraCDDeviceManager.h"
@@ -34,7 +34,7 @@ static NSString *kGroupName = @"GroupName";
 //    AgoraContactsViewController *_contactsVC;
     ACDContactsViewController *_contactsVC;
 
-    AgoraChatsViewController *_chatsVC;
+    ACDChatsViewController *_chatsVC;
 //    AgoraSettingsViewController *_settingsVC;
     ACDSettingsViewController *_settingsVC;
 }
@@ -102,7 +102,7 @@ static NSString *kGroupName = @"GroupName";
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     
-    _chatsVC = [[AgoraChatsViewController alloc] init];
+    _chatsVC = [[ACDChatsViewController alloc] init];
     _chatsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats"
                                                    image:[ImageWithName(@"TabBar.bundle/tabbar_chats")
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
@@ -281,12 +281,12 @@ static NSString *kGroupName = @"GroupName";
 
 - (void)userAccountDidLoginFromOtherDevice
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO userInfo:@{@"userName":@"",@"nickName":@""}];
 }
 
 - (void)userAccountDidRemoveFromServer
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO userInfo:@{@"userName":@"",@"nickName":@""}];
 }
 
 - (void)clearNavigationItem

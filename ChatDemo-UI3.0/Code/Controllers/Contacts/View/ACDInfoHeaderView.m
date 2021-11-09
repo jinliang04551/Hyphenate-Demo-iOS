@@ -9,8 +9,7 @@
 #import "ACDInfoHeaderView.h"
 #import "ACDImageTextButtonView.h"
 
-#define kMeHeaderImageViewHeight  140.0f
-
+#define kHeaderImageViewHeight  80.0f
 
 @interface ACDInfoHeaderView ()
 @property (nonatomic, strong) UIButton *backButton;
@@ -52,8 +51,6 @@
 }
 
 - (void)placeAndLayoutForContactInfo {
-    self.avatarImageView.layer.cornerRadius = 100 * 0.5;
-
     [self addSubview:self.backButton];
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
@@ -67,6 +64,10 @@
     }];
     
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self).offset(kAgroaPadding * 6.0);
+//        make.centerX.equalTo(self);
+//        make.width.mas_equalTo(140.0);
+//        make.height.mas_equalTo(140.0);
         make.top.equalTo(self.backButton.mas_bottom).offset(kAgroaPadding);
         make.centerX.equalTo(self);
         make.size.equalTo(@100.0);
@@ -95,8 +96,6 @@
 }
 
 - (void)placeAndLayoutForGroupInfo {
-    self.avatarImageView.image = ImageWithName(@"group_default_avatar");
-
     [self addSubview:self.backButton];
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
@@ -147,16 +146,15 @@
 }
 
 - (void)placeAndLayoutForMeInfo {
-    self.avatarImageView.layer.cornerRadius = kMeHeaderImageViewHeight * 0.5;
-    
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
     [self addSubview:self.userIdLabel];
         
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(kAgroaPadding *5.0);
+        make.top.equalTo(self).offset(kAgroaPadding *4.4);
         make.centerX.equalTo(self);
-        make.size.mas_equalTo(kMeHeaderImageViewHeight);
+//        make.width.mas_equalTo(140.0);
+//        make.height.mas_equalTo(140.0);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -220,7 +218,8 @@
     if (_avatarImageView == nil) {
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _avatarImageView.clipsToBounds = YES;
+        _avatarImageView.image = ImageWithName(@"group_default_avatar");
+//        _avatarImageView.backgroundColor = UIColor.yellowColor;
     }
     return _avatarImageView;
 }
@@ -286,6 +285,6 @@
 
 @end
 
-#undef kMeHeaderImageViewHeight
+#undef kHeaderImageViewHeight
 
 

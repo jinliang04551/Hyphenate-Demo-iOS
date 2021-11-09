@@ -58,8 +58,6 @@
     if (_iconImageView == nil) {
         _iconImageView = [[UIImageView alloc] init];
         _iconImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _iconImageView.layer.cornerRadius = kAvatarHeight * 0.5;
-        _iconImageView.clipsToBounds = YES;
     }
     return _iconImageView;
 }

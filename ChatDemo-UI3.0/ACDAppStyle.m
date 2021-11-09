@@ -23,7 +23,7 @@
 - (void)defaultStyle {
     [UITabBarItem.appearance setTitleTextAttributes:@{
                                                       NSFontAttributeName : NFont(12.0f),
-                                                      NSForegroundColorAttributeName : TextLabelBlackColor
+                                                      NSForegroundColorAttributeName : COLOR_HEX(0xC9CFCF)
                                                       } forState:UIControlStateNormal];
     [UITabBarItem.appearance setTitleTextAttributes:@{
                                                       NSFontAttributeName : NFont(12.0f),
@@ -31,8 +31,6 @@
                                                       } forState:UIControlStateSelected];
 //    UITabBar.appearance.backgroundImage = IMAGE_HEX(0xFFFFFF);
 //    UITabBar.appearance.shadowImage = IMAGE_HEX(0xFFFFFF);
-    
-    UITabBarItem.appearance.badgeColor = TextLabelPinkColor;
 }
 
 

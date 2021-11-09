@@ -7,7 +7,7 @@
 
 #import "UIView+MISRedPoint.h"
 
-#define kRedPointSize  10.0f
+#define kRedPointSize  8.0
 
 @interface MISRedDot()
 @property (nonatomic,  unsafe_unretained) UIView *superView;
@@ -92,7 +92,7 @@
     if (self) {
         _size = CGSizeMake(kRedPointSize, kRedPointSize);
         _radius = kRedPointSize * 0.5;
-        _color = COLOR_HEX(0xFF14CC);
+        _color = [UIColor redColor];
     }
     return self;
 }

@@ -80,6 +80,8 @@
     self.navigationController.navigationBarHidden = NO;
 }
 
+
+
 #pragma mark NSNotification
 - (void)updateUIWithNotification:(NSNotification *)notification
 {
@@ -95,9 +97,9 @@
         self.groupInfoHeaderView.isHideChatButton = YES;
     }else {
         if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
-            self.cells = @[self.membersCell,self.transferOwnerCell,self.disbandCell];
+            self.cells = @[self.membersCell,self.allowSearchCell,self.allowInviteCell,self.transferOwnerCell,self.disbandCell];
         } else if(self.group.permissionType == AgoraChatGroupPermissionTypeAdmin){
-            self.cells = @[self.membersCell,self.leaveCell];
+            self.cells = @[self.membersCell,self.allowSearchCell,self.allowInviteCell,self.leaveCell];
         }else {
             self.cells = @[self.membersCell,self.leaveCell];
         }
@@ -202,12 +204,7 @@
 }
 
 - (void)transferOwner {
-    [self goTransferOwnerWithIsLeaveGroup:NO];
-}
-
-- (void)goTransferOwnerWithIsLeaveGroup:(BOOL)isLeaveGroup {
     ACDTransferOwnerViewController *vc = [[ACDTransferOwnerViewController alloc] initWithGroup:self.group];
-    vc.isLeaveGroup = isLeaveGroup;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -217,19 +214,11 @@
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
        
     }];
-    
-    UIAlertAction *disBandAction = [UIAlertAction actionWithTitle:@"Disband" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Disband" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self dismissGroupWithGroupId:self.groupId];
     }];
-    
-    UIAlertAction *leaveAction = [UIAlertAction actionWithTitle:@"Transfer Ownership and Leave" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self goTransferOwnerWithIsLeaveGroup:YES];
-    }];
-    
-
     [alertController addAction:cancelAction];
-    [alertController addAction:disBandAction];
-    [alertController addAction:leaveAction];
+    [alertController addAction:okAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
@@ -273,31 +262,23 @@
     
         ACD_WS
         if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
-            
-            UIAlertAction *changeNicknameAction = [UIAlertAction alertActionWithTitle:@"Change Group Name" iconImage:ImageWithName(@"action_icon_edit") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
-                [self changeGroupName];
-            }];
-            [alertController addAction:changeNicknameAction];
-
+            [alertController addAction:[UIAlertAction actionWithTitle:@"Change Group Name" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf changeGroupName];
+            }]];
         }
                 
-    
-    UIAlertAction *copyAction = [UIAlertAction alertActionWithTitle:@"Copy GroupID" iconImage:ImageWithName(@"action_icon_copy") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
-        [UIPasteboard generalPasteboard].string = self.group.groupId;
-    }];
-   
-    
-    [alertController addAction:copyAction];
-    
-    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-    }]];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Copy GroupID" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }]];
+
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        }]];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)goGroupChatPage {
     AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:self.group.groupId conversationType:AgoraChatConversationTypeGroupChat];
-    chatViewController.navTitle = self.group.groupName;
     [self.navigationController pushViewController:chatViewController animated:YES];
 
 }

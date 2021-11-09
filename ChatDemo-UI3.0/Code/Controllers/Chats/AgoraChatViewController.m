@@ -30,12 +30,6 @@
 #import "AgoraChatRecallCell.h"
 #import <AVKit/AVKit.h>
 
-#import "ACDChatNavigationView.h"
-#import "ACDContactInfoViewController.h"
-#import "AgoraUserModel.h"
-#import "ACDGroupInfoViewController.h"
-
-
 static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 @interface AgoraChatViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate,AgoraLocationViewDelegate,AgoraChatManagerDelegate, AgoraChatroomManagerDelegate,AgoraChatBaseCellDelegate,UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource,AgoraChatToolBarNewDelegate,EaseChatViewControllerDelegate>
@@ -62,11 +56,6 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 @property (nonatomic, strong) EaseChatViewController *chatController;
 @property (nonatomic, strong) EaseConversationModel *conversationModel;
-@property (nonatomic, strong) ACDChatNavigationView *navigationView;
-
-@property (nonatomic, assign) AgoraChatConversationType conversationType;
-
-@property (nonatomic, strong) NSString *conversationId;
 
 
 @end
@@ -80,8 +69,6 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 //        _currentConversation = [[AgoraChatClient sharedClient].chatManager getConversation:conversationId type:type createIfNotExist:YES];
 //        [_currentConversation markAllMessagesAsRead:nil];
         
-        self.conversationType = type;
-        self.conversationId = conversationId;
         
         _currentConversation = [AgoraChatClient.sharedClient.chatManager getConversation:conversationId type:type createIfNotExist:YES];
         _conversationModel = [[EaseConversationModel alloc]initWithConversation:_currentConversation];
@@ -110,7 +97,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     [self setupSubviews];
     
     [self tableViewDidTriggerHeaderRefresh];
-//    [self _setupNavigationBar];
+    [self _setupNavigationBar];
 
     [[AgoraChatClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[AgoraChatClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
@@ -143,33 +130,9 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 //    }];
     
     [self addChildViewController:_chatController];
-    [self.view addSubview:self.navigationView];
     [self.view addSubview:_chatController.view];
-//    _chatController.view.frame = self.view.bounds;
-    
-    [self.navigationView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view);
-        make.left.right.equalTo(self.view);
-        make.bottom.equalTo(_chatController.view.mas_top);
-    }];
-    
-    [_chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(60.0, 0, 0, 0));
-    }];
+    _chatController.view.frame = self.view.bounds;
 }
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.navigationController.navigationBarHidden = NO;
-}
-
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -1252,12 +1215,12 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 //
 //        CGFloat interval = (self.chatController.msgTimelTag - msg.timestamp) / 1000;
 //        if (self.chatController.msgTimelTag < 0 || interval > 60 || interval < -60) {
-//            NSString *timeStr = [EMDateHelper formattedTimeFromTimeInterval:msg.timestamp];
+//            NSString *timeStr = [AgoraChatDateHelper formattedTimeFromTimeInterval:msg.timestamp];
 //            [formated addObject:timeStr];
 //            self.chatController.msgTimelTag = msg.timestamp;
 //        }
 //        EaseMessageModel *model = nil;
-//        model = [[EaseMessageModel alloc] initWithEMMessage:msg];
+//        model = [[EaseMessageModel alloc] initWithAgoraChatMessage:msg];
 //        if (!model) {
 //            model = [[EaseMessageModel alloc]init];
 //        }
@@ -1268,53 +1231,5 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 //    return formated;
 //}
 //
-
-- (ACDChatNavigationView *)navigationView {
-    if (_navigationView == nil) {
-        _navigationView = [[ACDChatNavigationView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 80.0f)];
-    
-        _navigationView.leftLabel.text = self.navTitle;
-        ACD_WS
-        _navigationView.leftButtonBlock = ^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        };
-        
-        _navigationView.chatButtonBlock = ^{
-            [weakSelf goInfoPage];
-        };
-        
-        
-    }
-    return _navigationView;
-}
-
-- (void)goInfoPage {
-    if (self.conversationType == AgoraChatConversationTypeChat) {
-        [self goContactInfoWithContactId:self.conversationId];
-    }
-    
-    if (self.conversationType == AgoraChatConversationTypeGroupChat) {
-        [self goGroupInfoWithGroupId:self.conversationId];
-    }
-
-}
-
-
-- (void)goContactInfoWithContactId:(NSString *)contactId {
-    AgoraUserModel * model = [[AgoraUserModel alloc] initWithHyphenateId:contactId];
-    ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
-    
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:YES];
-    
-}
-
-- (void)goGroupInfoWithGroupId:(NSString *)groupId {
-    ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
-    vc.accessType = ACDGroupInfoAccessTypeChat;
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
 
 @end

@@ -1,15 +1,14 @@
 //
-//  ACDGroupEnterNewViewController.m
+//  AgoraGroupEnterController.m
 //  ChatDemo-UI3.0
 //
-//  Created by liang on 2021/11/8.
+//  Created by liang on 2021/10/19.
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
 #import "ACDGroupEnterController.h"
 #import "ACDContactListController.h"
 #import "ACDGroupEnterCell.h"
-#import "ACDContactCell.h"
 
 #import "AgoraCreateNewGroupViewController.h"
 #import "ACDCreateNewGroupViewController.h"
@@ -20,8 +19,6 @@
 #import "ACDGroupInfoViewController.h"
 
 #import "ACDJoinGroupViewController.h"
-
-#define kHeaderInSection  30.0
 
 static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 
@@ -38,11 +35,7 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
     self.title = @"create";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismissViewController)];
     
-    if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        [self fetchAllContactsFromServer];
-    }else {
-        [self.table reloadData];
-    }
+    [self.table reloadData];
 }
 
 - (void)dismissViewController {
@@ -55,65 +48,49 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 }
 
 - (void)placeSubViews {
-    [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view);
-        make.left.equalTo(self.view).offset(12.0);
-        make.right.equalTo(self.view).offset(-12.0);
-        make.height.equalTo(@40.0);
-    }];
+    if (self.accessType == ACDGroupEnterAccessTypeChat) {
+        [self.view addSubview:self.searchBar];
+        [self.view addSubview:self.table];
+
+        [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.view);
+            make.left.equalTo(self.view).offset(12.0);
+            make.right.equalTo(self.view).offset(-12.0);
+            make.height.equalTo(@40.0);
+        }];
+        
+        [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.searchBar.mas_bottom);
+            make.left.equalTo(self.view).offset(12.0);
+            make.right.equalTo(self.view).offset(-12.0);
+            make.bottom.equalTo(self.view);
+        }];
+
+    }
     
-    [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.searchBar.mas_bottom);
-        make.left.equalTo(self.view).offset(12.0);
-        make.right.equalTo(self.view).offset(-12.0);
-        make.bottom.equalTo(self.view);
-    }];
+    
+    if (self.accessType == ACDGroupEnterAccessTypeContact) {
+        [self.view addSubview:self.searchBar];
+        [self.view addSubview:self.table];
+
+        [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.view);
+            make.left.equalTo(self.view).offset(12.0);
+            make.right.equalTo(self.view).offset(-12.0);
+            make.height.equalTo(@40.0);
+        }];
+        
+        [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.searchBar.mas_bottom);
+            make.left.equalTo(self.view).offset(12.0);
+            make.right.equalTo(self.view).offset(-12.0);
+            make.bottom.equalTo(self.view);
+        }];
+    }
 }
+
 
 #pragma mark private method
-- (void)fetchAllContactsFromServer {
-    ACD_WS
-    [[AgoraChatClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, AgoraChatError *aError) {
-        if (aError == nil) {
-            [weakSelf updateContacts:aList];
-            [weakSelf.table reloadData];
-        }
-        else {
-
-        }
-    }];
-}
-
-- (void)updateContacts:(NSArray *)bubbyList {
-    NSArray *blockList = [[AgoraChatClient sharedClient].contactManager getBlackList];
-    NSMutableArray *contacts = [NSMutableArray arrayWithArray:bubbyList];
-    for (NSString *blockId in blockList) {
-        [contacts removeObject:blockId];
-    }
-    [self sortContacts:contacts];
-    
-}
-
-- (void)sortContacts:(NSArray *)contacts {
-    if (contacts.count == 0) {
-        self.dataArray = [@[] mutableCopy];
-        self.sectionTitles = [@[] mutableCopy];
-        self.searchSource = [@[] mutableCopy];
-        return;
-    }
-    
-    NSMutableArray *sectionTitles = nil;
-    NSMutableArray *searchSource = nil;
-    NSArray *sortArray = [NSArray sortContacts:contacts
-                                 sectionTitles:&sectionTitles
-                                  searchSource:&searchSource];
-    [self.dataArray removeAllObjects];
-    [self.dataArray addObjectsFromArray:sortArray];
-    self.sectionTitles = [NSMutableArray arrayWithArray:sectionTitles];
-    self.searchSource = [NSMutableArray arrayWithArray:searchSource];
-}
-
-
 - (void)goCreateNewGroup {
     ACDCreateNewGroupViewController *vc = ACDCreateNewGroupViewController.new;
     [self.navigationController pushViewController:vc animated:YES];
@@ -144,116 +121,39 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 
 
 #pragma mark - Table view data source
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (self.accessType == ACDGroupEnterAccessTypeChat && section == 1) {
-        return kHeaderInSection;
-    }
-    return 0;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (self.accessType == ACDGroupEnterAccessTypeChat && section == 1) {
-        UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kHeaderInSection)];
-        
-        UILabel *label = [[UILabel alloc] init];
-        label.font = [UIFont systemFontOfSize:12.0f];
-        label.textColor = TextLabelGrayColor;
-        label.text = @"Contacts";
-        label.textAlignment = NSTextAlignmentLeft;
-        
-        [sectionView addSubview:label];
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(sectionView);
-            make.left.equalTo(sectionView).offset(16.0);
-        }];
-        
-        return sectionView;
-
-    }
-    return nil;
-}
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        if (self.isSearchState) {
-            return 1;
-        }
-        return  self.sectionTitles.count + 1;
-    }
-    return 1;
-    
-}
-
-- (NSArray*)sectionIndexTitlesForTableView:(UITableView *)tableView{
-    if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        return self.sectionTitles;
-    }
-    return @[];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index{
-    if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        return index;
-    }
-    return 0;
-}
-
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        if (self.isSearchState) {
-            return self.searchResults.count;
-        }
-        else {
-            if (section == 0) {
-                return 4;
-            }else {
-                NSInteger contactCount = ((NSArray *)self.dataArray[section-1]).count;
-
-                return contactCount;
-            }
-        }
+        return 4;
     }
     return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ACDContactCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    ACDGroupEnterCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[ACDContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDContactCell reuseIdentifier]];
+        cell = [[ACDGroupEnterCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
     if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        if (self.isSearchState) {
-            cell.model = self.searchResults[indexPath.row];
-        }else {
-            if (indexPath.section == 0) {
-                if (indexPath.row == 0) {
-                    [cell.iconImageView setImage:ImageWithName(@"new_group")];
-                    cell.nameLabel.text = @"New Group";
-                }
-                
-                if (indexPath.row == 1) {
-                    [cell.iconImageView setImage:ImageWithName(@"join_group")];
-                    cell.nameLabel.text = @"Join a Group";
-                }
-
-                if (indexPath.row == 2) {
-                    [cell.iconImageView setImage:ImageWithName(@"public_group")];
-                    cell.nameLabel.text = @"Public Group List";
-                }
-
-                if (indexPath.row == 3) {
-                    [cell.iconImageView setImage:ImageWithName(@"add_contact")];
-                    cell.nameLabel.text = @"Add Contacts";
-                }
-            }else {
-             cell.model = self.dataArray[indexPath.section - 1][indexPath.row];
-            }
-            
+        if (indexPath.row == 0) {
+            [cell.iconImageView setImage:ImageWithName(@"new_group")];
+            cell.nameLabel.text = @"New Group";
         }
-    
+        
+        if (indexPath.row == 1) {
+            [cell.iconImageView setImage:ImageWithName(@"join_group")];
+            cell.nameLabel.text = @"Join a Group";
+        }
+
+        if (indexPath.row == 2) {
+            [cell.iconImageView setImage:ImageWithName(@"public_group")];
+            cell.nameLabel.text = @"Public Group List";
+        }
+
+        if (indexPath.row == 3) {
+            [cell.iconImageView setImage:ImageWithName(@"add_contact")];
+            cell.nameLabel.text = @"Add Contacts";
+        }
     }else {
         if (indexPath.row == 0) {
             [cell.iconImageView setImage:ImageWithName(@"add_contact")];
@@ -278,22 +178,20 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        if (indexPath.section == 0) {
-            if (indexPath.row == 0) {
-                [self goCreateNewGroup];
-            }
-            
-            if (indexPath.row == 1) {
-                [self joinPublicGroup];
-            }
-            
-            if (indexPath.row == 2) {
-                [self goPublicGroupList];
-            }
+        if (indexPath.row == 0) {
+            [self goCreateNewGroup];
+        }
+        
+        if (indexPath.row == 1) {
+            [self joinPublicGroup];
+        }
+        
+        if (indexPath.row == 2) {
+            [self goPublicGroupList];
+        }
 
-            if (indexPath.row == 3) {
-                [self goAddContact];
-            }
+        if (indexPath.row == 3) {
+            [self goAddContact];
         }
     }else {
         if (indexPath.row == 0) {
@@ -319,7 +217,7 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 - (ACDContactListController *)contactVC {
     if (_contactVC == nil) {
         _contactVC = ACDContactListController.new;
-
+        _contactVC.view.hidden = YES;
     }
     return _contactVC;
 }
@@ -339,6 +237,4 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
     return _table;
 }
 
-
 @end
-#undef kHeaderInSection

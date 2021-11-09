@@ -10,7 +10,6 @@
 #import "AgoraApplyModel.h"
 
 #define kAcceptButtonHeight 72.0f
-#define kIconImageViewHeight 58.0f
 
 @interface ACDRequestCell ()
 @property (nonatomic, strong) UIButton *acceptButton;
@@ -34,11 +33,11 @@
 
 
 - (void)placeSubViews {
-    self.iconImageView.layer.cornerRadius = kIconImageViewHeight * 0.5;
+    
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(12.0f);
         make.left.equalTo(self.contentView).offset(16.0f);
-        make.size.equalTo(@kIconImageViewHeight);
+        make.size.equalTo(@58.0f);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -98,26 +97,13 @@
     self.timeLabel.text = @"Now";
     self.contentLabel.text = self.model.reason;
     
-//    NSString *iconImageName = @"";
-//    if (self.model.style == AgoraApplyStyle_contact) {
-//        iconImageName = @"default_avatar";
-//    }else {
-//        iconImageName = @"group_default_avatar";
-//    }
-//
-//    [self.iconImageView setImage:ImageWithName(iconImageName)];
-  
-    UIImage *avatarImage = nil;
+    NSString *iconImageName = @"";
     if (self.model.style == AgoraApplyStyle_contact) {
-        avatarImage = [UIImage imageWithColor:AvatarLightGreenColor size:CGSizeMake(kIconImageViewHeight, kIconImageViewHeight)];
+        iconImageName = @"default_avatar";
     }else {
-        UIImage *originImage = ImageWithName(@"group_default_avatar");
-        
-        avatarImage = [originImage acd_scaleToAssignSize:CGSizeMake(kIconImageViewHeight, kIconImageViewHeight)];
-     }
-    
-    [self.iconImageView setImage:avatarImage];
-
+        iconImageName = @"group_default_avatar";
+    }
+    [self.iconImageView setImage:ImageWithName(iconImageName)];
     
 }
 
@@ -172,7 +158,4 @@
 
 
 @end
-
 #undef kAcceptButtonHeight
-#undef kIconImageViewHeight
-

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDGroupMemberMutedListViewController : ACDContainerSearchTableViewController
 
-- (instancetype)initWithGroup:(AgoraChatGroup *)aGroup;
+@property (nonatomic,strong) NSArray *muteList;
 
 @end
 

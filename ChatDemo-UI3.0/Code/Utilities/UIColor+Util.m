@@ -42,32 +42,4 @@
     return [UIColor colorWithRed:((float) r / 255.0f) green:((float) g / 255.0f) blue:((float) b / 255.0f) alpha:1.0f];
 }
 
-+ (UIColor *)avatarRandomColor {
-        int randomIndex = arc4random() % 5 + 1;
-        UIColor *avatarColor = nil;
-        switch (randomIndex) {
-            case 1:
-                avatarColor = AvatarLightBlueColor;
-                break;
-            case 2:
-                avatarColor = AvatarLightYellowColor;
-                break;
-            case 3:
-                avatarColor = AvatarLightGreenColor;
-                break;
-            case 4:
-                avatarColor = AvatarLightGrayColor;
-                break;
-            case 5:
-                avatarColor = AvatarLightOrangeColor;
-                break;
-
-            default:
-                avatarColor = AvatarLightBlueColor;
-                break;
-        }
-    return avatarColor;
-}
-
-
 @end

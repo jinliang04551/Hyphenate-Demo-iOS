@@ -11,7 +11,7 @@
 #import "AgoraContactsViewController.h"
 #import "AgoraMainViewController.h"
 #import "AgoraPushNotificationViewController.h"
-#import "AgoraChatsViewController.h"
+#import "ACDChatsViewController.h"
 #import "AgoraSettingsViewController.h"
 #import "ACDContactsViewController.h"
 
@@ -27,7 +27,7 @@
 
 @property (nonatomic, weak) AgoraPushNotificationViewController *pushVC;
 
-@property (nonatomic, weak) AgoraChatsViewController *chatsVC;
+@property (nonatomic, weak) ACDChatsViewController *chatsVC;
 
 + (instancetype)shareHelper;
 

@@ -7,8 +7,19 @@
  * the property of Hyphenate Inc.
  */
 
-#ifndef EMChatDemoUIDefine_h
-#define EMChatDemoUIDefine_h
+#ifndef AgoraChatChatDemoUIDefine_h
+#define AgoraChatChatDemoUIDefine_h
+
+#define kIsBangsScreen ({\
+    BOOL isBangsScreen = NO; \
+    if (@available(iOS 11.0, *)) { \
+    UIWindow *window = [[UIApplication sharedApplication].windows firstObject]; \
+    isBangsScreen = window.safeAreaInsets.bottom > 0; \
+    } \
+    isBangsScreen; \
+})
+
+#define AgoraChatVIEWTOPMARGIN (kIsBangsScreen ? 34.f : 0.f)
 
 #define ChatDemo_DEBUG 1
 
@@ -51,9 +62,13 @@
 #define BFont(__SIZE) [UIFont boldSystemFontOfSize:__SIZE]//system bold font with size
 #define Font(__NAME, __SIZE) [UIFont fontWithName:__NAME size:__SIZE] //font with name and size
 
-//消息撤回
+//message recall
 #define MSG_EXT_RECALL @"agora_recall"
 
-#define kAvatarHeight 40.0f
+#define GROUP_LIST_FETCHFINISHED @"AgoraChatGroupListFetchFinished"
+#define CHAT_BACKOFF @"AgoraChatChatBackOff"
+#define USERINFO_UPDATE @"userinfo_update"
+#define USERINFO_LIST @"userinfo_list"
 
-#endif /* EMChatDemoUIDefine_h */
+
+#endif /* AgoraChatChatDemoUIDefine_h */

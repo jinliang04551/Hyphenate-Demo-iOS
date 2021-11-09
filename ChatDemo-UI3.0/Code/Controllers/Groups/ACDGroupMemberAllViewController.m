@@ -8,6 +8,7 @@
 
 #import "ACDGroupMemberAllViewController.h"
 #import "AgoraGroupOccupantsViewController.h"
+
 #import "UIViewController+HUD.h"
 #import "AgoraNotificationNames.h"
 #import "ACDContainerSearchTableViewController+GroupMemberList.h"
@@ -20,6 +21,7 @@
 @property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) AgoraChatGroup *group;
 @property (nonatomic, strong) NSString *cursor;
+@property (nonatomic, strong) NSMutableArray *ownerAndAdmins;
 
 @end
 
@@ -33,6 +35,7 @@
         self.groupId = self.group.groupId;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUIWithNotification:) name:KAgora_REFRESH_GROUP_INFO object:nil];
+
     }
     
     return self;
@@ -42,50 +45,111 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self tableViewDidTriggerHeaderRefresh];
+    [self loadAllMembers];
+    [self.table reloadData];
 }
 
-- (void)updateUIWithResultList:(NSArray *)sourceList IsHeader:(BOOL)isHeader {
-    
-    NSLog(@"%s sourceList:%@ isHeader:%@",__func__,sourceList,@(isHeader));
-    if (isHeader) {
-        [self.dataArray removeAllObjects];
-        [self.dataArray addObject:self.group.owner];
-        [self.dataArray addObjectsFromArray:self.group.adminList];
+- (void)loadAllMembers {
+    [self.ownerAndAdmins addObject:self.group.owner];
+    [self.ownerAndAdmins addObject:self.group.adminList];
+
+    [self sortALlMembers];
+}
+
+- (void)sortALlMembers {
+    [self sortMembers:self.group.occupants];
+}
+
+
+- (void)sortMembers:(NSArray *)members {
+    if (members.count == 0) {
+        self.dataArray = [@[] mutableCopy];
+        self.sectionTitles = [@[] mutableCopy];
+        self.searchSource = [@[] mutableCopy];
+        return;
     }
     
-    [self.dataArray addObjectsFromArray:sourceList];
+    if (members.count == 1) {
+        NSString *firstLetter = [self.group.owner substringToIndex:1];
+        [self.dataArray addObject:self.group.owner];
+        self.sectionTitles = [NSMutableArray arrayWithObject:firstLetter];
+        self.searchSource = self.dataArray;
+        return;
+    }
+    
+    NSLog(@"%s members:%@",__func__,members);
 
+    NSMutableArray *sectionTitles = nil;
+    NSMutableArray *searchSource = nil;
+    NSArray *sortArray = [NSArray sortContacts:members
+                                 sectionTitles:&sectionTitles
+                                  searchSource:&searchSource];
+    [self.dataArray removeAllObjects];
+    [self.dataArray addObjectsFromArray:sortArray];
+    self.sectionTitles = [NSMutableArray arrayWithArray:sectionTitles];
+    self.searchSource = [NSMutableArray arrayWithArray:searchSource];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark overload method
+- (void)updateUIWithGroupId:(NSString *)groupId {
+    
+}
+
 
 #pragma mark updateUIWithNotification
 - (void)updateUIWithNotification:(NSNotification *)notify {
-    [self tableViewDidTriggerHeaderRefresh];
+    self.cursor = @"";
+    [self fetchMembersWithCursor:self.cursor isHeader:YES];
 }
 
 
 #pragma mark - Table view data source
+//- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)table {
+//    return self.sectionTitles;
+//}
+//
+//- (NSInteger)table:(UITableView *)table sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+//    return index;
+//}
+//
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    return [self.dataArray count];
+//}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)table {
-    return 1;
+    if (self.isSearchState) {
+        return 1;
+    }
+    return  self.sectionTitles.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)table {
+    return self.sectionTitles;
+}
+
+- (NSInteger)table:(UITableView *)table sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    return index;
+}
+
+- (NSInteger)table:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     if (self.isSearchState) {
         return self.searchResults.count;
     }
-    return self.dataArray.count;
+   
+//    return ((NSArray *)self.dataArray[section]).count;
+    return 1;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [ACDInfoDetailCell height];
-}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ACDInfoDetailCell *cell = (ACDInfoDetailCell *)[tableView dequeueReusableCellWithIdentifier:[ACDInfoDetailCell reuseIdentifier]];
@@ -95,22 +159,129 @@
     }
     
     NSString *name = self.dataArray[indexPath.row];
+    cell.iconImageView.image = [UIImage imageNamed:@"default_avatar"];
     cell.nameLabel.text = name;
 
-    if (name == self.group.owner) {
-        cell.detailLabel.text = @"owner";
-    } else if([self.group.adminList containsObject:name]){
-        cell.detailLabel.text = @"admin";
-    }else {
-        cell.detailLabel.text = @"";
+    if ([self.ownerAndAdmins containsObject:name]) {
+        if (name == self.group.owner) {
+            cell.detailLabel.text = @"owner";
+        } else {
+            cell.detailLabel.text = @"admin";
+        }
     }
 
     ACD_WS
     cell.tapCellBlock = ^{
-        [weakSelf actionSheetWithUserId:name memberListType:ACDGroupMemberListTypeALL group:weakSelf.group];
+        
     };
     return cell;
 }
+
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    NSInteger section = indexPath.section;
+//    NSInteger row = indexPath.row;
+//    if (section == 0 && row == 0) {
+//        return NO;
+//    }
+//
+//    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
+//        return YES;
+//    }
+//
+//    return NO;
+//}
+
+//- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.remove", @"Remove") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+//        [self editActionsForRowAtIndexPath:indexPath actionIndex:0];
+//    }];
+//    deleteAction.backgroundColor = [UIColor redColor];
+//
+//    UITableViewRowAction *blackAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.block", @"Block") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+//        [self editActionsForRowAtIndexPath:indexPath actionIndex:1];
+//    }];
+//    blackAction.backgroundColor = [UIColor colorWithRed: 50 / 255.0 green: 63 / 255.0 blue: 72 / 255.0 alpha:1.0];
+//
+//    UITableViewRowAction *muteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.mute", @"Mute") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+//        [self editActionsForRowAtIndexPath:indexPath actionIndex:2];
+//    }];
+//    muteAction.backgroundColor = [UIColor colorWithRed: 116 / 255.0 green: 134 / 255.0 blue: 147 / 255.0 alpha:1.0];
+//
+//    UITableViewRowAction *toAdminAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.upgrade", @"Up") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+//        [self editActionsForRowAtIndexPath:indexPath actionIndex:3];
+//    }];
+//    toAdminAction.backgroundColor = [UIColor colorWithRed: 50 / 255.0 green: 63 / 255.0 blue: 72 / 255.0 alpha:1.0];
+//
+//    if (indexPath.section == 1) {
+//        return @[deleteAction, blackAction, muteAction, toAdminAction];
+//    }
+//
+//    return @[deleteAction, blackAction, muteAction];
+//}
+//
+#pragma mark - Action
+
+//- (void)editActionsForRowAtIndexPath:(NSIndexPath *)indexPath actionIndex:(NSInteger)buttonIndex
+//{
+//    NSString *userName = @"";
+//    if (indexPath.section == 0) {
+//        userName = [self.ownerAndAdmins objectAtIndex:indexPath.row];
+//    } else {
+//        userName = [self.dataArray objectAtIndex:indexPath.row];
+//    }
+//
+//    [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
+//
+//    __weak typeof(self) weakSelf = self;
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        AgoraChatError *error = nil;
+//        if (buttonIndex == 0) { //Remove
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                if (indexPath.section == 0) {
+//                    [weakSelf.ownerAndAdmins removeObject:userName];
+//                } else {
+//                    [weakSelf.dataArray removeObject:userName];
+//                }
+//            }
+//        } else if (buttonIndex == 1) { //Blacklist
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                if (indexPath.section == 0) {
+//                    [weakSelf.ownerAndAdmins removeObject:userName];
+//                } else {
+//                    [weakSelf.dataArray removeObject:userName];
+//                }
+//            }
+//        } else if (buttonIndex == 2) {  //Mute
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
+//        } else if (buttonIndex == 3) {  //To Admin
+//            weakSelf.group = [[AgoraChatClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
+//            if (!error) {
+//                [weakSelf.ownerAndAdmins addObject:userName];
+//                [weakSelf.dataArray removeObject:userName];
+//            }
+//        }
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf hideHud];
+//            if (!error) {
+//                if (buttonIndex != 2) {
+//                    [weakSelf.table reloadData];
+//                } else {
+//                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
+//                }
+//
+//                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:weakSelf.group];
+//            }
+//            else {
+//                [weakSelf showHint:error.errorDescription];
+//            }
+//        });
+//    });
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -119,46 +290,95 @@
 
 
 #pragma mark - private
+
+- (BOOL)_isShowCellAccessoryView
+{
+    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+#pragma mark - data
+
 - (void)tableViewDidTriggerHeaderRefresh
 {
     self.cursor = @"";
-    [self fetchMembersWithCursor:self.cursor isHeader:YES];
-
+    [self fetchGroupInfo];
 }
 
 - (void)tableViewDidTriggerFooterRefresh
 {
-    NSLog(@"%s",__func__);
-    
     [self fetchMembersWithCursor:self.cursor isHeader:NO];
 }
 
+- (void)fetchGroupInfo
+{
+    __weak typeof(self) weakSelf = self;
+    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
+        [weakSelf hideHud];
+        
+        if (!aError) {
+            weakSelf.group = aGroup;
+            AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:aGroup.groupId type:AgoraChatConversationTypeGroupChat createIfNotExist:YES];
+            if ([aGroup.groupId isEqualToString:conversation.conversationId]) {
+                NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+                [ext setObject:aGroup.subject forKey:@"subject"];
+                [ext setObject:[NSNumber numberWithBool:aGroup.isPublic] forKey:@"isPublic"];
+                conversation.ext = ext;
+            }
+            
+            
+            [weakSelf.ownerAndAdmins removeAllObjects];
+            [weakSelf.ownerAndAdmins addObject:aGroup.owner];
+            [weakSelf.ownerAndAdmins addObjectsFromArray:aGroup.adminList];
+            
+            weakSelf.cursor = @"";
+            [weakSelf fetchMembersWithCursor:weakSelf.cursor isHeader:YES];
+        }
+        else{
+            [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
+        }
+    }];
+}
 
 - (void)fetchMembersWithCursor:(NSString *)aCursor
                       isHeader:(BOOL)aIsHeader
 {
-    NSLog(@"%s aCursor:%@ aIsHeader:%@",__func__,aCursor,@(aIsHeader));
     NSInteger pageSize = 50;
-    
-    ACD_WS
+    __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         weakSelf.cursor = aResult.cursor;
         [weakSelf hideHud];
 //        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         if (!aError) {
-            [weakSelf updateUIWithResultList:aResult.list IsHeader:aIsHeader];
+            if (aIsHeader) {
+                [weakSelf.dataArray removeAllObjects];
+            }
+            
+            [weakSelf.dataArray addObjectsFromArray:aResult.list];
+            [weakSelf.table reloadData];
         } else {
             [weakSelf showHint:NSLocalizedString(@"group.member.fetchFail", @"Failed to get the group details, please try again later")];
         }
         
         if ([aResult.list count] < pageSize) {
 //            weakSelf.showRefreshFooter = NO;
-            [weakSelf.table reloadData];
         } else {
 //            weakSelf.showRefreshFooter = YES;
         }
     }];
+}
+
+
+- (NSMutableArray *)ownerAndAdmins {
+    if (_ownerAndAdmins == nil) {
+        _ownerAndAdmins = NSMutableArray.new;
+    }
+    return _ownerAndAdmins;
 }
 
 

@@ -22,6 +22,8 @@
 @implementation ACDGroupNewCell
 
 - (void)prepare {
+//    self.nameLabel.backgroundColor = UIColor.yellowColor;
+//    self.numberCountLabel.backgroundColor = UIColor.blueColor;
     
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [self.contentView addSubview:self.iconImageView];
@@ -32,12 +34,11 @@
 
 - (void)placeSubViews {
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    self.iconImageView.clipsToBounds = NO;
     
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.contentView);
         make.left.equalTo(self.contentView).offset(16.0f);
-        make.width.mas_equalTo(kAvatarHeight);
+        make.size.equalTo(@40.0f);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {

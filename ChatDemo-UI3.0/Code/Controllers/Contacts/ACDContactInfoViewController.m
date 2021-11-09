@@ -103,8 +103,8 @@ typedef enum : NSUInteger {
     
     ACD_WS
     if (indexPath.row == 0) {
-        [cell.iconImageView setImage:ImageWithName(@"blocked")];
-        cell.nameLabel.text = @"block";
+        [cell.imageView setImage:ImageWithName(@"blocked")];
+        cell.textLabel.text = @"block";
         
         cell.tapCellBlock = ^{
             [weakSelf blockAction];
@@ -113,8 +113,8 @@ typedef enum : NSUInteger {
     }
     
     if (indexPath.row == 1) {
-        [cell.iconImageView setImage:ImageWithName(@"delete")];
-        cell.nameLabel.text = @"delete";
+        [cell.imageView setImage:ImageWithName(@"delete")];
+        cell.textLabel.text = @"delete";
         cell.tapCellBlock = ^{
             [weakSelf deleteAction];
         };
@@ -241,7 +241,6 @@ typedef enum : NSUInteger {
         
         _contactInfoHeaderView.goChatPageBlock = ^{
             AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
-            chatViewController.navTitle = weakSelf.model.nickname;
             [weakSelf.navigationController pushViewController:chatViewController animated:YES];
         };
         
