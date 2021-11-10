@@ -110,7 +110,6 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     WEAK_SELF
     [[AgoraChatClient sharedClient] logout:YES completion:^(AgoraChatError *aError) {
-        
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (!aError) {
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO userInfo:@{@"userName":@"",@"nickName":@""}];

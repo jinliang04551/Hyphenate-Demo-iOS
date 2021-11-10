@@ -23,7 +23,8 @@
 #define ChatDemoUIAppKey @"easemob-demo#chatdemoui"
 #define HongKongAppkey @"52366312#441909"
 #define MeidongAppkey @"41117440#383391"
-
+#define Appkey @"61308276#489779"
+ 
 
 @interface AppDelegate () <AgoraChatClientDelegate,UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) NSString *userName;
@@ -101,7 +102,7 @@
 
 - (void)initUIKit
 {
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:EaseIMAppKey];
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:Appkey];
     
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -216,10 +217,6 @@
             UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:errorDes delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
             [alertError show];
         };
-        
-        if ([AgoraChatClient sharedClient].isLoggedIn) {
-            [[AgoraChatClient sharedClient] logout:YES];
-        }
         
         if (self.userName.length == 0 || self.nickName.length == 0) return;
         //unify token login

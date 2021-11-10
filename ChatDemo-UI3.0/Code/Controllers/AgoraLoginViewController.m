@@ -126,10 +126,6 @@
         [alertError show];
     };
     
-    if ([AgoraChatClient sharedClient].isLoggedIn) {
-        [[AgoraChatClient sharedClient] logout:YES];
-    }
-    
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     //unify token login
     __weak typeof(self) weakself = self;
