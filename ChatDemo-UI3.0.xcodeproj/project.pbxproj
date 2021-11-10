@@ -188,8 +188,8 @@
 		9ECE66EF273B6F69007CF85F /* AgoraChatConvUserDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE66E7273B6F69007CF85F /* AgoraChatConvUserDataModel.m */; };
 		9ECE66F0273B6F69007CF85F /* AgoraChatUserDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE66E9273B6F69007CF85F /* AgoraChatUserDataModel.m */; };
 		9ECE66F1273B6F69007CF85F /* ACDChatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE66EB273B6F69007CF85F /* ACDChatsViewController.m */; };
-		9ECE66F2273B6F69007CF85F /* ACDChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE66EC273B6F69007CF85F /* ACDChatViewController.m */; };
 		9ECE66F3273B6F69007CF85F /* backleft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9ECE66ED273B6F69007CF85F /* backleft@3x.png */; };
+		9ECE66FE273BF842007CF85F /* ACDChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE66FD273BF841007CF85F /* ACDChatViewController.m */; };
 		D20E26D71DCA011C00B3FAC6 /* icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D41DCA011C00B3FAC6 /* icon_info.png */; };
 		D20E26D81DCA011C00B3FAC6 /* icon_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */; };
 		D20E26D91DCA011C00B3FAC6 /* icon_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D61DCA011C00B3FAC6 /* icon_info@3x.png */; };
@@ -936,11 +936,11 @@
 		9ECE66E7273B6F69007CF85F /* AgoraChatConvUserDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraChatConvUserDataModel.m; sourceTree = "<group>"; };
 		9ECE66E8273B6F69007CF85F /* AgoraChatUserDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatUserDataModel.h; sourceTree = "<group>"; };
 		9ECE66E9273B6F69007CF85F /* AgoraChatUserDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraChatUserDataModel.m; sourceTree = "<group>"; };
-		9ECE66EA273B6F69007CF85F /* ACDChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ACDChatViewController.h; path = "../../../../../EaseChat/ChatDemo-UI3.0/Code/Controllers/Chats/ACDChatViewController.h"; sourceTree = "<group>"; };
 		9ECE66EB273B6F69007CF85F /* ACDChatsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACDChatsViewController.m; sourceTree = "<group>"; };
-		9ECE66EC273B6F69007CF85F /* ACDChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ACDChatViewController.m; path = "../../../../../EaseChat/ChatDemo-UI3.0/Code/Controllers/Chats/ACDChatViewController.m"; sourceTree = "<group>"; };
 		9ECE66ED273B6F69007CF85F /* backleft@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backleft@3x.png"; sourceTree = "<group>"; };
-		9ECE66F4273B7121007CF85F /* AgoraChatDemoUIDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AgoraChatDemoUIDefine.h; path = "../../EaseChat/ChatDemo-UI3.0/AgoraChatDemoUIDefine.h"; sourceTree = "<group>"; };
+		9ECE66FB273BF7B5007CF85F /* AgoraChatDemoUIDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatDemoUIDefine.h; sourceTree = "<group>"; };
+		9ECE66FC273BF841007CF85F /* ACDChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACDChatViewController.h; sourceTree = "<group>"; };
+		9ECE66FD273BF841007CF85F /* ACDChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACDChatViewController.m; sourceTree = "<group>"; };
 		D16326FFC6F317D24E92E388 /* Pods-ChatDemo-UI3.0.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatDemo-UI3.0.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0.release.xcconfig"; sourceTree = "<group>"; };
 		D20E26D41DCA011C00B3FAC6 /* icon_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_info.png; sourceTree = "<group>"; };
 		D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_info@2x.png"; sourceTree = "<group>"; };
@@ -2021,7 +2021,7 @@
 		D28345021D8FD1D400FD48A9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				9ECE66F4273B7121007CF85F /* AgoraChatDemoUIDefine.h */,
+				9ECE66FB273BF7B5007CF85F /* AgoraChatDemoUIDefine.h */,
 				7F3E7F87267A3053009CEAB6 /* AgoraChatDemoEnum.h */,
 				D28345031D8FD1D400FD48A9 /* main.m */,
 				D283451F1D8FDC8200FD48A9 /* Localizable.strings */,
@@ -2099,8 +2099,8 @@
 			children = (
 				9ECE66E4273B6F69007CF85F /* ACDChatsViewController.h */,
 				9ECE66EB273B6F69007CF85F /* ACDChatsViewController.m */,
-				9ECE66EA273B6F69007CF85F /* ACDChatViewController.h */,
-				9ECE66EC273B6F69007CF85F /* ACDChatViewController.m */,
+				9ECE66FC273BF841007CF85F /* ACDChatViewController.h */,
+				9ECE66FD273BF841007CF85F /* ACDChatViewController.m */,
 				9ECE66E6273B6F69007CF85F /* AgoraChatConvUserDataModel.h */,
 				9ECE66E7273B6F69007CF85F /* AgoraChatConvUserDataModel.m */,
 				9ECE66E8273B6F69007CF85F /* AgoraChatUserDataModel.h */,
@@ -3412,7 +3412,6 @@
 			files = (
 				EC54DCE62721502200ABEE3E /* MISScrollPageCollectionView.m in Sources */,
 				3A79D10A1E77AAF40085AB6E /* AgoraGroupInfoViewController.m in Sources */,
-				9ECE66F2273B6F69007CF85F /* ACDChatViewController.m in Sources */,
 				9ECE66C3273B6E7C007CF85F /* UserInfoStore.m in Sources */,
 				7F6CC8E826568C8600BA60BB /* AgoraPushNotificationViewController.m in Sources */,
 				EC432EB4271D852C001B31DE /* AgoraNewLoginViewController.m in Sources */,
@@ -3504,6 +3503,7 @@
 				EC54DD532722A45100ABEE3E /* ACDMAXGroupNumberCell.m in Sources */,
 				7FB1588326A18C4300B995F3 /* AgoraChatBaseTextField.m in Sources */,
 				EC54DDE12727F1B400ABEE3E /* ACDNoDataPromptView.m in Sources */,
+				9ECE66FE273BF842007CF85F /* ACDChatViewController.m in Sources */,
 				7F0516D526A0122B00B2C795 /* AgoraChatBaseViewController.m in Sources */,
 				EC54DE21272A8AD800ABEE3E /* ACDGroupMembersViewController.m in Sources */,
 				9ECE66C7273B6E7C007CF85F /* AgoraChatRefreshTableViewController.m in Sources */,

@@ -65,7 +65,7 @@
                   nickName:(NSString *)nickName
                 completion:(void (^)(NSInteger statusCode, NSString *response))aCompletionBlock
 {
-    NSURL *url = [NSURL URLWithString:@"http://hk.test.easemob.com/app/chat/user/login"];
+    NSURL *url = [NSURL URLWithString:@"https://a61.easemob.com/app/chat/user/login"];
     NSMutableURLRequest *request = [NSMutableURLRequest
                                                 requestWithURL:url];
     request.HTTPMethod = @"POST";

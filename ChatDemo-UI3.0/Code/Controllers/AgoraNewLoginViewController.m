@@ -8,6 +8,7 @@
 
 #import "AgoraNewLoginViewController.h"
 #import "AgoraChatHttpRequest.h"
+#import "UserInfoStore.h"
 
 #define kLoginButtonHeight 48.0f
 
@@ -120,12 +121,21 @@
     [self.view endEditing:YES];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    void (^finishBlock) (NSString *aName, AgoraChatError *aError) = ^(NSString *aName, AgoraChatError *aError) {
+    void (^finishBlock) (NSString *aName, NSString *nickName, AgoraChatError *aError) = ^(NSString *aName, NSString *nickName, AgoraChatError *aError) {
         if (!aError) {
+            if (nickName) {
+                [AgoraChatClient.sharedClient.userInfoManager updateOwnUserInfo:nickName withType:AgoraChatUserInfoTypeNickName completion:^(AgoraChatUserInfo *aUserInfo, AgoraChatError *aError) {
+                    if (!aError) {
+                        [UserInfoStore.sharedInstance setUserInfo:aUserInfo forId:aName];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:USERINFO_UPDATE  object:nil userInfo:@{USERINFO_LIST:@[aUserInfo]}];
+                    }
+                }];
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.succeed", @"Sign in succeed") delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
                 [alertError show];
-                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES userInfo:@{@"userName":aName,@"nickName":_passwordTextField.text}];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES userInfo:@{@"userName":aName,@"nickName":!nickName ? @"" : nickName}];
             });
             return ;
         }
@@ -152,16 +162,8 @@
         [alertError show];
     };
     
-    if ([AgoraChatClient sharedClient].isLoggedIn) {
-        [[AgoraChatClient sharedClient] logout:YES];
-    }
-    
-    [[AgoraChatClient sharedClient] loginWithUsername:[_usernameTextField.text lowercaseString] password:_passwordTextField.text completion:finishBlock];
-    return;
-    
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     //unify token login
-    __weak typeof(self) weakself = self;
     [[AgoraChatHttpRequest sharedManager] loginToApperServer:[_usernameTextField.text lowercaseString] nickName:_passwordTextField.text completion:^(NSInteger statusCode, NSString * _Nonnull response) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -171,8 +173,11 @@
                 NSDictionary *responsedict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
                 NSString *token = [responsedict objectForKey:@"accessToken"];
                 NSString *loginName = [responsedict objectForKey:@"chatUserName"];
+                NSString *nickName = [responsedict objectForKey:@"chatUserNickname"];
                 if (token && token.length > 0) {
-                    [[AgoraChatClient sharedClient] loginWithUsername:[loginName lowercaseString] agoraToken:token completion:finishBlock];
+                    [[AgoraChatClient sharedClient] loginWithUsername:[loginName lowercaseString] agoraToken:token completion:^(NSString *aUsername, AgoraChatError *aError) {
+                        finishBlock(aUsername, nickName, aError);
+                    }];
                     return;
                 } else {
                     alertStr = NSLocalizedString(@"login analysis token failure", @"analysis token failure");
