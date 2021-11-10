@@ -124,14 +124,13 @@
     if (_searchJoincell == nil) {
         _searchJoincell = [[ACDSearchJoinCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDSearchJoinCell reuseIdentifier]];
         ACD_WS
-        _searchJoincell.addGroupBlock = ^{
+        _searchJoincell.tapCellBlock = ^{
             if (weakSelf.isSearchGroup) {
                 [weakSelf joinToPublicGroup:weakSelf.searchSource[0]];
 
             }else {
                 [weakSelf sendAddContact:weakSelf.searchSource[0]];
             }
-            
         };
     }
     return _searchJoincell;

@@ -217,12 +217,12 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (self.isRigisterState) {
         if (_usernameTextField.isFirstResponder &&_usernameTextField.text.length >= kMaxLimitLength) {
-            [WHToast showErrorWithMessage:NSLocalizedString(@"register.userName.outOfLimit", @"Username length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
+//            [WHToast showErrorWithMessage:NSLocalizedString(@"register.userName.outOfLimit", @"Username length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
 
         }
         
         if (_passwordTextField.isFirstResponder && _passwordTextField.text.length >= kMaxLimitLength) {
-            [WHToast showErrorWithMessage:NSLocalizedString(@"register.password.outOfLimit", @"Password length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
+//            [WHToast showErrorWithMessage:NSLocalizedString(@"register.password.outOfLimit", @"Password length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
         }
     }
     return YES;

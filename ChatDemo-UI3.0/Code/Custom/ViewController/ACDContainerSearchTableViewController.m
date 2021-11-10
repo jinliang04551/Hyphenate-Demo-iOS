@@ -26,26 +26,19 @@
 }
 
 - (void)viewDidLoadedForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidLoadedForIndex ---------- %lu", (unsigned long)index);
-    
 }
 
 - (void)viewWillAppearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewWillAppearForIndex ---------- %lu", (unsigned long)index);
 }
 
 - (void)viewDidAppearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidAppearForIndex ---------- %lu", (unsigned long)index);
 }
 
 - (void)viewWillDisappearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewWillDisappearForIndex ---------- %lu", (unsigned long)index);
-    
     self.editing = NO;
 }
 
 - (void)viewDidDisappearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidDisappearForIndex ---------- %lu", (unsigned long)index);
 }
 
 

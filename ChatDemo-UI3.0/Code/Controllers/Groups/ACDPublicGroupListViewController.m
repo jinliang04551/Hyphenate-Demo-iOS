@@ -25,9 +25,6 @@
 @interface ACDPublicGroupListViewController ()<MISScrollPageControllerContentSubViewControllerDelegate>
 @property (nonatomic, strong) ACDNoDataPromptView *noDataPromptView;
 @property (nonatomic, strong) NSString *cursor;
-@property (nonatomic, assign) BOOL isEmptySearchKey;
-@property (nonatomic, assign) BOOL isShowSearchResult;
-@property (nonatomic, strong) NSIndexPath *selectIndexPath;;
 
 
 @end
@@ -36,12 +33,29 @@
 #pragma mark life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"Public Groups";
+    
     self.view.backgroundColor = UIColor.whiteColor;
     
     [self addNotifications];
     [self loadPublicGroupsFromServer];
 
     self.table.tableFooterView = [[UIView alloc] init];
+    
+    ACD_WS
+    self.searchResultBlock = ^{
+        if (weakSelf.searchResults.count == 0) {
+            weakSelf.noDataPromptView.hidden = NO;
+        }else {
+            weakSelf.noDataPromptView.hidden = YES;
+        }
+        
+        [weakSelf.table reloadData];
+    };
+    
+    self.searchCancelBlock = ^{
+        weakSelf.noDataPromptView.hidden = YES;
+    };
 }
 
 - (void)prepare {
@@ -79,7 +93,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
 }
 
-
+    
 #pragma mark - Notification Method
 - (void)refreshGroupList:(NSNotification *)notification {
     NSArray *groupList = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];

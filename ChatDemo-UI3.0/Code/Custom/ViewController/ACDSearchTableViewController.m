@@ -9,7 +9,7 @@
 #import "ACDSearchTableViewController.h"
 #import "AgoraRealtimeSearchUtils.h"
 
-#define kSearchBarHeight 40.0f
+#define kSearchBarHeight 30.0f
 
 @interface ACDSearchTableViewController ()<UISearchBarDelegate>
 @property (nonatomic, strong) NSMutableArray *searchResults;
@@ -31,11 +31,14 @@
     [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view);
         make.left.and.right.equalTo(self.view);
-        make.height.equalTo(@kSearchBarHeight);
+        make.height.mas_equalTo(kSearchBarHeight);
     }];
     
     [self.table mas_makeConstraints:^(MASConstraintMaker* make) {
-        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(40, 0, 0, 0));
+        make.top.equalTo(self.searchBar.mas_bottom);
+        make.left.and.right.equalTo(self.view);
+        make.bottom.equalTo(self.view).offset(-5.0);
+
     }];
 
 }
@@ -59,21 +62,23 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     self.table.userInteractionEnabled = YES;
+    
+    [_searchResults removeAllObjects];
     if (searchBar.text.length == 0) {
-        [_searchResults removeAllObjects];
         [self.table reloadData];
         return;
     }
+    
     __weak typeof(self) weakSelf = self;
     [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchWithSource:_searchSource searchString:searchText resultBlock:^(NSArray *results) {
         if (results) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 _searchResults = [NSMutableArray arrayWithArray:results];
-                if (weakSelf.searchResultNullBlock && _searchResults.count == 0) {
-                    weakSelf.searchResultNullBlock();
-                }else {
-                    [weakSelf.table reloadData];
+                if (weakSelf.searchResultBlock) {
+                    weakSelf.searchResultBlock();
                 }
+                
+                [weakSelf.table reloadData];
             });
         }
     }];
@@ -89,22 +94,33 @@
     [searchBar resignFirstResponder];
     [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchDidFinish];
     _isSearchState = NO;
+    if (self.searchCancelBlock) {
+        self.searchCancelBlock();
+    }
+    [self.searchResults removeAllObjects];
     self.table.scrollEnabled = !_isSearchState;
     [self.table reloadData];
 }
 
 #pragma mark getter and setter
-- (UISearchBar *)searchBar {
+- (UISearchBar*)searchBar
+{
     if (_searchBar == nil) {
-        _searchBar = [[UISearchBar alloc] init];
-        _searchBar.delegate = self;
-        _searchBar.barTintColor = [UIColor whiteColor];
-        _searchBar.searchBarStyle = UISearchBarStyleMinimal;
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 30)];
         _searchBar.placeholder = @"Search";
-        _searchBar.layer.cornerRadius = kSearchBarHeight * 0.5;
-        _searchBar.backgroundColor = UIColor.whiteColor;
+        _searchBar.delegate = self;
+        _searchBar.showsCancelButton = NO;
+        _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
+        [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
+        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:COLOR_HEX(0xF2F2F2) size:_searchBar.bounds.size] forState:UIControlStateNormal];
+        
+        UITextField *searchField = [_searchBar valueForKey:@"searchField"];
+          if (searchField) {
+              [searchField setBackgroundColor:[UIColor whiteColor]];
+              searchField.layer.cornerRadius = 14.0f;
+              searchField.layer.masksToBounds = YES;
+          }
     }
-    
     return _searchBar;
 }
 

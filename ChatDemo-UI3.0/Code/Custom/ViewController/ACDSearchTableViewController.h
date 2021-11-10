@@ -19,7 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSMutableArray *searchResults;
 @property (nonatomic, assign, readonly) BOOL isSearchState;
 
-@property (nonatomic, copy) void (^searchResultNullBlock)(void);
+@property (nonatomic, copy) void (^searchResultBlock)(void);
+@property (nonatomic, copy) void (^searchCancelBlock)(void);
 
 
 @end

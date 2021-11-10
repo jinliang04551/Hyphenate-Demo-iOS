@@ -73,7 +73,6 @@
             [self.dataArray addObject:model];
         }
     }
-//    [self tableViewDidFinishTriggerHeader:YES];
     [self.table reloadData];
 }
 
@@ -165,6 +164,11 @@
 #pragma mark - Data
 - (void)tableViewDidTriggerHeaderRefresh
 {
+    if (self.isSearchState) {
+        [self endRefresh];
+        return;
+    }
+
     self.page = 1;
     [self fetchJoinedGroupWithPage:self.page isHeader:YES];
 }

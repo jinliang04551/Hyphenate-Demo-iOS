@@ -10,18 +10,16 @@
 
 @interface ACDSearchJoinCell ()
 @property (nonatomic, strong) UIButton *addButton;
+@property (nonatomic, strong) UILabel *addLabel;
 
 @end
 
 @implementation ACDSearchJoinCell
 
 - (void)prepare {
+    [self.contentView addGestureRecognizer:self.tapGestureRecognizer];
     [self.contentView addSubview:self.nameLabel];
-    [self.contentView addSubview:self.addButton];
-    
-//    self.nameLabel.backgroundColor = UIColor.blueColor;
-//    self.contentView.backgroundColor = UIColor.grayColor;
-//    self.addButton.backgroundColor = UIColor.yellowColor;
+    [self.contentView addSubview:self.addLabel];
 }
 
 - (void)placeSubViews {
@@ -30,10 +28,10 @@
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.contentView);
         make.left.equalTo(self.contentView).offset(kAgroaPadding * 1.6);
-        make.right.equalTo(self.addButton.mas_left).offset(-kAgroaPadding * 1.6);
+        make.right.equalTo(self.addLabel.mas_left).offset(-kAgroaPadding * 1.6);
     }];
     
-    [self.addButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.addLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.nameLabel);
         make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.6);
         make.width.equalTo(@100.0);
@@ -61,6 +59,18 @@
         [_addButton addTarget:self action:@selector(addButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _addButton;
+}
+
+- (UILabel *)addLabel {
+    if (_addLabel == nil) {
+        _addLabel = [[UILabel alloc] init];
+        _addLabel.font = [UIFont fontWithName:@"PingFangSC-Semibold" size:16.0f];
+        _addLabel.textColor = ButtonEnableBlueColor;
+        _addLabel.textAlignment = NSTextAlignmentRight;
+        _addLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        _addLabel.text = @"Apply";
+    }
+    return _addLabel;
 }
 
 @end

@@ -58,7 +58,6 @@
 - (void)tableDidTriggerHeaderRefresh {
     if (self.isSearchState) {
         [self endRefresh];
-//        [self tableViewDidFinishTriggerHeader:YES];
         return;
     }
     
