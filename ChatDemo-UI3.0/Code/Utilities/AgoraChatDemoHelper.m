@@ -75,11 +75,9 @@ static AgoraChatDemoHelper *helper = nil;
 #pragma mark - AgoraChatClientDelegate
 
 - (void)autoLoginDidCompleteWithError:(AgoraChatError *)aError {
-    if (!aError) {
-        [_contactsVC reloadGroupNotifications];
-        [_contactsVC reloadContactRequests];
-        [_contactsVC reloadContacts];
-    }
+    [_contactsVC reloadGroupNotifications];
+    [_contactsVC reloadContactRequests];
+    [_contactsVC reloadContacts];
 }
 
 #pragma mark - AgoraChatManagerDelegate
