@@ -170,6 +170,9 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 }
 
 - (void)navBarUnreadRequestIsShow:(BOOL)isShow {
+    if (self.segView.titles.count == 0) {
+        return;
+    }
     [self.segView reloadTitleRedPointWithISShow:isShow withTitleIndex:2];
 }
 
