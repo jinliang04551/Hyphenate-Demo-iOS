@@ -7,12 +7,12 @@
 //
 
 #import "ACDChatsViewController.h"
-#import "ACDChatViewController.h"
 #import "AgoraChatRealtimeSearch.h"
 #import "AgoraChatSearchResultController.h"
 #import "UserInfoStore.h"
 #import "AgoraChatConvUserDataModel.h"
 #import "ACDGroupEnterController.h"
+#import "ACDChatViewController.h"
 
 @interface ACDChatsViewController() <EaseConversationsViewControllerDelegate, AgoraChatSearchControllerDelegate>
 

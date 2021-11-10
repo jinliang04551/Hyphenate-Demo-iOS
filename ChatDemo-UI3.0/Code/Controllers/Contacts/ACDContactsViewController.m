@@ -237,7 +237,7 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 
 - (MISScrollPageContentView*)contentView {
     if(!_contentView){
-        _contentView = [self.pageController contentViewWithFrame:CGRectMake(0, 50, KScreenWidth, KScreenHeight-64-50-5-kTabBarHeight)];
+        _contentView = [self.pageController contentViewWithFrame:CGRectMake(0, 50, KScreenWidth, KScreenHeight-64-50-5-44.0)];
     }
     return _contentView;
 }
