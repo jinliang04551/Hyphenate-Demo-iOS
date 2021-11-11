@@ -13,6 +13,7 @@
 #import "AgoraChatConvUserDataModel.h"
 #import "ACDGroupEnterController.h"
 #import "ACDChatViewController.h"
+#import "ACDNaviCustomView.h"
 
 @interface ACDChatsViewController() <EaseConversationsViewControllerDelegate, AgoraChatSearchControllerDelegate>
 
@@ -23,6 +24,9 @@
 @property (nonatomic, strong) UINavigationController *resultNavigationController;
 @property (nonatomic, strong) AgoraChatSearchResultController *resultController;
 @property (strong, nonatomic) UIView *networkStateView;
+@property (nonatomic,strong) ACDNaviCustomView *navView;
+
+
 @end
 
 @implementation ACDChatsViewController
@@ -58,46 +62,75 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+//- (void)_setupSubviews
+//{
+//    self.view.backgroundColor = [UIColor clearColor];
+//    UILabel *titleLabel = [[UILabel alloc] init];
+//    titleLabel.text = @"Chats";
+//    titleLabel.textColor = [UIColor blackColor];
+//    titleLabel.font = [UIFont systemFontOfSize:18];
+//    [self.view addSubview:titleLabel];
+//    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(self.view);
+//        make.top.equalTo(self.view).offset(AgoraChatVIEWTOPMARGIN + 35);
+//        make.height.equalTo(@25);
+//    }];
+//
+//    self.addImageBtn = [[UIButton alloc]init];
+//    [self.addImageBtn setImage:[UIImage imageNamed:@"chat_nav_add"] forState:UIControlStateNormal];
+//    [self.addImageBtn addTarget:self action:@selector(chatInfoAction) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:self.addImageBtn];
+//    [self.addImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.width.height.equalTo(@35);
+//        make.centerY.equalTo(titleLabel);
+//        make.right.equalTo(self.view).offset(-16);
+//    }];
+//
+//    self.viewModel = [[EaseConversationViewModel alloc] init];
+//    self.viewModel.canRefresh = YES;
+//    self.viewModel.badgeLabelPosition = EaseAvatarTopRight;
+//
+//    self.easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:self.viewModel];
+//    self.easeConvsVC.delegate = self;
+//    [self addChildViewController:self.easeConvsVC];
+//    [self.view addSubview:self.easeConvsVC.view];
+//    [self.easeConvsVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(titleLabel.mas_bottom).offset(15);
+//        make.left.equalTo(self.view);
+//        make.right.equalTo(self.view);
+//        make.bottom.equalTo(self.view);
+//    }];
+//    [self _updateConversationViewTableHeader];
+//}
+
 - (void)_setupSubviews
 {
     self.view.backgroundColor = [UIColor clearColor];
-    UILabel *titleLabel = [[UILabel alloc] init];
-    titleLabel.text = @"Chats";
-    titleLabel.textColor = [UIColor blackColor];
-    titleLabel.font = [UIFont systemFontOfSize:18];
-    [self.view addSubview:titleLabel];
-    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
-        make.top.equalTo(self.view).offset(AgoraChatVIEWTOPMARGIN + 35);
-        make.height.equalTo(@25);
-    }];
-    
-    self.addImageBtn = [[UIButton alloc]init];
-    [self.addImageBtn setImage:[UIImage imageNamed:@"chat_nav_add"] forState:UIControlStateNormal];
-    [self.addImageBtn addTarget:self action:@selector(chatInfoAction) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.addImageBtn];
-    [self.addImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(@35);
-        make.centerY.equalTo(titleLabel);
-        make.right.equalTo(self.view).offset(-16);
-    }];
-    
     self.viewModel = [[EaseConversationViewModel alloc] init];
     self.viewModel.canRefresh = YES;
     self.viewModel.badgeLabelPosition = EaseAvatarTopRight;
-    
+
     self.easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:self.viewModel];
     self.easeConvsVC.delegate = self;
     [self addChildViewController:self.easeConvsVC];
     [self.view addSubview:self.easeConvsVC.view];
+    [self.view addSubview:self.navView];
+
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
+        make.left.right.equalTo(self.view);
+    }];
+
+
     [self.easeConvsVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(titleLabel.mas_bottom).offset(15);
+        make.top.equalTo(self.navView.mas_bottom).offset(15);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
     }];
     [self _updateConversationViewTableHeader];
 }
+
 
 - (void)_updateConversationViewTableHeader {
     self.easeConvsVC.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -431,4 +464,19 @@
     return _networkStateView;
 }
 
+
+- (ACDNaviCustomView *)navView {
+    if (_navView == nil) {
+        _navView = [[ACDNaviCustomView alloc] init];
+        ACD_WS
+        _navView.addActionBlock = ^{
+            [weakSelf chatInfoAction];
+        };
+        
+        [_navView.titleImageView setImage:ImageWithName(@"nav_title_chats")];
+        
+        [_navView.addButton setImage:ImageWithName(@"chat_nav_add") forState:UIControlStateNormal];
+    }
+    return _navView;
+}
 @end

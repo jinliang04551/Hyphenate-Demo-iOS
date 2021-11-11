@@ -76,6 +76,24 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark - Action
+- (void)headerViewTapAction {
+   
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    
+    UIAlertAction *copyAction = [UIAlertAction alertActionWithTitle:@"Copy AgoraID" iconImage:ImageWithName(@"action_icon_copy") textColor:TextLabelBlackColor alignment:NSTextAlignmentLeft completion:^{
+        [UIPasteboard generalPasteboard].string = _model.hyphenateId;
+    }];
+   
+    [alertController addAction:copyAction];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+
+#pragma mark scollView
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.y < 0) {
         CGPoint contentOffset = scrollView.contentOffset;
@@ -85,7 +103,6 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -132,9 +149,12 @@ typedef enum : NSUInteger {
     }];
     [alertController addAction:cancelAction];
     
-    [alertController addAction: [UIAlertAction actionWithTitle:@"Block" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *blackAction = [UIAlertAction actionWithTitle:@"Block" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self addBlackList];
-    }]];
+    }];
+    [blackAction setValue:TextLabelPinkColor forKey:@"titleTextColor"];
+    [alertController addAction:blackAction];
+    
     alertController.modalPresentationStyle = 0;
     [self presentViewController:alertController animated:YES completion:nil];
 
@@ -147,9 +167,13 @@ typedef enum : NSUInteger {
     }];
     [alertController addAction:cancelAction];
     
-    [alertController addAction: [UIAlertAction actionWithTitle:@"Delete" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self deleteContact];
-    }]];
+    }];
+    [deleteAction setValue:TextLabelPinkColor forKey:@"titleTextColor"];
+
+    [alertController addAction:deleteAction];
+    
     alertController.modalPresentationStyle = 0;
     [self presentViewController:alertController animated:YES completion:nil];
 }
@@ -236,7 +260,7 @@ typedef enum : NSUInteger {
         
         ACD_WS
         _contactInfoHeaderView.tapHeaderBlock = ^{
-            
+            [weakSelf headerViewTapAction];
         };
         
         _contactInfoHeaderView.goChatPageBlock = ^{
@@ -247,7 +271,6 @@ typedef enum : NSUInteger {
         
         _contactInfoHeaderView.goBackBlock = ^{
             [weakSelf.navigationController popViewControllerAnimated:YES];
-
         };
     }
     return _contactInfoHeaderView;

@@ -1282,8 +1282,6 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
         _navigationView.chatButtonBlock = ^{
             [weakSelf goInfoPage];
         };
-        
-        
     }
     return _navigationView;
 }

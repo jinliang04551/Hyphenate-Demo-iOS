@@ -9,7 +9,7 @@
 #import "ACDInfoHeaderView.h"
 #import "ACDImageTextButtonView.h"
 
-#define kMeHeaderImageViewHeight  140.0f
+#define kMeHeaderImageViewHeight  180.0
 
 
 @interface ACDInfoHeaderView ()
@@ -148,6 +148,7 @@
 
 - (void)placeAndLayoutForMeInfo {
     self.avatarImageView.layer.cornerRadius = kMeHeaderImageViewHeight * 0.5;
+    self.avatarImageView.layer.masksToBounds = YES;
     
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];

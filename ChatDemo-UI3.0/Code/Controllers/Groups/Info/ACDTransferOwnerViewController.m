@@ -201,7 +201,6 @@
 #pragma mark - Data
 - (void)updateUIWithResultList:(NSArray *)sourceList IsHeader:(BOOL)isHeader {
     
-    NSLog(@"%s sourceList:%@ isHeader:%@",__func__,sourceList,@(isHeader));
     if (isHeader) {
         [self.dataArray removeAllObjects];
         [self.dataArray addObject:self.group.owner];

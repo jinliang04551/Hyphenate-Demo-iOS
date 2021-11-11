@@ -144,7 +144,7 @@
 - (void)fetchMembersWithCursor:(NSString *)aCursor
                       isHeader:(BOOL)aIsHeader
 {
-    NSInteger pageSize = 5;
+    NSInteger pageSize = 50;
     
     ACD_WS
     [self showHudInView:self.view hint:@"Load data..."];
@@ -160,7 +160,6 @@
             [weakSelf showHint:@"Failed to get the group details, please try again later"];
         }
         
-        [weakSelf.table reloadData];
 
         if ([aResult.list count] < pageSize) {
             [weakSelf endLoadMore];
@@ -168,6 +167,8 @@
         } else {
             [weakSelf useLoadMore];
         }
+
+        [weakSelf.table reloadData];
 
     }];
 }
