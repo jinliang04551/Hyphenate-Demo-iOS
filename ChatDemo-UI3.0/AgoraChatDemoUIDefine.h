@@ -58,6 +58,7 @@
 #define kAvatarHeight 40.0f
 
 //user
+#define USER_NAME @"user_name"
 #define USER_NICKNAME @"nick_name"
 
 //fonts

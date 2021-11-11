@@ -16,9 +16,20 @@
         _easeId = userInfo.userId;
         _showName = userInfo.nickName;
         _avatarURL = userInfo.avatarUrl;
-        _defaultAvatar = [UIImage imageNamed:@"defaultAvatar"];
+        _defaultAvatar = [self getAvatar:userInfo.userId];
     }
     return self;
+}
+
+- (UIImage *)getAvatar:(NSString *)uName
+{
+    if ([uName isEqualToString:AgoraChatClient.sharedClient.currentUsername]) {
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        NSString *imageName = [userDefault valueForKey:[NSString stringWithFormat:@"%@_avatar",AgoraChatClient.sharedClient.currentUsername]];
+        return ImageWithName(imageName);
+    }
+    
+    return ImageWithName(@"defaultAvatar");
 }
 
 @end

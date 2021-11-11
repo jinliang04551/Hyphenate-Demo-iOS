@@ -18,6 +18,7 @@
 #import "AgoraAboutViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "ACDModifyAvatarViewController.h"
+#import "UserInfoStore.h"
 
 #define kInfoHeaderViewHeight 320.0
 #define kHeaderInSection  30.0
@@ -115,6 +116,11 @@ typedef enum : NSUInteger {
         
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (!aError) {
+            NSUserDefaults *shareDefault = [NSUserDefaults standardUserDefaults];
+            [shareDefault setObject:@"" forKey:USER_NAME];
+            [shareDefault setObject:@"" forKey:USER_NICKNAME];
+            [shareDefault synchronize];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO userInfo:@{@"userName":@"",@"nickName":@""}];
         } else {
             [weakSelf showHint:[NSString stringWithFormat:@"%@:%u",NSLocalizedString(@"logout.failed", @"Logout failed"), aError.code]];
@@ -205,6 +211,10 @@ typedef enum : NSUInteger {
         self.userInfoHeaderView.nameLabel.text = self.myNickName;
 
         [AgoraChatUserInfoManagerHelper updateUserInfoWithUserId:newName withType:AgoraChatUserInfoTypeNickName completion:^(AgoraChatUserInfo * _Nonnull aUserInfo) {
+            if (aUserInfo) {
+                [UserInfoStore.sharedInstance setUserInfo:aUserInfo forId:AgoraChatClient.sharedClient.currentUsername];
+                [[NSNotificationCenter defaultCenter] postNotificationName:USERINFO_UPDATE  object:nil userInfo:@{USERINFO_LIST:@[aUserInfo]}];
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.table reloadData];
             });

@@ -112,6 +112,11 @@
     [[AgoraChatClient sharedClient] logout:YES completion:^(AgoraChatError *aError) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (!aError) {
+            NSUserDefaults *shareDefault = [NSUserDefaults standardUserDefaults];
+            [shareDefault setObject:@"" forKey:USER_NAME];
+            [shareDefault setObject:@"" forKey:USER_NICKNAME];
+            [shareDefault synchronize];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO userInfo:@{@"userName":@"",@"nickName":@""}];
         } else {
             [weakSelf showHint:[NSString stringWithFormat:@"%@:%u",NSLocalizedString(@"logout.failed", @"Logout failed"), aError.code]];

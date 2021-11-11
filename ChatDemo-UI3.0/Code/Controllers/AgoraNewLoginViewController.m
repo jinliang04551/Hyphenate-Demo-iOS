@@ -131,6 +131,12 @@
                     }
                 }];
             }
+            
+            NSUserDefaults *shareDefault = [NSUserDefaults standardUserDefaults];
+            [shareDefault setObject:aName forKey:USER_NAME];
+            [shareDefault setObject:nickName forKey:USER_NICKNAME];
+            [shareDefault synchronize];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.succeed", @"Sign in succeed") delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
                 [alertError show];

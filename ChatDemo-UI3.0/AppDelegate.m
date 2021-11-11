@@ -52,7 +52,7 @@
         [[UINavigationBar appearance] setTranslucent:NO];
     }
             
-    
+    [self initAccount];
 //    [self initSDK];
     [self initUIKit];
     
@@ -99,6 +99,12 @@
     [[AgoraChatClient sharedClient] initializeSDKWithOptions:options];
 }
 
+- (void)initAccount
+{
+    NSUserDefaults *shareDefault = [NSUserDefaults standardUserDefaults];
+    self.userName = [shareDefault objectForKey:USER_NAME] ? (NSString *)[shareDefault objectForKey:USER_NAME] : @"";
+    self.nickName = [shareDefault objectForKey:USER_NICKNAME] ? (NSString *)[shareDefault objectForKey:USER_NICKNAME] : @"";
+}
 
 - (void)initUIKit
 {

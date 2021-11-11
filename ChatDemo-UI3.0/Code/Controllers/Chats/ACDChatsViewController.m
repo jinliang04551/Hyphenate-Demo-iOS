@@ -73,8 +73,8 @@
     }];
     
     self.addImageBtn = [[UIButton alloc]init];
-    [self.addImageBtn setImage:[UIImage imageNamed:@"icon-add"] forState:UIControlStateNormal];
-    [self.addImageBtn addTarget:self action:@selector(groupAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.addImageBtn setImage:[UIImage imageNamed:@"chat_nav_add"] forState:UIControlStateNormal];
+    [self.addImageBtn addTarget:self action:@selector(chatInfoAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.addImageBtn];
     [self.addImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@35);
@@ -305,7 +305,7 @@
     }
 }
 
-- (void)groupAction
+- (void)chatInfoAction
 {
     ACDGroupEnterController *groupEnterVC = ACDGroupEnterController.new;
     groupEnterVC.accessType = ACDGroupEnterAccessTypeChat;
