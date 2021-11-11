@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
                     
                     NSString *imageName = [userDefault valueForKey:[NSString stringWithFormat:@"%@_avatar",self.userInfo.userId]];
                              
-                    if (imageName) {
+                    if (imageName == nil) {
                         imageName = @"defatult_avatar_1";
                     }
                     [self.userInfoHeaderView.avatarImageView sd_setImageWithURL:nil placeholderImage:ImageWithName(imageName)];
