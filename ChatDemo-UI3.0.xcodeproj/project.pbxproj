@@ -505,7 +505,7 @@
 		EC54DCC327211A4300ABEE3E /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DCBF27211A4300ABEE3E /* delete@2x.png */; };
 		EC54DCC427211A4300ABEE3E /* blocked@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC54DCC027211A4300ABEE3E /* blocked@3x.png */; };
 		EC54DCC7272143B300ABEE3E /* ACDContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCC6272143B300ABEE3E /* ACDContactListController.m */; };
-		EC54DCCC272144B400ABEE3E /* AgoraBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */; };
+		EC54DCCC272144B400ABEE3E /* ACDBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCCB272144B400ABEE3E /* ACDBaseTableViewController.m */; };
 		EC54DCCF272148E300ABEE3E /* ACDSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCCE272148E300ABEE3E /* ACDSearchTableViewController.m */; };
 		EC54DCE62721502200ABEE3E /* MISScrollPageCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCD32721502200ABEE3E /* MISScrollPageCollectionView.m */; };
 		EC54DCE72721502200ABEE3E /* MISScrollPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC54DCD52721502200ABEE3E /* MISScrollPageController.m */; };
@@ -614,6 +614,7 @@
 		EC7A3299272EC91C00AF0C19 /* ACDPublicGroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A3298272EC91C00AF0C19 /* ACDPublicGroupListViewController.m */; };
 		EC7A329C272EE67F00AF0C19 /* ACDSearchJoinCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A329B272EE67F00AF0C19 /* ACDSearchJoinCell.m */; };
 		EC7A329F272EE9A400AF0C19 /* ACDSearchResultView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7A329E272EE9A400AF0C19 /* ACDSearchResultView.m */; };
+		ECCAF7E1273E558B001DA505 /* ACDNaviBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = ECCAF7E0273E558B001DA505 /* ACDNaviBackView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1293,8 +1294,8 @@
 		EC54DCC027211A4300ABEE3E /* blocked@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blocked@3x.png"; sourceTree = "<group>"; };
 		EC54DCC5272143B300ABEE3E /* ACDContactListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDContactListController.h; sourceTree = "<group>"; };
 		EC54DCC6272143B300ABEE3E /* ACDContactListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDContactListController.m; sourceTree = "<group>"; };
-		EC54DCCA272144B400ABEE3E /* AgoraBaseTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraBaseTableViewController.h; sourceTree = "<group>"; };
-		EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraBaseTableViewController.m; sourceTree = "<group>"; };
+		EC54DCCA272144B400ABEE3E /* ACDBaseTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDBaseTableViewController.h; sourceTree = "<group>"; };
+		EC54DCCB272144B400ABEE3E /* ACDBaseTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDBaseTableViewController.m; sourceTree = "<group>"; };
 		EC54DCCD272148E300ABEE3E /* ACDSearchTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDSearchTableViewController.h; sourceTree = "<group>"; };
 		EC54DCCE272148E300ABEE3E /* ACDSearchTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDSearchTableViewController.m; sourceTree = "<group>"; };
 		EC54DCD32721502200ABEE3E /* MISScrollPageCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MISScrollPageCollectionView.m; sourceTree = "<group>"; };
@@ -1453,6 +1454,8 @@
 		EC7A329B272EE67F00AF0C19 /* ACDSearchJoinCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDSearchJoinCell.m; sourceTree = "<group>"; };
 		EC7A329D272EE9A400AF0C19 /* ACDSearchResultView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDSearchResultView.h; sourceTree = "<group>"; };
 		EC7A329E272EE9A400AF0C19 /* ACDSearchResultView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDSearchResultView.m; sourceTree = "<group>"; };
+		ECCAF7DF273E558B001DA505 /* ACDNaviBackView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDNaviBackView.h; sourceTree = "<group>"; };
+		ECCAF7E0273E558B001DA505 /* ACDNaviBackView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDNaviBackView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2691,8 +2694,8 @@
 			children = (
 				EC54DDE227280ECF00ABEE3E /* ACDTableViewController.h */,
 				EC54DDE327280ECF00ABEE3E /* ACDTableViewController.m */,
-				EC54DCCA272144B400ABEE3E /* AgoraBaseTableViewController.h */,
-				EC54DCCB272144B400ABEE3E /* AgoraBaseTableViewController.m */,
+				EC54DCCA272144B400ABEE3E /* ACDBaseTableViewController.h */,
+				EC54DCCB272144B400ABEE3E /* ACDBaseTableViewController.m */,
 				EC54DCCD272148E300ABEE3E /* ACDSearchTableViewController.h */,
 				EC54DCCE272148E300ABEE3E /* ACDSearchTableViewController.m */,
 				EC7A3240272BCBE600AF0C19 /* ACDContainerSearchTableViewController.h */,
@@ -2752,6 +2755,8 @@
 				EC7A3244272BD2E600AF0C19 /* ACDGroupMemberNavView.m */,
 				EC658DF52733BFEA00472939 /* ACDChatNavigationView.h */,
 				EC658DF62733BFEA00472939 /* ACDChatNavigationView.m */,
+				ECCAF7DF273E558B001DA505 /* ACDNaviBackView.h */,
+				ECCAF7E0273E558B001DA505 /* ACDNaviBackView.m */,
 				EC54DCFA272170E600ABEE3E /* ACDCustomBaseView.h */,
 				EC54DCFB272170E600ABEE3E /* ACDCustomBaseView.m */,
 				EC432EEC27210ABC001B31DE /* ACDImageTextButtonView.h */,
@@ -3459,7 +3464,7 @@
 				EC658DF72733BFEA00472939 /* ACDChatNavigationView.m in Sources */,
 				7F13569C2656582E00A181DD /* AgoraLaunchViewController.m in Sources */,
 				EC54DCF827216EBA00ABEE3E /* ACDNaviCustomView.m in Sources */,
-				EC54DCCC272144B400ABEE3E /* AgoraBaseTableViewController.m in Sources */,
+				EC54DCCC272144B400ABEE3E /* ACDBaseTableViewController.m in Sources */,
 				7F6CC8BF26568C4B00BA60BB /* AgoraAddContactViewController.m in Sources */,
 				EC54DD132722688F00ABEE3E /* ACDGroupEnterCell.m in Sources */,
 				EC7A329F272EE9A400AF0C19 /* ACDSearchResultView.m in Sources */,
@@ -3571,6 +3576,7 @@
 				7F13569D2656582E00A181DD /* AgoraMainViewController.m in Sources */,
 				7F0516DE26A0137800B2C795 /* AgoraChatCustomBaseCell.m in Sources */,
 				EC54DCF427215ABE00ABEE3E /* ACDRequestListViewController.m in Sources */,
+				ECCAF7E1273E558B001DA505 /* ACDNaviBackView.m in Sources */,
 				9ECE66EF273B6F69007CF85F /* AgoraChatConvUserDataModel.m in Sources */,
 				7166345C1DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.m in Sources */,
 				7F0516E726A0184100B2C795 /* AgoraChatBaseCell.m in Sources */,
@@ -3780,7 +3786,7 @@
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "";
-				MARKETING_VERSION = 3.8.6;
+				MARKETING_VERSION = 3.8.7;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -3850,7 +3856,7 @@
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "";
-				MARKETING_VERSION = 3.8.6;
+				MARKETING_VERSION = 3.8.7;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

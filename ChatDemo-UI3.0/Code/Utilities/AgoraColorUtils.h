@@ -52,6 +52,8 @@
 #define TextLabelBlueColor  COLOR_HEX(0x154DFE)
 #define TextLabelGrayColor  COLOR_HEX(0x999999)
 #define TextLabelBlackColor  COLOR_HEX(0x000000)
+#define TextLabelBlack2Color  COLOR_HEX(0x0D0D0D)
+
 #define TextLabelPinkColor  COLOR_HEX(0xFF14CC)
 
 #define AvatarLightBlueColor   COLOR_HEX(0xA8E2F3)

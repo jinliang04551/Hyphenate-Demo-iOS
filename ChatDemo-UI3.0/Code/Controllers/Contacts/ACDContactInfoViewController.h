@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AgoraBaseTableViewController.h"
+#import "ACDBaseTableViewController.h"
 
 @class AgoraUserModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ACDContactInfoViewController : AgoraBaseTableViewController
+@interface ACDContactInfoViewController : ACDBaseTableViewController
 @property (nonatomic,copy) void (^addBlackListBlock)(void);
 @property (nonatomic,copy) void (^deleteContactBlock)(void);
 

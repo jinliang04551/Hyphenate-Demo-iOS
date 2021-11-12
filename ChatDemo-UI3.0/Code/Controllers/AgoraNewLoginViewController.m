@@ -23,6 +23,8 @@
 @property (nonatomic) BOOL isLogin;
 
 @property (nonatomic, strong) UIButton *registerButton;
+@property (nonatomic, strong) UIImageView *loadingImageView;
+@property (nonatomic, assign) CGFloat loadingAngle;
 
 @end
 
@@ -94,9 +96,43 @@
         make.right.equalTo(self.contentView).offset(-30);
         make.height.equalTo(@kLoginButtonHeight);
     }];
+    
 }
 
 #pragma mark - private
+- (NSAttributedString *)textFieldAttributeString:(NSString *)content {
+    
+    NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:content attributes:
+        @{NSForegroundColorAttributeName:COLOR_HEX(0x999999),
+          NSFontAttributeName:[UIFont fontWithName:@"PingFang SC" size:14.0]
+        }];
+    return attrString;
+}
+
+- (void)startAnimation {
+    CGAffineTransform endAngle = CGAffineTransformMakeRotation(self.loadingAngle * (M_PI /180.0f));
+
+    [UIView animateWithDuration:0.01 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        self.loadingImageView.transform = endAngle;
+    } completion:^(BOOL finished) {
+        self.loadingAngle += 15;
+        [self startAnimation];
+    }];
+}
+
+- (void)updateLoginStateWithStart:(BOOL)start{
+    if (start) {
+        [self.loginButton setTitle:@"" forState:UIControlStateNormal];
+        self.loadingImageView.hidden = NO;
+        [self startAnimation];
+        
+    }else {
+        [self.loginButton setTitle:@"Log In" forState:UIControlStateNormal];
+        self.loadingImageView.hidden = YES;
+    }
+}
+
+
 - (BOOL)_isEmpty
 {
     BOOL ret = NO;
@@ -119,13 +155,16 @@
         return;
     }
     [self.view endEditing:YES];
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        
+    [self updateLoginStateWithStart:YES];
     
     void (^finishBlock) (NSString *aName, NSString *nickName, AgoraChatError *aError) = ^(NSString *aName, NSString *nickName, AgoraChatError *aError) {
         if (!aError) {
             if (nickName) {
                 [AgoraChatClient.sharedClient.userInfoManager updateOwnUserInfo:nickName withType:AgoraChatUserInfoTypeNickName completion:^(AgoraChatUserInfo *aUserInfo, AgoraChatError *aError) {
                     if (!aError) {
+                        [self updateLoginStateWithStart:NO];
+
                         [UserInfoStore.sharedInstance setUserInfo:aUserInfo forId:aName];
                         [[NSNotificationCenter defaultCenter] postNotificationName:USERINFO_UPDATE  object:nil userInfo:@{USERINFO_LIST:@[aUserInfo]}];
                     }
@@ -168,11 +207,12 @@
         [alertError show];
     };
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     //unify token login
     [[AgoraChatHttpRequest sharedManager] loginToApperServer:[_usernameTextField.text lowercaseString] nickName:_passwordTextField.text completion:^(NSInteger statusCode, NSString * _Nonnull response) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+//            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
             NSString *alertStr = nil;
             if (response && response.length > 0 && statusCode) {
                 NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
@@ -191,6 +231,9 @@
             } else {
                 alertStr = NSLocalizedString(@"login appserver failure", @"Sign in appserver failure");
             }
+            
+            [self updateLoginStateWithStart:NO];
+
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"loginAppServer.ok", @"Ok"), nil];
             [alert show];
         });
@@ -257,15 +300,15 @@
         _usernameTextField.backgroundColor = COLOR_HEX(0xF2F2F2);
         _usernameTextField.delegate = self;
         _usernameTextField.borderStyle = UITextBorderStyleNone;
-        _usernameTextField.placeholder = @"AgoraID";
+        _usernameTextField.attributedPlaceholder = [self textFieldAttributeString:@"AgoraID"];
         
         _usernameTextField.returnKeyType = UIReturnKeyGo;
-        _usernameTextField.font = [UIFont systemFontOfSize:17];
-        _usernameTextField.rightViewMode = UITextFieldViewModeWhileEditing;
-        _usernameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _usernameTextField.font = [UIFont fontWithName:@"PingFang SC" size:14.0];
+        _usernameTextField.textColor = COLOR_HEX(0x000000);
         _usernameTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 18, 10)];
         _usernameTextField.leftViewMode = UITextFieldViewModeAlways;
         _usernameTextField.layer.cornerRadius = kLoginButtonHeight * 0.5;
+        
     }
     return _usernameTextField;
 }
@@ -276,18 +319,13 @@
         _passwordTextField.backgroundColor = COLOR_HEX(0xF2F2F2);
         _passwordTextField.delegate = self;
         _passwordTextField.borderStyle = UITextBorderStyleNone;
-        _passwordTextField.placeholder = NSLocalizedString(@"login.passwordTextField.password", @"Password");
-        _passwordTextField.font = [UIFont systemFontOfSize:17];
-        _passwordTextField.returnKeyType = UIReturnKeyGo;
-        _passwordTextField.secureTextEntry = YES;
+        _passwordTextField.font = [UIFont fontWithName:@"PingFang SC" size:14.0];
+        _passwordTextField.textColor = COLOR_HEX(0x000000);
+        _passwordTextField.attributedPlaceholder = [self textFieldAttributeString:@"NickName"];
         _passwordTextField.clearsOnBeginEditing = NO;
-        _passwordTextField.rightViewMode = UITextFieldViewModeWhileEditing;
-        _passwordTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _passwordTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 18, 10)];
         _passwordTextField.leftViewMode = UITextFieldViewModeAlways;
         _passwordTextField.layer.cornerRadius = kLoginButtonHeight * 0.5;
-      
-
     }
     return _passwordTextField;
 }
@@ -296,16 +334,34 @@
 - (UIButton *)loginButton {
     if (_loginButton == nil) {
         _loginButton = [[UIButton alloc] init];
-        _loginButton.titleLabel.font = [UIFont systemFontOfSize:12];
-        [_loginButton setTitle:@"LOG IN" forState:UIControlStateNormal];
+        _loginButton.titleLabel.font = [UIFont fontWithName:@"PingFang SC" size:16.0];
+        _loginButton.titleLabel.textColor = COLOR_HEX(0x000000);
+        [_loginButton setTitle:@"Log In" forState:UIControlStateNormal];
         [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _loginButton.backgroundColor = COLOR_HEX(0x114EFF);
         [_loginButton addTarget:self action:@selector(doLogin) forControlEvents:UIControlEventTouchUpInside];
         _loginButton.layer.cornerRadius = kLoginButtonHeight * 0.5;
-
+        
+        [_loginButton addSubview:self.loadingImageView];
+        
+        [self.loadingImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(_loginButton);
+        }];
     }
     return _loginButton;
 }
+
+
+- (UIImageView *)loadingImageView {
+    if (_loadingImageView == nil) {
+        _loadingImageView = [[UIImageView alloc] init];
+        _loadingImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _loadingImageView.image = ImageWithName(@"login.bundle/loading");
+        _loadingImageView.hidden = YES;
+    }
+    return _loadingImageView;
+}
+
 
 @end
 #undef loginButtonHeight

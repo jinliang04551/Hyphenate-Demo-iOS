@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AgoraBaseTableViewController : UIViewController<UITableViewDataSource, UITableViewDelegate> {
+@interface ACDBaseTableViewController : UIViewController<UITableViewDataSource, UITableViewDelegate> {
 @protected
     UITableView              *_table;
     UIView                   *_headerView;

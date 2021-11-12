@@ -6,9 +6,9 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraBaseTableViewController.h"
+#import "ACDBaseTableViewController.h"
 
-@interface AgoraBaseTableViewController ()
+@interface ACDBaseTableViewController ()
 @property (nonatomic, readonly) BOOL isDragging;
 @property (nonatomic, readonly) BOOL isRefreshing;
 @property (nonatomic, readonly) BOOL isLoadingMore;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation AgoraBaseTableViewController
+@implementation ACDBaseTableViewController
 
 #pragma mark - Life Cycle
 
@@ -45,6 +45,7 @@
 
     [self placeSubViews];
 }
+
 
 /**
  *  初始化各个视图，子类实现

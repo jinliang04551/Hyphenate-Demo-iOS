@@ -165,6 +165,9 @@ static dispatch_once_t oneToken;
 
 - (void)fetchOwnUserInfoCompletion:(void(^)(AgoraChatUserInfo *ownUserInfo))completion {
     NSString *userId = [AgoraChatClient sharedClient].currentUsername;
+    if (userId == nil) {
+        userId = @"";
+    }
     [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[userId] completion:^(NSDictionary *aUserDatas, AgoraChatError *aError) {
         AgoraChatUserInfo *user = aUserDatas[userId];
         if (completion) {

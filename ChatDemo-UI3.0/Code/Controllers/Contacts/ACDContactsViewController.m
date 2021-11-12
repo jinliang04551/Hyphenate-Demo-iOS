@@ -84,20 +84,6 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
         make.bottom.equalTo(self.view).offset(-bottom);
     }];
     
-//
-//    [self.segView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.navView.mas_bottom).offset(5);
-//        make.left.equalTo(self.view);
-//        make.right.equalTo(self.view);
-//        make.height.equalTo(@50);
-//    }];
-    
-//    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.segView.mas_bottom);
-//        make.left.equalTo(self.view);
-//        make.right.equalTo(self.view);
-//        make.bottom.equalTo(self.view).offset(-bottom);
-//    }];
     
 }
 

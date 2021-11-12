@@ -112,7 +112,7 @@ MISScrollPageControllerDelegate,AgoraGroupUIProtocol>
         make.top.equalTo(self.navView.mas_bottom).offset(5);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
-        make.bottom.equalTo(self.view);
+        make.bottom.equalTo(self.view).offset(-bottom);
     }];
 }
 

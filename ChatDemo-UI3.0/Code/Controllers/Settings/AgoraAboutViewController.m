@@ -42,16 +42,28 @@
     }
     if (indexPath.row == 0) {
         
-        cell.textLabel.text = @"App Version";
-        cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        cell.textLabel.attributedText = [self titleAttribute:@"UI Library Version"];
+        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        
+        NSString *detailContent = [NSString stringWithFormat:@"AgoraChat v:%@",ver];
+        cell.detailTextLabel.attributedText = [self detailAttribute:detailContent];
+        
     } else if (indexPath.row == 1) {
         
-        cell.textLabel.text = @"SDK Version";
-        cell.detailTextLabel.text = [[AgoraChatClient sharedClient] version];
+        cell.textLabel.attributedText = [self titleAttribute:@"SDK Version"];
+        NSString *detailContent = [NSString stringWithFormat:@"AgoraChat v:%@",[[AgoraChatClient sharedClient] version]];
+        cell.detailTextLabel.attributedText = [self detailAttribute:detailContent];
     }
     
     return cell;
 }
 
+- (NSAttributedString *)titleAttribute:(NSString *)title {
+    return [ACDUtil attributeContent:title color:TextLabelBlack2Color font:Font(@"PingFang SC",16.0)];
+}
+
+- (NSAttributedString *)detailAttribute:(NSString *)detail {
+    return [ACDUtil attributeContent:detail color:TextLabelGrayColor font:Font(@"PingFang SC",16.0)];
+}
 
 @end

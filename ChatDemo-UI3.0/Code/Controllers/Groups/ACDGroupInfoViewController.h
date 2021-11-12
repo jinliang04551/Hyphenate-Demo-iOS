@@ -6,7 +6,7 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraBaseTableViewController.h"
+#import "ACDBaseTableViewController.h"
 
 @protocol  ACDGroupInfoViewControllerDelegate <NSObject>
 
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, ACDGroupInfoAccessType) {
 };
 
 
-@interface ACDGroupInfoViewController : AgoraBaseTableViewController
+@interface ACDGroupInfoViewController : ACDBaseTableViewController
 @property (nonatomic, assign) ACDGroupInfoAccessType accessType;
 @property (nonatomic, assign) id<ACDGroupInfoViewControllerDelegate> delegate;
  

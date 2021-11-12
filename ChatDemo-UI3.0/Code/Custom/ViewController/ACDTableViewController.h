@@ -6,11 +6,11 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraBaseTableViewController.h"
+#import "ACDBaseTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ACDTableViewController : AgoraBaseTableViewController
+@interface ACDTableViewController : ACDBaseTableViewController
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) int page;
 

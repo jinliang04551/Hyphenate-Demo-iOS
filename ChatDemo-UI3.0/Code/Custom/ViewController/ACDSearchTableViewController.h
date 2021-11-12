@@ -6,11 +6,11 @@
 //  Copyright © 2021 easemob. All rights reserved.
 //
 
-#import "AgoraBaseTableViewController.h"
+#import "ACDBaseTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ACDSearchTableViewController : AgoraBaseTableViewController
+@interface ACDSearchTableViewController : ACDBaseTableViewController
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) int page;
