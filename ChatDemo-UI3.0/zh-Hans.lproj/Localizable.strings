@@ -65,11 +65,13 @@
 "login.failure.password.notmatch" = "密码与账号不匹配";
 "login.ok" = "确认";
 "login.inputNameAndPswd" = "请输入账号和密码";
+"login.inputNameNotCompliance" = "只有拉丁字母和数字";
+"login.inputNameOrPswdTooLength" = "用户名或者密码太长";
 "login.endAutoLogin.failure" = "自动登录失败";
 "login.endAutoLogin.succeed" = "自动登录成功";
 
 
-"login.passwordTextField.password" = "密 码";
+"login.nicknameTextField.nickname" = "昵 称";
 "login.usernameTextField.hyphenateID" = "账 号";
 "login.loginButton.login" = "登 录";
 "login.signupButton.signup" = "注 册";

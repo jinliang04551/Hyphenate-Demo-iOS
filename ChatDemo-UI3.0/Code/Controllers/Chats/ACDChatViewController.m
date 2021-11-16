@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UILabel *titleDetailLabel;
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic, strong) UIView* fullScreenView;
+@property (strong, nonatomic) UIButton *backButton;
 @end
 
 @implementation ACDChatViewController
@@ -29,6 +30,11 @@
         _conversationModel = [[EaseConversationModel alloc]initWithConversation:_conversation];
         
         EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
+        viewModel.displayOneselfAvatar = NO;
+        viewModel.displayOneselfName = NO;
+        if (conType == AgoraChatTypeChat) {
+            viewModel.displayOneselfName = NO;
+        }
         _chatController = [EaseChatViewController initWithConversationId:conversationId
                                                     conversationType:conType
                                                         chatViewModel:viewModel];

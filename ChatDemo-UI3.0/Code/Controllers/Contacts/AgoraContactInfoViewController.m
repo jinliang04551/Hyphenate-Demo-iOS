@@ -13,6 +13,7 @@
 #import "AgoraContactInfoCell.h"
 #import "AgoraChatDemoHelper.h"
 #import "AgoraChatViewController.h"
+#import "ACDChatViewController.h"
 
 #define NAME                NSLocalizedString(@"contact.name", @"Name")
 #define HYPHENATE_ID        NSLocalizedString(@"contact.hyphenateId", @"Hyphenate ID")
@@ -123,7 +124,7 @@ typedef enum : NSUInteger {
 
 
 - (IBAction)chatAction:(id)sender {
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:_model.hyphenateId conversationType:AgoraChatConversationTypeChat];
+    ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:_model.hyphenateId conversationType:AgoraChatConversationTypeChat];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
