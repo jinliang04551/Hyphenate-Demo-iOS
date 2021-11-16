@@ -64,8 +64,8 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
     
     [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.searchBar.mas_bottom);
-        make.left.equalTo(self.view).offset(12.0);
-        make.right.equalTo(self.view).offset(-12.0);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
     }];
 }
@@ -334,7 +334,9 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
         _table.backgroundColor = UIColor.whiteColor;
         
          [_table registerClass:[ACDGroupEnterCell class] forCellReuseIdentifier:[ACDGroupEnterCell reuseIdentifier]];
-
+        
+        _table.sectionIndexColor = TextLabelGrayColor;
+        _table.sectionIndexBackgroundColor = [UIColor clearColor];
     }
     return _table;
 }

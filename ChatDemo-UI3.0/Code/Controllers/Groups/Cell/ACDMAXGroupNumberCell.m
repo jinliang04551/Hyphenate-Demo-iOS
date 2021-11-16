@@ -47,8 +47,8 @@
     if (!_maxGroupMemberField) {
         _maxGroupMemberField = UITextField.new;
         _maxGroupMemberField.font = BFont(16.0);
-        _maxGroupMemberField.textColor = COLOR_HEX(0x000000);
-        _maxGroupMemberField.placeholder = @"No More Than 2000";
+        _maxGroupMemberField.textColor = TextLabelBlackColor;
+        _maxGroupMemberField.attributedPlaceholder = [ACDUtil attributeContent:@"No More Than 2000" color:TextLabelPlaceHolderGrayColor font:Font(@"PingFang SC", 16.0)];
         _maxGroupMemberField.textAlignment = NSTextAlignmentRight;
     }
     return _maxGroupMemberField;

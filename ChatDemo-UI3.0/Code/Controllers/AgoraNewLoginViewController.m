@@ -78,26 +78,33 @@
     
     [self.usernameTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.titleImageView.mas_bottom).offset(40);
-        make.left.equalTo(self.contentView).offset(30);
-        make.right.equalTo(self.contentView).offset(-30);
+        make.left.equalTo(self.contentView).offset(24);
+        make.right.equalTo(self.contentView).offset(-24);
         make.height.equalTo(@kLoginButtonHeight);
     }];
     
     [self.passwordTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_usernameTextField.mas_bottom).offset(20);
-        make.left.equalTo(self.contentView).offset(30);
-        make.right.equalTo(self.contentView).offset(-30);
+        make.left.equalTo(self.usernameTextField);
+        make.right.equalTo(self.usernameTextField);
         make.height.equalTo(@kLoginButtonHeight);
     }];
     
     [self.loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.passwordTextField.mas_bottom).offset(kAgroaPadding * 2);
-        make.left.equalTo(self.contentView).offset(30);
-        make.right.equalTo(self.contentView).offset(-30);
+        make.left.equalTo(self.usernameTextField);
+        make.right.equalTo(self.usernameTextField);
         make.height.equalTo(@kLoginButtonHeight);
     }];
     
 }
+
+#pragma mark UITextFieldDelegate
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+
+    self.loginButton.enabled = self.usernameTextField.text.length > 0 && self.passwordTextField.text.length > 0;
+}
+
 
 #pragma mark - private
 - (NSAttributedString *)textFieldAttributeString:(NSString *)content {
@@ -112,7 +119,7 @@
 - (void)startAnimation {
     CGAffineTransform endAngle = CGAffineTransformMakeRotation(self.loadingAngle * (M_PI /180.0f));
 
-    [UIView animateWithDuration:0.01 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.loadingImageView.transform = endAngle;
     } completion:^(BOOL finished) {
         self.loadingAngle += 15;
@@ -121,15 +128,17 @@
 }
 
 - (void)updateLoginStateWithStart:(BOOL)start{
-    if (start) {
-        [self.loginButton setTitle:@"" forState:UIControlStateNormal];
-        self.loadingImageView.hidden = NO;
-        [self startAnimation];
-        
-    }else {
-        [self.loginButton setTitle:@"Log In" forState:UIControlStateNormal];
-        self.loadingImageView.hidden = YES;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (start) {
+            [self.loginButton setTitle:@"" forState:UIControlStateNormal];
+            self.loadingImageView.hidden = NO;
+            [self startAnimation];
+            
+        }else {
+            [self.loginButton setTitle:@"Log In" forState:UIControlStateNormal];
+            self.loadingImageView.hidden = YES;
+        }
+    });
 }
 
 
@@ -347,6 +356,8 @@
         [self.loadingImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(_loginButton);
         }];
+        
+        _loginButton.enabled = NO;
     }
     return _loginButton;
 }
