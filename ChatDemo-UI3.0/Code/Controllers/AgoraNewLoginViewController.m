@@ -9,18 +9,22 @@
 #import "AgoraNewLoginViewController.h"
 #import "AgoraChatHttpRequest.h"
 #import "UserInfoStore.h"
+#import "Reachability.h"
 
 #define kLoginButtonHeight 48.0f
+#define kMaxLimitLength 64
 
 @interface AgoraNewLoginViewController ()<UITextViewDelegate,UITextFieldDelegate>
 
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIImageView *logoImageView;
 @property (nonatomic, strong) UIImageView* titleImageView;
+@property (nonatomic, strong) UIView *hintView;
+@property (nonatomic, strong) UILabel *hintTitleLabel;
 @property (nonatomic, strong) UITextField *usernameTextField;
 @property (nonatomic, strong) UITextField *passwordTextField;
 @property (nonatomic, strong) UIButton *loginButton;
-@property (nonatomic) BOOL isLogin;
+@property (nonatomic) BOOL isMaxLimitLength;
 
 @property (nonatomic, strong) UIButton *registerButton;
 @property (nonatomic, strong) UIImageView *loadingImageView;
@@ -35,6 +39,7 @@
     self = [super init];
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+        _isMaxLimitLength = NO;
     }
     return self;
 }
@@ -54,6 +59,7 @@
     [self.view addSubview:self.contentView];
     [self.contentView addSubview:self.logoImageView];
     [self.contentView addSubview:self.titleImageView];
+    [self.contentView addSubview:self.hintView];
     [self.contentView addSubview:self.usernameTextField];
     [self.contentView addSubview:self.passwordTextField];
     [self.contentView addSubview:self.loginButton];
@@ -75,6 +81,12 @@
         
     }];
         
+    [self.hintView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.titleImageView.mas_bottom).offset(63);
+        make.centerX.equalTo(self.contentView);
+        make.height.equalTo(@20);
+    }];
+    self.hintView.hidden = YES;
     
     [self.usernameTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.titleImageView.mas_bottom).offset(40);
@@ -99,10 +111,34 @@
     
 }
 
-#pragma mark UITextFieldDelegate
-- (void)textFieldDidEndEditing:(UITextField *)textField {
+#pragma mark - UITextFieldDelegate
 
-    self.loginButton.enabled = self.usernameTextField.text.length > 0 && self.passwordTextField.text.length > 0;
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *hint = nil;
+    if (_usernameTextField.isFirstResponder &&_usernameTextField.text.length >= kMaxLimitLength) {
+        _isMaxLimitLength = YES;
+        hint = NSLocalizedString(@"register.userName.outOfLimit", @"Username length out of limit, maximum 64 bytes");
+    } else {
+        _isMaxLimitLength = !_isMaxLimitLength ? NO : _isMaxLimitLength;
+    }
+    
+    if (_passwordTextField.isFirstResponder && _passwordTextField.text.length >= kMaxLimitLength) {
+        _isMaxLimitLength = YES;
+        hint = NSLocalizedString(@"register.password.outOfLimit", @"Password length out of limit, maximum 64 bytes");
+    } else {
+        _isMaxLimitLength = !_isMaxLimitLength ? NO : _isMaxLimitLength;
+    }
+    
+    self.hintView.hidden = hint == nil ? YES : NO;
+    self.hintTitleLabel.text = hint == nil ? @"" : hint;
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self.contentView endEditing:YES];
+    return YES;
 }
 
 
@@ -149,16 +185,44 @@
     NSString *password = _passwordTextField.text;
     if (username.length == 0 || password.length == 0) {
         ret = YES;
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"login.inputNameAndPswd", @"Please enter username and password") delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
-        [alert show];
-
+        self.hintView.hidden = NO;
+        self.hintTitleLabel.text = NSLocalizedString(@"login.inputNameAndPswd", @"Please enter username and password");
+    } else if (_isMaxLimitLength) {
+        ret = YES;
+        self.hintView.hidden = NO;
+        self.hintTitleLabel.text = NSLocalizedString(@"login.inputNameOrPswdTooLength", @"Username or password too length");
+    } else {
+        NSString *regex = @"^[A-Za-z0-9]+$";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+        BOOL result = [predicate evaluateWithObject:username];
+        if (!result) {
+            ret = YES;
+            self.hintView.hidden = NO;
+            self.hintTitleLabel.text = NSLocalizedString(@"login.inputNameNotCompliance", @"Latin letters and numbers only.");
+        }
     }
     
     return ret;
 }
 
+- (BOOL)conecteNetwork
+{
+    Reachability *reachability   = [Reachability reachabilityWithHostName:@"www.apple.com"];
+    NetworkStatus internetStatus = [reachability currentReachabilityStatus];
+    if (internetStatus == NotReachable) {
+        return NO;
+    }
+    return YES;
+}
+
 
 - (void)doLogin {
+    
+    if (![self conecteNetwork]) {
+        self.hintView.hidden = NO;
+        self.hintTitleLabel.text = NSLocalizedString(@"login.networkReachable", @"Network disconnected.");
+        return;
+    }
     
     if ([self _isEmpty]) {
         return;
@@ -166,6 +230,8 @@
     [self.view endEditing:YES];
         
     [self updateLoginStateWithStart:YES];
+    self.hintView.hidden = YES;
+    self.hintTitleLabel.text = @"";
     
     void (^finishBlock) (NSString *aName, NSString *nickName, AgoraChatError *aError) = ^(NSString *aName, NSString *nickName, AgoraChatError *aError) {
         if (!aError) {
@@ -186,6 +252,8 @@
             [shareDefault synchronize];
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                self.hintView.hidden = YES;
+                self.hintTitleLabel.text = @"";
                 UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.succeed", @"Sign in succeed") delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
                 [alertError show];
                 
@@ -214,14 +282,14 @@
         }
         UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:errorDes delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
         [alertError show];
+        
+        self.hintView.hidden = NO;
+        self.hintTitleLabel.text = errorDes;
     };
     
-//    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     //unify token login
     [[AgoraChatHttpRequest sharedManager] loginToApperServer:[_usernameTextField.text lowercaseString] nickName:_passwordTextField.text completion:^(NSInteger statusCode, NSString * _Nonnull response) {
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
             NSString *alertStr = nil;
             if (response && response.length > 0 && statusCode) {
                 NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
@@ -242,6 +310,9 @@
             }
             
             [self updateLoginStateWithStart:NO];
+            
+            self.hintView.hidden = NO;
+            self.hintTitleLabel.text = alertStr;
 
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertStr delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"loginAppServer.ok", @"Ok"), nil];
             [alert show];
@@ -302,6 +373,38 @@
     return _titleImageView;
 }
 
+- (UIView *)hintView
+{
+    if (!_hintView) {
+        _hintView = [[UIView alloc]init];
+        
+        [_hintView addSubview:self.hintTitleLabel];
+        [self.hintTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(_hintView);
+            make.centerX.equalTo(_hintView.mas_centerX).offset(11);
+            make.height.equalTo(@20);
+        }];
+        
+        UIImageView *failImg = [[UIImageView alloc]initWithImage:ImageWithName(@"login.bundle/loginFail")];
+        [_hintView addSubview:failImg];
+        [failImg mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.equalTo(@18);
+            make.centerY.equalTo(_hintView);
+            make.right.equalTo(self.hintTitleLabel.mas_left).offset(-4);
+        }];
+    }
+    return  _hintView;
+}
+
+- (UILabel *)hintTitleLabel
+{
+    if (!_hintTitleLabel) {
+        _hintTitleLabel = [[UILabel alloc]init];
+        _hintTitleLabel.textColor = [UIColor blackColor];
+        _hintTitleLabel.font = [UIFont fontWithName:@"PingFang SC" size:14.0];
+    }
+    return _hintTitleLabel;
+}
 
 - (UITextField *)usernameTextField {
     if (_usernameTextField == nil) {
@@ -311,7 +414,7 @@
         _usernameTextField.borderStyle = UITextBorderStyleNone;
         _usernameTextField.attributedPlaceholder = [self textFieldAttributeString:@"AgoraID"];
         
-        _usernameTextField.returnKeyType = UIReturnKeyGo;
+        _usernameTextField.returnKeyType = UIReturnKeyDone;
         _usernameTextField.font = [UIFont fontWithName:@"PingFang SC" size:14.0];
         _usernameTextField.textColor = COLOR_HEX(0x000000);
         _usernameTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 18, 10)];
@@ -328,9 +431,12 @@
         _passwordTextField.backgroundColor = COLOR_HEX(0xF2F2F2);
         _passwordTextField.delegate = self;
         _passwordTextField.borderStyle = UITextBorderStyleNone;
+
         _passwordTextField.font = [UIFont fontWithName:@"PingFang SC" size:14.0];
         _passwordTextField.textColor = COLOR_HEX(0x000000);
         _passwordTextField.attributedPlaceholder = [self textFieldAttributeString:@"NickName"];
+
+        _passwordTextField.returnKeyType = UIReturnKeyDone;
         _passwordTextField.clearsOnBeginEditing = NO;
         _passwordTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 18, 10)];
         _passwordTextField.leftViewMode = UITextFieldViewModeAlways;
@@ -357,7 +463,6 @@
             make.center.equalTo(_loginButton);
         }];
         
-        _loginButton.enabled = NO;
     }
     return _loginButton;
 }
@@ -376,4 +481,5 @@
 
 @end
 #undef loginButtonHeight
+#undef kMaxLimitLength
 

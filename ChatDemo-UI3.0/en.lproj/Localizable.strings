@@ -64,7 +64,10 @@
 "login.failure" = "Login failure";
 "login.failure.password.notmatch" = "Password does not match username";
 "login.ok" = "Ok";
-"login.inputNameAndPswd" = "Please enter username and password";
+"login.inputNameAndPswd" = "Please enter username and password.";
+"login.inputNameOrPswdTooLength" = "Username or password too length.";
+"login.inputNameNotCompliance" = "Latin letters and numbers only.";
+"login.networkReachable" = "Network disconnected.";
 "login.endAutoLogin.failure" = "Automatic login failed";
 "login.endAutoLogin.succeed" = "Automatic login succeed";
 
@@ -190,7 +193,7 @@
 "group.groupSubject" = "Group Subject";
 "group.isPublic" = "Appear in group search";
 "group.allowedOccupantInvite" = "Allow members to invite";
-"group.openJoin" = "Join the group freely";
+"group.openJoin" = "Authorizated to join";
 "group.groupType" = "Group Type";
 "group.isOpenJoin" = "need to agree to apply for owner";
 "group.pushNotification" = "Push Notification";

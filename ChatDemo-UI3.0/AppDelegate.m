@@ -148,7 +148,7 @@
     
     BOOL loginSuccess = [notification.object boolValue];
     if (loginSuccess) {
-
+//[self tokenDidExpire:401];
         [self loadMainPage];
         
     } else {
@@ -223,6 +223,8 @@
             UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:errorDes delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
             [alertError show];
         };
+        
+        [AgoraChatClient.sharedClient logout:NO];
         
         if (self.userName.length == 0 || self.nickName.length == 0) return;
         //unify token login
@@ -407,6 +409,10 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertMsg delegate:nil cancelButtonTitle:NSLocalizedString(@"login.ok", @"Ok") otherButtonTitles:nil, nil];
     [alert show];
 #endif
+    
+    if (aError) {
+        [self loadLoginPage];
+    }
 }
 
 @end

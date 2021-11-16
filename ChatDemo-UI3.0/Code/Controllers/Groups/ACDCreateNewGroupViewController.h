@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ACDBaseTableViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ACDCreateNewGroupViewController : UITableViewController
+@interface ACDCreateNewGroupViewController : ACDBaseTableViewController
 
 @end
 

@@ -51,6 +51,15 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     
 }
 
+- (void)prepare {
+    [self.view addSubview:self.table];
+}
+
+- (void)placeSubViews {
+    [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+}
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 }
@@ -128,7 +137,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     
     model = _groupPermissions.lastObject;
     if (_isPublic) {
-        model.title = NSLocalizedString(@"group.openJoin", @"Join the group freely");
+        model.title = NSLocalizedString(@"group.openJoin", @"Authorizated to join");
         model.type = AgoraGroupInfoType_openJoin;
     }
     else {
@@ -136,7 +145,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
         model.type = AgoraGroupInfoType_canAllInvite;
     }
     [_groupPermissions replaceObjectAtIndex:1 withObject:model];
-    [self.tableView reloadData];
+    [self.table reloadData];
 }
 
 
@@ -277,6 +286,18 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 
 
 #pragma mark getter
+- (UITableView *)table {
+    if (!_table) {
+        _table                 = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
+        _table.delegate        = self;
+        _table.dataSource      = self;
+        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
+        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+        _table.backgroundColor = UIColor.whiteColor;
+    }
+    return _table;
+}
+
 - (ACDTextFieldCell *)groupNameCell {
     if (_groupNameCell == nil) {
         _groupNameCell = ACDTextFieldCell.new;

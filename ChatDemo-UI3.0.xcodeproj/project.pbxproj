@@ -190,6 +190,7 @@
 		9ECE66F1273B6F69007CF85F /* ACDChatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE66EB273B6F69007CF85F /* ACDChatsViewController.m */; };
 		9ECE66F3273B6F69007CF85F /* backleft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9ECE66ED273B6F69007CF85F /* backleft@3x.png */; };
 		9ECE6701273CBF5F007CF85F /* ACDChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE6700273CBF5F007CF85F /* ACDChatViewController.m */; };
+		9ECE6704274271DB007CF85F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE6703274271DB007CF85F /* Reachability.m */; };
 		D20E26D71DCA011C00B3FAC6 /* icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D41DCA011C00B3FAC6 /* icon_info.png */; };
 		D20E26D81DCA011C00B3FAC6 /* icon_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */; };
 		D20E26D91DCA011C00B3FAC6 /* icon_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D61DCA011C00B3FAC6 /* icon_info@3x.png */; };
@@ -942,6 +943,8 @@
 		9ECE66FB273BF7B5007CF85F /* AgoraChatDemoUIDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatDemoUIDefine.h; sourceTree = "<group>"; };
 		9ECE66FF273CBF5F007CF85F /* ACDChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACDChatViewController.h; sourceTree = "<group>"; };
 		9ECE6700273CBF5F007CF85F /* ACDChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACDChatViewController.m; sourceTree = "<group>"; };
+		9ECE6702274271DB007CF85F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		9ECE6703274271DB007CF85F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		D16326FFC6F317D24E92E388 /* Pods-ChatDemo-UI3.0.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatDemo-UI3.0.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0.release.xcconfig"; sourceTree = "<group>"; };
 		D20E26D41DCA011C00B3FAC6 /* icon_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_info.png; sourceTree = "<group>"; };
 		D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_info@2x.png"; sourceTree = "<group>"; };
@@ -2087,6 +2090,8 @@
 				7F1356952656582E00A181DD /* AgoraMainViewController.xib */,
 				EC432EB2271D852C001B31DE /* AgoraNewLoginViewController.h */,
 				EC432EB3271D852C001B31DE /* AgoraNewLoginViewController.m */,
+				9ECE6702274271DB007CF85F /* Reachability.h */,
+				9ECE6703274271DB007CF85F /* Reachability.m */,
 				716634101DB0E1AB00C92E27 /* Base */,
 				3A57BFAA1ED30ECB00CF9C8C /* Chatroom */,
 				D28345311D90048600FD48A9 /* Chats */,
@@ -3539,6 +3544,7 @@
 				D24327B91DAA024A00EDCDAB /* AgoraMessageReadManager.m in Sources */,
 				EC19F55A27395A9800F88012 /* UIAlertAction+Custom.m in Sources */,
 				7F6CC8AE26568C3600BA60BB /* AgoraChatBaseBubbleView.m in Sources */,
+				9ECE6704274271DB007CF85F /* Reachability.m in Sources */,
 				7F2A1FBD2667B4FC00800ACC /* AgoraPublicGroupsViewController.m in Sources */,
 				EC54DCED2721502200ABEE3E /* MISScrollPageControllerDelegate.m in Sources */,
 				EC54DDFE272A45B100ABEE3E /* ACDInfoDetailCell.m in Sources */,
@@ -3777,6 +3783,20 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/ChatDemo-UI3.0/ChatDemo-UI3.0.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/EMVoiceConvert\"",
+					"\"${PODS_ROOT}/Headers/Public/EaseChatKit\"",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/MJRefresh\"",
+					"\"${PODS_ROOT}/Headers/Public/MWPhotoBrowser\"",
+					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/WHToast\"",
+					"\"${PODS_ROOT}/Headers/Public/DACircularProgress\"",
+				);
 				INFOPLIST_FILE = "ChatDemo-UI3.0/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -3788,6 +3808,33 @@
 				MACOSX_DEPLOYMENT_TARGET = "";
 				MARKETING_VERSION = 3.8.7;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/EMVoiceConvert\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/EaseChatKit\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/MJRefresh\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/MWPhotoBrowser\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/WHToast\"",
+					"-iframework",
+					"\"${PODS_ROOT}/AgoraChat\"",
+					"-iframework",
+					"\"${PODS_ROOT}/Headers/Public/DACircularProgress\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -3847,6 +3894,20 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/ChatDemo-UI3.0/ChatDemo-UI3.0.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/EMVoiceConvert\"",
+					"\"${PODS_ROOT}/Headers/Public/EaseChatKit\"",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/MJRefresh\"",
+					"\"${PODS_ROOT}/Headers/Public/MWPhotoBrowser\"",
+					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/WHToast\"",
+					"\"${PODS_ROOT}/Headers/Public/DACircularProgress\"",
+				);
 				INFOPLIST_FILE = "ChatDemo-UI3.0/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -3858,6 +3919,33 @@
 				MACOSX_DEPLOYMENT_TARGET = "";
 				MARKETING_VERSION = 3.8.7;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/EMVoiceConvert\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/EaseChatKit\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/MJRefresh\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/MWPhotoBrowser\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/WHToast\"",
+					"-iframework",
+					"\"${PODS_ROOT}/AgoraChat\"",
+					"-iframework",
+					"\"${PODS_ROOT}/Headers/Public/DACircularProgress\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
