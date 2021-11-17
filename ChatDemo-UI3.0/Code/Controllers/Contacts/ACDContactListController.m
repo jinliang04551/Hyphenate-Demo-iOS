@@ -210,7 +210,7 @@
         _table.clipsToBounds = YES;
         _table.rowHeight = 54.0f;
         [_table registerClass:[ACDContactCell class] forCellReuseIdentifier:[ACDContactCell reuseIdentifier]];
-        _table.sectionIndexColor = TextLabelGrayColor;
+        _table.sectionIndexColor = SectionIndexTextColor;
         _table.sectionIndexBackgroundColor = [UIColor clearColor];
 
     }

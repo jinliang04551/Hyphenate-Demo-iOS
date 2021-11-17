@@ -30,12 +30,12 @@
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.iconImageView);
         make.left.equalTo(self.iconImageView.mas_right).offset(kAgroaPadding);
-        make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.5);
+        make.right.equalTo(self.detailLabel.mas_left);
     }];
     
     [self.detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.iconImageView);
-        make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.5);
+        make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.6);
     }];
     
 }

@@ -26,6 +26,9 @@
     if ([self.reuseIdentifier isEqualToString:@"AgoraMemberCollection_Edit_Cell"]) {
         _deleteImageView.hidden = YES;
     }
+    
+    self.nicknamLabel.textAlignment = NSTextAlignmentCenter;
+    
 }
 
 - (void)setModel:(AgoraUserModel *)model {

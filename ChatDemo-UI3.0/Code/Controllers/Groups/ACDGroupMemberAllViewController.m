@@ -11,9 +11,9 @@
 #import "UIViewController+HUD.h"
 #import "AgoraNotificationNames.h"
 #import "ACDContainerSearchTableViewController+GroupMemberList.h"
-#import "ACDInfoDetailCell.h"
+#import "ACDContactCell.h"
 #import "NSArray+AgoraSortContacts.h"
-
+#import "AgoraUserModel.h"
 
 @interface ACDGroupMemberAllViewController ()
 
@@ -84,19 +84,19 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [ACDInfoDetailCell height];
+    return [ACDContactCell height];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ACDInfoDetailCell *cell = (ACDInfoDetailCell *)[tableView dequeueReusableCellWithIdentifier:[ACDInfoDetailCell reuseIdentifier]];
+    ACDContactCell *cell = (ACDContactCell *)[tableView dequeueReusableCellWithIdentifier:[ACDContactCell reuseIdentifier]];
     if (cell == nil) {
-        cell = [[ACDInfoDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoDetailCell reuseIdentifier]];
+        cell = [[ACDContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDContactCell reuseIdentifier]];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     NSString *name = self.dataArray[indexPath.row];
-    cell.nameLabel.text = name;
-
+    AgoraUserModel *model = [[AgoraUserModel alloc] initWithHyphenateId:name];
+    cell.model =  model;
     if (name == self.group.owner) {
         cell.detailLabel.text = @"owner";
     } else if([self.group.adminList containsObject:name]){

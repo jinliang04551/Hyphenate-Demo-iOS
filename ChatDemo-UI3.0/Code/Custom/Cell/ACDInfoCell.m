@@ -21,7 +21,7 @@
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(kAgroaPadding * 0.5);
         make.left.equalTo(self.contentView).offset(16.0f);
-        make.width.equalTo(@40.0f);
+        make.size.mas_equalTo(kAvatarHeight);
         make.bottom.equalTo(self.contentView).offset(-kAgroaPadding * 0.5);
     }];
     

@@ -17,33 +17,40 @@
 @implementation ACDSearchJoinCell
 
 - (void)prepare {
-    [self.contentView addGestureRecognizer:self.tapGestureRecognizer];
     [self.contentView addSubview:self.nameLabel];
-    [self.contentView addSubview:self.addLabel];
+    [self.contentView addSubview:self.addButton];
 }
 
 - (void)placeSubViews {
     self.accessoryType = UITableViewCellAccessoryNone;
-        
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.contentView);
         make.left.equalTo(self.contentView).offset(kAgroaPadding * 1.6);
-        make.right.equalTo(self.addLabel.mas_left).offset(-kAgroaPadding * 1.6);
+        make.right.equalTo(self.addButton.mas_left).offset(-kAgroaPadding * 1.6);
     }];
     
-    [self.addLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.addButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.nameLabel);
         make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.6);
-        make.width.equalTo(@100.0);
+//        make.width.equalTo(@100.0);
         make.height.equalTo(@30.0f);
     }];
 }
 
+
 - (void)addButtonAction {
-    self.addButton.selected = !self.addButton.selected;
-    if (self.addGroupBlock) {
+    if (self.addGroupBlock && !self.addButton.selected) {
         self.addGroupBlock();
     }
+    self.addButton.selected = YES;
+
+}
+
+- (void)updateSearchName:(NSString *)searchName {
+    self.nameLabel.text = searchName;
+    self.addButton.selected = NO;
 }
 
 #pragma mark getter and setter
@@ -51,8 +58,11 @@
     if (_addButton == nil) {
         _addButton = [[UIButton alloc] init];
         _addButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+        _addButton.titleLabel.textAlignment = NSTextAlignmentRight;
+        
         [_addButton setTitleColor:ButtonEnableBlueColor forState:UIControlStateNormal];
         [_addButton setTitleColor:ButtonDisableGrayColor forState:UIControlStateSelected];
+        
         [_addButton setTitle:@"Apply" forState:UIControlStateNormal];
         [_addButton setTitle:@"Applied" forState:UIControlStateSelected];
         
@@ -71,6 +81,16 @@
         _addLabel.text = @"Apply";
     }
     return _addLabel;
+}
+
+- (void)setIsSearchGroup:(BOOL)isSearchGroup {
+    if (isSearchGroup) {
+        [_addButton setTitle:@"Apply" forState:UIControlStateNormal];
+        [_addButton setTitle:@"Applied" forState:UIControlStateSelected];
+    }else {
+        [_addButton setTitle:@"Add" forState:UIControlStateNormal];
+        [_addButton setTitle:@"Added" forState:UIControlStateSelected];
+    }
 }
 
 @end

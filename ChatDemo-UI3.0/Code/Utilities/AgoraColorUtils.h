@@ -63,4 +63,4 @@
 #define AvatarLightGrayColor   COLOR_HEX(0xD2E2EF)
 #define AvatarLightOrangeColor   COLOR_HEX(0xFFC188)
 
-
+#define SectionIndexTextColor    COLOR_HEX(0x353535)

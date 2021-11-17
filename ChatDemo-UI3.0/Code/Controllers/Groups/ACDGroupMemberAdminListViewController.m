@@ -11,7 +11,7 @@
 #import "UIViewController+HUD.h"
 #import "AgoraAddAdminViewController.h"
 #import "AgoraNotificationNames.h"
-#import "ACDInfoDetailCell.h"
+#import "ACDContactCell.h"
 #import "ACDContainerSearchTableViewController+GroupMemberList.h"
 
 
@@ -64,12 +64,12 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [ACDInfoDetailCell height];
+    return [ACDContactCell height];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ACDInfoDetailCell *cell = (ACDInfoDetailCell *)[tableView dequeueReusableCellWithIdentifier:[ACDInfoDetailCell reuseIdentifier]];
+    ACDContactCell *cell = (ACDContactCell *)[tableView dequeueReusableCellWithIdentifier:[ACDContactCell reuseIdentifier]];
     if (cell == nil) {
-        cell = [[ACDInfoDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDInfoDetailCell reuseIdentifier]];
+        cell = [[ACDContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDContactCell reuseIdentifier]];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     

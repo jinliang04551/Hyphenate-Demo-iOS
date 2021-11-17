@@ -9,7 +9,6 @@
 #import "ACDMAXGroupNumberCell.h"
 
 @interface ACDMAXGroupNumberCell ()
-@property (nonatomic, strong) UITextField* maxGroupMemberField;
 
 @end
 
@@ -38,7 +37,7 @@
         make.top.equalTo(self.contentView).offset(5);
         make.bottom.equalTo(self.contentView);
         make.left.equalTo(self.nameLabel.mas_right).offset(kAgroaPadding * 0.5);
-        make.right.equalTo(self.contentView).offset(-10);
+        make.right.equalTo(self.contentView).offset(-16);
     }];
     
 }
@@ -50,8 +49,10 @@
         _maxGroupMemberField.textColor = TextLabelBlackColor;
         _maxGroupMemberField.attributedPlaceholder = [ACDUtil attributeContent:@"No More Than 2000" color:TextLabelPlaceHolderGrayColor font:Font(@"PingFang SC", 16.0)];
         _maxGroupMemberField.textAlignment = NSTextAlignmentRight;
+        _maxGroupMemberField.keyboardType = UIKeyboardTypeNumberPad;
     }
     return _maxGroupMemberField;
 }
+
 
 @end

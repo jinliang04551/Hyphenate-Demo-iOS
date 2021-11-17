@@ -107,7 +107,7 @@
     [_groupPermissions addObject:model];
     
     model = [[AgoraGroupPermissionModel alloc] init];
-    model.title = NSLocalizedString(@"group.allowedOccupantInvite", @"Allow members to invite");
+    model.title =  @"Allow members to invite";
     model.isEdit = YES;
     model.switchState = NO;
     model.type = AgoraGroupInfoType_canAllInvite;
@@ -125,7 +125,7 @@
         model.type = AgoraGroupInfoType_openJoin;
     }
     else {
-        model.title = NSLocalizedString(@"group.allowedOccupantInvite", @"Allow members to invite");
+        model.title = @"Allow members to invite";
         model.type = AgoraGroupInfoType_canAllInvite;
     }
     [_groupPermissions replaceObjectAtIndex:1 withObject:model];

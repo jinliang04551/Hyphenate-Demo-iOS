@@ -9,19 +9,25 @@
 #import "ACDContactCell.h"
 #import "AgoraUserModel.h"
 
+#define kIconHeight 40.0f
+
 @implementation ACDContactCell
 
 - (void)prepare {
     [self.contentView addSubview:self.iconImageView];
     [self.contentView addSubview:self.nameLabel];
+    [self.contentView addSubview:self.detailLabel];
+
 }
 
 - (void)placeSubViews {
-    
+    self.iconImageView.layer.cornerRadius = kIconHeight * 0.5;
+   
+
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView);
         make.left.equalTo(self.contentView).offset(16.0f);
-        make.size.mas_equalTo(kAvatarHeight);
+        make.size.mas_equalTo(kIconHeight);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -29,6 +35,12 @@
         make.left.equalTo(self.iconImageView.mas_right).offset(kAgroaPadding);
         make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.5);
     }];
+    
+    [self.detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.iconImageView);
+        make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.6);
+    }];
+
 }
 
 #pragma mark setter
@@ -46,5 +58,17 @@
     }
 }
 
+- (UILabel *)detailLabel {
+    if (_detailLabel == nil) {
+        _detailLabel = [[UILabel alloc] init];
+        _detailLabel.font = NFont(16.0f);
+        _detailLabel.textColor = TextLabelGrayColor;
+        _detailLabel.textAlignment = NSTextAlignmentRight;
+        _detailLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    }
+    return _detailLabel;
+}
 
 @end
+#undef kIconHeight
+

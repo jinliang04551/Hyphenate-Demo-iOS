@@ -12,7 +12,6 @@
 #import "ACDGroupMemberAdminListViewController.h"
 #import "ACDGroupMemberMutedListViewController.h"
 #import "ACDGroupMemberBlockListViewController.h"
-#import "ACDGroupMemberWhiteListViewController.h"
 
 #import "ACDGroupMembersViewController.h"
 #import "AgoraChatDemoHelper.h"

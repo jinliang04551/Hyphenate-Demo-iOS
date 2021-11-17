@@ -23,7 +23,7 @@
 
 static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell";
 
-@interface ACDCreateNewGroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UINavigationControllerDelegate, AgoraGroupUIProtocol>
+@interface ACDCreateNewGroupViewController () <UITextFieldDelegate, UINavigationControllerDelegate, AgoraGroupUIProtocol>
 
 
 @property (strong, nonatomic) ACDTextFieldCell *groupNameCell;
@@ -91,9 +91,9 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     [self.navigationItem setRightBarButtonItems:@[rightSpace,rightBar]];
 }
 
-- (void)updateCreateButtonUserInteractionEnabled:(BOOL)userInteractionEnabled {
-    self.createBtn.userInteractionEnabled = userInteractionEnabled;
-    if (userInteractionEnabled) {
+- (void)updateCreateButtonStatus:(BOOL)enabled {
+    self.createBtn.userInteractionEnabled = enabled;
+    if (enabled) {
         [self.createBtn setTitleColor:TextLabelBlueColor forState:UIControlStateNormal];
         [self.createBtn setTitleColor:TextLabelBlueColor forState:UIControlStateHighlighted];
     }
@@ -183,6 +183,25 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark UITextFieldDelegate
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if (textField == self.maxGroupNumberCell.maxGroupMemberField) {
+
+        NSInteger maxNumber = [textField.text integerValue];
+        if (maxNumber > 2000) {
+            [self showHint:@"max number can not exceed 2000"];
+            textField.text = @"2000";
+        }
+    }
+    
+    if (textField == self.groupNameCell.titleTextField) {
+        BOOL enable = textField.text.length > 0;
+        [self updateCreateButtonStatus:enable];
+
+    }
+}
+
 
 #pragma mark - Table view data source
 
@@ -302,6 +321,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     if (_groupNameCell == nil) {
         _groupNameCell = ACDTextFieldCell.new;
         _groupNameCell.nameLabel.text = @"Group Name";
+        _groupNameCell.titleTextField.delegate = self;
     }
     return _groupNameCell;
 }
@@ -317,6 +337,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     if (_maxGroupNumberCell == nil) {
         _maxGroupNumberCell = ACDMAXGroupNumberCell.new;
         _maxGroupNumberCell.nameLabel.text = @"Maximum Mumber";
+        _maxGroupNumberCell.maxGroupMemberField.delegate = self;
     }
     return _maxGroupNumberCell;
 }

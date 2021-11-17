@@ -147,6 +147,7 @@
 }
 
 - (void)placeAndLayoutForMeInfo {
+
     self.avatarImageView.layer.cornerRadius = kMeHeaderImageViewHeight * 0.5;
     self.avatarImageView.layer.masksToBounds = YES;
     
@@ -270,7 +271,7 @@
     if (_chatView == nil) {
         _chatView = [[ACDImageTextButtonView alloc] init];
         [_chatView.iconImageView setImage:ImageWithName(@"start_chat")];
-        _chatView.titleLabel.text = @"chat";
+        _chatView.titleLabel.text = @"Chat";
         [_chatView.tapBtn addTarget:self action:@selector(goChatPageAction) forControlEvents:UIControlEventTouchUpInside];
 //        _chatView.backgroundColor = UIColor.yellowColor;
         

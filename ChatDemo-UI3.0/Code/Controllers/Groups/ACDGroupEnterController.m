@@ -18,8 +18,8 @@
 #import "AgoraAddContactViewController.h"
 
 #import "ACDGroupInfoViewController.h"
-
 #import "ACDJoinGroupViewController.h"
+#import "ACDContactInfoViewController.h"
 
 #define kHeaderInSection  30.0
 
@@ -35,8 +35,8 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"create";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismissViewController)];
+    self.title = @"Create";
+    [self setNavBar];
     
     if (self.accessType == ACDGroupEnterAccessTypeChat) {
         [self fetchAllContactsFromServer];
@@ -45,29 +45,51 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
     }
 }
 
+- (void)setNavBar {
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 8, 15)];
+    [button addTarget:self action:@selector(dismissViewController) forControlEvents:UIControlEventTouchUpInside];
+    
+    [button setTitle:@"Cancel" forState:UIControlStateNormal];
+    [button setTitleColor:TextLabelBlueColor forState:UIControlStateNormal];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+}
+
 - (void)dismissViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)prepare {
-    [self.view addSubview:self.searchBar];
-    [self.view addSubview:self.table];
+    if (self.accessType == ACDGroupEnterAccessTypeChat) {
+        [self.view addSubview:self.searchBar];
+        [self.view addSubview:self.table];
+    }else {
+        [self.view addSubview:self.table];
+    }
+    
 }
 
 - (void)placeSubViews {
-    [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view);
-        make.left.equalTo(self.view).offset(12.0);
-        make.right.equalTo(self.view).offset(-12.0);
-        make.height.equalTo(@40.0);
-    }];
-    
-    [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.searchBar.mas_bottom);
-        make.left.equalTo(self.view);
-        make.right.equalTo(self.view);
-        make.bottom.equalTo(self.view);
-    }];
+    if (self.accessType == ACDGroupEnterAccessTypeChat) {
+        [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.view);
+            make.left.equalTo(self.view).offset(12.0);
+            make.right.equalTo(self.view).offset(-12.0);
+            make.height.equalTo(@40.0);
+        }];
+        
+        [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.searchBar.mas_bottom);
+            make.left.equalTo(self.view);
+            make.right.equalTo(self.view);
+            make.bottom.equalTo(self.view);
+        }];
+        
+    }else {
+        [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.view);
+        }];
+    }
 }
 
 #pragma mark private method
@@ -142,6 +164,16 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)goContactInfoPageWithUserModel:(AgoraUserModel  *)model {
+    ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
+    vc.addBlackListBlock = ^{
+    };
+    vc.deleteContactBlock = ^{
+    };
+    
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 #pragma mark - Table view data source
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -278,22 +310,33 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        if (indexPath.section == 0) {
-            if (indexPath.row == 0) {
-                [self goCreateNewGroup];
-            }
+        AgoraUserModel *userModel = nil;
+        if (self.isSearchState) {
+            userModel = self.searchResults[indexPath.row];
+            [self goContactInfoPageWithUserModel:userModel];
+        }else {
+            if (indexPath.section == 0) {
+                if (indexPath.row == 0) {
+                    [self goCreateNewGroup];
+                }
+                
+                if (indexPath.row == 1) {
+                    [self joinPublicGroup];
+                }
+                
+                if (indexPath.row == 2) {
+                    [self goPublicGroupList];
+                }
+
+                if (indexPath.row == 3) {
+                    [self goAddContact];
+                }
             
-            if (indexPath.row == 1) {
-                [self joinPublicGroup];
-            }
-            
-            if (indexPath.row == 2) {
-                [self goPublicGroupList];
+            }else {
+                userModel = self.dataArray[indexPath.section - 1][indexPath.row];
+                [self goContactInfoPageWithUserModel:userModel];
             }
 
-            if (indexPath.row == 3) {
-                [self goAddContact];
-            }
         }
     }else {
         if (indexPath.row == 0) {
@@ -310,6 +353,7 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 
     }
 }
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 54.0f;
@@ -335,7 +379,7 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
         
          [_table registerClass:[ACDGroupEnterCell class] forCellReuseIdentifier:[ACDGroupEnterCell reuseIdentifier]];
         
-        _table.sectionIndexColor = TextLabelGrayColor;
+        _table.sectionIndexColor = SectionIndexTextColor;
         _table.sectionIndexBackgroundColor = [UIColor clearColor];
     }
     return _table;

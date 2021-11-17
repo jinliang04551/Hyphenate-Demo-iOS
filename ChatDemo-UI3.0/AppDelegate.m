@@ -24,7 +24,9 @@
 #define HongKongAppkey @"52366312#441909"
 #define MeidongAppkey @"41117440#383391"
 #define Appkey @"61308276#489779"
- 
+#define Appkey1 @"61117440#460199"
+
+
 
 @interface AppDelegate () <AgoraChatClientDelegate,UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) NSString *userName;
@@ -108,7 +110,7 @@
 
 - (void)initUIKit
 {
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:Appkey];
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:Appkey1];
     
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -131,13 +133,15 @@
 
 
 - (void)loadViewController {
-    BOOL isAutoLogin = [AgoraChatClient sharedClient].isAutoLogin;
-    if (isAutoLogin) {
-        [self loadMainPage];
-    } else {
-        [self loadLoginPage];
-    }
-    
+//    BOOL isAutoLogin = [AgoraChatClient sharedClient].isAutoLogin;
+//    if (isAutoLogin) {
+//        [self loadMainPage];
+//    } else {
+//        [self loadLoginPage];
+//    }
+  
+    [self loadMainPage];
+
 }
 
 

@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDMAXGroupNumberCell : ACDCustomCell
+@property (nonatomic, strong) UITextField* maxGroupMemberField;
 
 @end
 

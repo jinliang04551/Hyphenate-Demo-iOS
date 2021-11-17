@@ -29,14 +29,15 @@
     [self.contentView addSubview:self.contentTextView];
     [self.contentView addSubview:self.placeholderLabel];
     [self.contentView addSubview:self.textCountLabel];
+    [self.contentView addSubview:self.bottomLine];
 }
 
 - (void)placeSubViews {
     [self.contentTextView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(10.0f);
         make.bottom.equalTo(self.contentView).offset(-10.0f);
-        make.left.equalTo(self.contentView).offset(10.0 - 5.0f);
-        make.right.equalTo(self.contentView).offset(-10.0 + 5.0f);
+        make.left.equalTo(self.contentView).offset(16.0);
+        make.right.equalTo(self.contentView).offset(-16.0);
     }];
     
     [self.placeholderLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -48,7 +49,13 @@
         make.bottom.equalTo(self.contentView).offset(-5.0);
         make.right.equalTo(self.contentView).offset(-16.0);
     }];
-    
+ 
+    [self.bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentTextView);
+        make.right.equalTo(self.contentTextView);
+        make.height.mas_equalTo(ACD_ONE_PX);
+        make.bottom.equalTo(self.contentView);
+    }];
 }
 
 #pragma mark - UITextViewDelegate

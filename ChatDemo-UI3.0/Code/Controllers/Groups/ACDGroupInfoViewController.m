@@ -308,7 +308,7 @@
         [self joinToPublicGroup:self.group.groupId];
     }
     else {
-        [self showAlertView];
+        [self requestToJoinPublicGroup:self.groupId message:[NSString stringWithFormat:@"%@ request join the group",AgoraChatClient.sharedClient.currentUsername]];
     }
 }
 

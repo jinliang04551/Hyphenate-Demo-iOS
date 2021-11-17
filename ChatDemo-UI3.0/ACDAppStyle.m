@@ -21,6 +21,11 @@
 
 
 - (void)defaultStyle {
+    //hidden navigation bottom line
+    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
     [UITabBarItem.appearance setTitleTextAttributes:@{
                                                       NSFontAttributeName : NFont(12.0f),
                                                       NSForegroundColorAttributeName : TextLabelBlackColor
@@ -33,6 +38,20 @@
 //    UITabBar.appearance.shadowImage = IMAGE_HEX(0xFFFFFF);
     
     UITabBarItem.appearance.badgeColor = TextLabelPinkColor;
+
+}
+
+- (void)matchNavigation {
+    //make navigation not
+    if(@available(iOS 15.0, *)) {
+    UINavigationBarAppearance *appearance = [UINavigationBarAppearance new];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor= [UIColor whiteColor];
+    appearance.shadowColor= [UIColor clearColor];
+    UINavigationBar.appearance.standardAppearance = appearance;
+    UINavigationBar.appearance.scrollEdgeAppearance = appearance;
+    }
+
 }
 
 

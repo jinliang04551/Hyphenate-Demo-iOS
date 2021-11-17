@@ -1,34 +1,24 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  ACDGroupMemberSelectViewController.m
+//  ChatDemo-UI3.0
+//
+//  Created by liang on 2021/11/16.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
-#import "AgoraMemberSelectViewController.h"
+#import "ACDGroupMemberSelectViewController.h"
 #import "AgoraUserModel.h"
-//#import "AgoraMemberCollectionCell.h"
+#import "AgoraMemberCollectionCell.h"
 #import "AgoraRealtimeSearchUtils.h"
 #import "NSArray+AgoraSortContacts.h"
 #import "AgoraGroupMemberCell.h"
-#import "ACDMemberCollectionCell.h"
 
 
 #define NEXT_TITLE   NSLocalizedString(@"common.next", @"Next")
 
 #define DONE_TITLE   @"Done"
 
-@interface AgoraMemberSelectViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, AgoraGroupUIProtocol>
-@property (strong, nonatomic) IBOutlet UIView *headerView;
-
-@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
-
-@property (strong, nonatomic) IBOutlet UICollectionView *selectConllection;
-
-@property (strong, nonatomic) IBOutlet AgoraChatBaseTableview *tableView;
-
+@interface ACDGroupMemberSelectViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AgoraGroupUIProtocol>
 
 @property (strong, nonatomic) NSMutableArray<AgoraUserModel *> *selectContacts;
 
@@ -36,17 +26,16 @@
 
 @property (nonatomic) NSInteger maxInviteCount;
 
-@end
 
-@interface AgoraSectionTitleHeader : UIView
-
-@property (nonatomic, strong) NSString *title;
-
-+ (CGFloat)sectionHeight;
+@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) UICollectionViewFlowLayout *collectionViewLayout;
+@property (nonatomic, strong) NSMutableArray *itemArray;
+@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
 
 @end
 
-@implementation AgoraMemberSelectViewController
+
+@implementation ACDGroupMemberSelectViewController
 {
     UIButton *_doneBtn;
     NSMutableArray *_hasInvitees;
@@ -72,34 +61,31 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.edgesForExtendedLayout = UIRectEdgeNone;
-//    [self.selectConllection registerNib:[UINib nibWithNibName:@"AgoraMemberCollection_Edit_Cell" bundle:nil] forCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell"];
     
-    [self.selectConllection registerClass:[ACDMemberCollectionCell class] forCellWithReuseIdentifier:[ACDMemberCollectionCell reuseIdentifier]];
-    
-    self.tableView.tableFooterView = [UIView new];
-    self.selectConllection.backgroundColor = UIColor.whiteColor;
-    self.tableView.backgroundColor = UIColor.whiteColor;
-    self.tableView.sectionIndexColor = SectionIndexTextColor;
-    self.tableView.sectionIndexBackgroundColor = [UIColor clearColor];
-    self.tableView.separatorStyle  = UITableViewCellSeparatorStyleNone;
-
     [self setupNavBar];
     [self loadUnSelectContacts];
-    [self setupSearchBar];
-}
-    
-- (void)setupSearchBar {
-    CGRect frame = _searchBar.frame;
-    frame.size.height = 30;
-    _searchBar.frame = frame;
-    _searchBar.placeholder = NSLocalizedString(@"common.search", @"Search");
-    _searchBar.showsCancelButton = NO;
-    _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
-    [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-    [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
-    _searchBar.tintColor = AlmostBlackColor;
 }
 
+- (void)prepare {
+    [self.view addSubview:self.searchBar];
+    [self.view addSubview:self.table];
+}
+
+- (void)placeSubViews {
+    [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
+        make.left.equalTo(self.view).offset(14.0);
+        make.right.equalTo(self.view).offset(-14.0);
+        make.height.equalTo(@40.0);
+    }];
+    
+    [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.searchBar.mas_bottom);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.bottom.equalTo(self.view);
+    }];
+}
 
 - (void)setupNavBar {
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -129,39 +115,39 @@
 }
 
 - (void)updateHeaderView:(BOOL)isAdd {
-    if (_selectContacts.count > 0 && self.selectConllection.hidden) {
-        CGFloat height = self.selectConllection.frame.size.height;
-        CGRect frame = self.headerView.frame;
-        frame.size.height += height;
-        self.headerView.frame = frame;
-        
-        frame = self.tableView.frame;
-        frame.origin.y += height;
-        frame.size.height -= height;
-        self.tableView.frame = frame;
-        [_selectConllection reloadData];
-        self.selectConllection.hidden = NO;
-        
-        return;
-    }
-    if (_selectContacts.count == 0 && !self.selectConllection.hidden) {
-        self.selectConllection.hidden = YES;
-        CGFloat height = self.selectConllection.frame.size.height;
-        CGRect frame = self.headerView.frame;
-        frame.size.height -= height;
-        self.headerView.frame = frame;
-        
-        frame = self.tableView.frame;
-        frame.origin.y -= height;
-        frame.size.height += height;
-        self.tableView.frame = frame;
-        [_selectConllection reloadData];
-        return;
-    }
-    if (isAdd) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:_selectContacts.count - 1 inSection:0];
-        [_selectConllection insertItemsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil]];
-    }
+//    if (_selectContacts.count > 0 && self.selectConllection.hidden) {
+//        CGFloat height = self.selectConllection.frame.size.height;
+//        CGRect frame = self.headerView.frame;
+//        frame.size.height += height;
+//        self.headerView.frame = frame;
+//
+//        frame = .frame;
+//        frame.origin.y += height;
+//        frame.size.height -= height;
+//        .frame = frame;
+//        [_selectConllection reloadData];
+//        self.selectConllection.hidden = NO;
+//
+//        return;
+//    }
+//    if (_selectContacts.count == 0 && !self.selectConllection.hidden) {
+//        self.selectConllection.hidden = YES;
+//        CGFloat height = self.selectConllection.frame.size.height;
+//        CGRect frame = self.headerView.frame;
+//        frame.size.height -= height;
+//        self.headerView.frame = frame;
+//
+//        frame = .frame;
+//        frame.origin.y -= height;
+//        frame.size.height += height;
+//        .frame = frame;
+//        [_selectConllection reloadData];
+//        return;
+//    }
+//    if (isAdd) {
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:_selectContacts.count - 1 inSection:0];
+//        [_selectConllection insertItemsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil]];
+//    }
 }
 
 - (void)updateDoneUserInteractionEnabled:(BOOL)userInteractionEnabled {
@@ -208,7 +194,7 @@
     }];
     dispatch_async(dispatch_get_main_queue(), ^{
         if (array.count > 0) {
-            [weakSelf.selectConllection deleteItemsAtIndexPaths:array];
+            [weakSelf.collectionView deleteItemsAtIndexPaths:array];
         }
         if (weakSelf.selectContacts.count == 0) {
             [self updateDoneUserInteractionEnabled:NO];
@@ -228,14 +214,10 @@
         [_delegate addSelectOccupants:_selectContacts];
     }
     [self backAction];
-
-//    [self dismissViewControllerAnimated:YES completion:nil];
-    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -291,28 +273,16 @@
     return 54.0f;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-//    if (_isSearchState) {
-//        return 0;
-//    }
-//    return [AgoraSectionTitleHeader sectionHeight];
-//}
-//
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    AgoraSectionTitleHeader *headerView = [[AgoraSectionTitleHeader alloc] init];
-//    headerView.title = _sectionTitles[section];
-//    return headerView;
-//}
+
 
 #pragma mark - UIScrollViewDelegate
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == self.tableView && scrollView.contentOffset.y < 0) {
-        [scrollView setContentOffset:CGPointMake(0, 0)];
-    }
-    if (scrollView == self.selectConllection && scrollView.contentOffset.x < 0) {
-        [scrollView setContentOffset:CGPointMake(0, 0)];
-    }
+//    if (scrollView ==  && scrollView.contentOffset.y < 0) {
+//        [scrollView setContentOffset:CGPointMake(0, 0)];
+//    }
+//    if (scrollView == self.selectConllection && scrollView.contentOffset.x < 0) {
+//        [scrollView setContentOffset:CGPointMake(0, 0)];
+//    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -326,7 +296,7 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    ACDMemberCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[ACDMemberCollectionCell reuseIdentifier] forIndexPath:indexPath];
+    AgoraMemberCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell" forIndexPath:indexPath];
     cell.model = _selectContacts[indexPath.row];
     return cell;
 }
@@ -337,7 +307,7 @@
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     AgoraUserModel *model = _selectContacts[indexPath.row];
     [self removeOccupantsFromDataSource:@[model]];
-    [self.tableView reloadData];
+    [self.collectionView reloadData];
 }
 
 
@@ -348,57 +318,8 @@
     return CGSizeMake(collectionView.frame.size.width / 5, collectionView.frame.size.height);
 }
 
-#pragma mark - UISearchBarDelegate
-
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    [searchBar setShowsCancelButton:YES animated:YES];
-    _isSearchState = YES;
-    self.tableView.scrollEnabled = !_isSearchState;
-    return YES;
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    self.tableView.scrollEnabled = YES;
-}
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    if (searchBar.text.length == 0) {
-        _isSearchState = NO;
-        self.tableView.scrollEnabled = NO;
-        [_searchResults removeAllObjects];
-        [self.tableView reloadData];
-        return;
-    }
-    _isSearchState = YES;
-    __weak typeof(self) weakSelf = self;
-    [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchWithSource:_searchSource searchString:searchText resultBlock:^(NSArray *results) {
-        if (results) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _searchResults = [NSMutableArray arrayWithArray:results];
-                [weakSelf.tableView reloadData];
-            });
-        }
-    }];
-}
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [searchBar setShowsCancelButton:NO animated:NO];
-    self.tableView.scrollEnabled = YES;
-    [searchBar resignFirstResponder];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    searchBar.text = @"";
-    [searchBar setShowsCancelButton:NO animated:NO];
-    [searchBar resignFirstResponder];
-    [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchDidFinish];
-    _isSearchState = NO;
-    self.tableView.scrollEnabled = !_isSearchState;
-    [self.tableView reloadData];
-}
 
 #pragma mark - AgoraGroupUIProtocol
-
 - (void)addSelectOccupants:(NSArray<AgoraUserModel *> *)modelArray {
     [self.selectContacts addObjectsFromArray:modelArray];
     for (AgoraUserModel *model in modelArray) {
@@ -412,39 +333,67 @@
     [self removeOccupantsFromDataSource:modelArray];
 }
 
-@end
-
-
-@implementation AgoraSectionTitleHeader
-{
-    UILabel *_titleLabel;
-}
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        CGRect screenFrame = [UIScreen mainScreen].bounds;
-        self.frame = CGRectMake(0, 0, screenFrame.size.width, [AgoraSectionTitleHeader sectionHeight]);
-        self.backgroundColor = CoolGrayColor;
+#pragma mark getter and setter
+- (UICollectionView *)collectionView {
+    if (_collectionView == nil) {
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) collectionViewLayout:self.collectionViewLayout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        
+//        [_collectionView registerClass:[ACDAvatarCollectionCell class] forCellWithReuseIdentifier:[ACDAvatarCollectionCell reuseIdentifier]];
+        [_collectionView registerNib:[UINib nibWithNibName:@"AgoraMemberCollection_Edit_Cell" bundle:nil] forCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell"];
     }
-    return self;
+    return _collectionView;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    if (!_titleLabel) {
-        CGFloat x = 15;
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, 0, self.frame.size.width - x, self.frame.size.height)];
-        _titleLabel.font = [UIFont systemFontOfSize:13];
-        _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.textAlignment = NSTextAlignmentLeft;
-        [self addSubview:_titleLabel];
+- (UICollectionViewFlowLayout *)collectionViewLayout {
+    UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    CGFloat itemWidth = (KScreenWidth - 5.0 * 2)/2.0;
+    flowLayout.itemSize = CGSizeMake(itemWidth, itemWidth);
+    flowLayout.minimumLineSpacing = 5.0;
+    flowLayout.minimumInteritemSpacing = 5.0;
+    flowLayout.sectionInset = UIEdgeInsetsMake(0,
+                                               0,
+                                               0,
+                                               0);
+    return flowLayout;
+}
+
+- (NSMutableArray *)itemArray {
+    if (_itemArray == nil) {
+        _itemArray = NSMutableArray.new;
     }
-    _titleLabel.text = _title;
+    return _itemArray;
 }
 
-+ (CGFloat)sectionHeight {
-    return 20;
+- (UITableView *)table {
+    if (!_table) {
+        _table                 = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
+        _table.delegate        = self;
+        _table.dataSource      = self;
+        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
+        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+        _table.backgroundColor = UIColor.whiteColor;
+        
+//         [_table registerClass:[ACDGroupEnterCell class] forCellReuseIdentifier:[ACDGroupEnterCell reuseIdentifier]];
+        
+        _table.sectionIndexColor = SectionIndexTextColor;
+        _table.sectionIndexBackgroundColor = [UIColor clearColor];
+        
+        _table.tableFooterView = [UIView new];
+        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
+    }
+    return _table;
 }
+
+- (UIView *)headerView {
+    if (_headerView == nil) {
     
+        
+    }
+    
+    return _headerView;
+}
+
 @end
