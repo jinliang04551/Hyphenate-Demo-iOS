@@ -11,6 +11,7 @@
 #import "UIViewController+HUD.h"
 #import "AgoraNotificationNames.h"
 #import "ACDContainerSearchTableViewController+GroupMemberList.h"
+#import "AgoraUserModel.h"
 
 @interface ACDGroupMemberBlockListViewController ()
 
@@ -90,7 +91,9 @@
     }
     
     NSString *name = self.dataArray[indexPath.row];
-    cell.nameLabel.text = name;
+    AgoraUserModel *model = [[AgoraUserModel alloc] initWithHyphenateId:name];
+    cell.model = model;
+    
     ACD_WS
     cell.tapCellBlock = ^{
         [weakSelf actionSheetWithUserId:name memberListType:ACDGroupMemberListTypeBlock group:weakSelf.group];

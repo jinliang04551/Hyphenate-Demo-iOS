@@ -33,8 +33,7 @@
 #pragma mark life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Public Groups";
-    
+    [self setupNavbar];
     self.view.backgroundColor = UIColor.whiteColor;
     
     [self addNotifications];
@@ -57,6 +56,35 @@
         weakSelf.noDataPromptView.hidden = YES;
     };
 }
+
+- (void)setupNavbar {
+    self.title = @"Public Groups";
+
+    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftBtn.frame = CGRectMake(0, 0, 20, 20);
+    [leftBtn setImage:[UIImage imageNamed:@"gray_goBack"] forState:UIControlStateNormal];
+    [leftBtn setImage:[UIImage imageNamed:@"gray_goBack"] forState:UIControlStateHighlighted];
+    [leftBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *leftBar = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
+    [self.navigationItem setLeftBarButtonItem:leftBar];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.frame = CGRectMake(0, 0, 50, 40);
+    cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [cancelButton setTitleColor:ButtonEnableBlueColor forState:UIControlStateNormal];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateHighlighted];
+    [cancelButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:cancelButton];
+    
+    UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                target:nil
+                                                                                action:nil];
+    rightSpace.width = -2;
+    [self.navigationItem setRightBarButtonItems:@[rightSpace,rightBar]];
+}
+
+
 
 - (void)prepare {
     [super prepare];
@@ -93,6 +121,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
 }
 
+#pragma mark - Action
+- (void)backAction {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
     
 #pragma mark - Notification Method
 - (void)refreshGroupList:(NSNotification *)notification {
@@ -127,6 +160,7 @@
     ACDGroupNewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[ACDGroupNewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
     if (self.isSearchState) {

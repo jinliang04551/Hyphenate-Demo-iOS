@@ -35,6 +35,8 @@
 
 
 - (void)placeSubViews {
+    self.iconImageView.layer.cornerRadius = kContactAvatarHeight * 0.5;
+    
     [self.selectButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView);
         make.left.equalTo(self.contentView).offset(16.0f);
@@ -43,6 +45,7 @@
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView);
         make.left.equalTo(self.selectButton.mas_right).offset(10.0f);
+        make.size.mas_equalTo(kContactAvatarHeight);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {

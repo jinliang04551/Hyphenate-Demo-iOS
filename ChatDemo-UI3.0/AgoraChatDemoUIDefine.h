@@ -56,6 +56,7 @@
 
 #define kAgroaPadding 10.0f
 #define kAvatarHeight 32.0f
+#define kContactAvatarHeight 40.0f
 
 //user
 #define USER_NAME @"user_name"

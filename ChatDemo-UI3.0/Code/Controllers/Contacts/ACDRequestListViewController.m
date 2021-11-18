@@ -144,9 +144,10 @@
     ACD_WS
     cell.acceptBlock = ^(AgoraApplyModel * _Nonnull model) {
         [weakSelf acceptAction:model];
+        
     };
     cell.rejectBlock = ^(AgoraApplyModel * _Nonnull model) {
-        [weakSelf declineAction:model];
+//        [weakSelf declineAction:model];
     };
     
     return cell;

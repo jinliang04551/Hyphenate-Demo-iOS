@@ -17,6 +17,7 @@
 #import "ACDTextFieldCell.h"
 #import "ACDTextViewCell.h"
 #import "ACDMAXGroupNumberCell.h"
+#import "ACDGroupMemberSelectViewController.h"
 
 #define KAgora_GROUP_MAgoraBERSCOUNT         2000
 
@@ -156,7 +157,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 
 - (void)nextButtonAction {
     if (self.groupNameCell.titleTextField.text.length == 0) {
-        [self showAlertWithMessage:@"请输入群组标题"];
+        [self showAlertWithMessage:@"please input group name"];
         return;
     }
     
@@ -165,7 +166,12 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     selectVC.title = @"Add Members";
     selectVC.delegate = self;
     [self.navigationController pushViewController:selectVC animated:YES];
-        
+  
+//    ACDGroupMemberSelectViewController *selectVC = [[ACDGroupMemberSelectViewController alloc] initWithInvitees:@[] maxInviteCount:0];
+//    selectVC.style = AgoraContactSelectStyle_Add;
+//    selectVC.title = @"Add Members";
+//    selectVC.delegate = self;
+//    [self.navigationController pushViewController:selectVC animated:YES];
 }
 
 

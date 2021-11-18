@@ -484,6 +484,7 @@
 		EC19F578273A187B00F88012 /* Unmute@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F574273A187B00F88012 /* Unmute@2x.png */; };
 		EC19F579273A187B00F88012 /* remove_admin@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F575273A187B00F88012 /* remove_admin@3x.png */; };
 		EC19F57A273A187B00F88012 /* Unmute@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC19F576273A187B00F88012 /* Unmute@3x.png */; };
+		EC1B2C2C27465A9100A6FA6E /* UITabBar+RedPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = EC1B2C2B27465A9100A6FA6E /* UITabBar+RedPoint.m */; };
 		EC432EB4271D852C001B31DE /* AgoraNewLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC432EB3271D852C001B31DE /* AgoraNewLoginViewController.m */; };
 		EC432EB6271D9BFD001B31DE /* login.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC432EB5271D9BFD001B31DE /* login.bundle */; };
 		EC432EB8271EADDA001B31DE /* TabBar.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EC432EB7271EADDA001B31DE /* TabBar.bundle */; };
@@ -1276,6 +1277,8 @@
 		EC19F574273A187B00F88012 /* Unmute@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Unmute@2x.png"; sourceTree = "<group>"; };
 		EC19F575273A187B00F88012 /* remove_admin@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "remove_admin@3x.png"; sourceTree = "<group>"; };
 		EC19F576273A187B00F88012 /* Unmute@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Unmute@3x.png"; sourceTree = "<group>"; };
+		EC1B2C2A27465A9100A6FA6E /* UITabBar+RedPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITabBar+RedPoint.h"; sourceTree = "<group>"; };
+		EC1B2C2B27465A9100A6FA6E /* UITabBar+RedPoint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITabBar+RedPoint.m"; sourceTree = "<group>"; };
 		EC432EB2271D852C001B31DE /* AgoraNewLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraNewLoginViewController.h; sourceTree = "<group>"; };
 		EC432EB3271D852C001B31DE /* AgoraNewLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraNewLoginViewController.m; sourceTree = "<group>"; };
 		EC432EB5271D9BFD001B31DE /* login.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = login.bundle; sourceTree = "<group>"; };
@@ -1608,46 +1611,46 @@
 		716634201DB0E86900C92E27 /* Groups */ = {
 			isa = PBXGroup;
 			children = (
+				EC7A3294272E597100AF0C19 /* ACDContainerSearchTableViewController+GroupMemberList.h */,
+				EC7A3295272E597100AF0C19 /* ACDContainerSearchTableViewController+GroupMemberList.m */,
 				EC54DD412722951100ABEE3E /* ACDCreateNewGroupViewController.h */,
 				EC54DD422722951100ABEE3E /* ACDCreateNewGroupViewController.m */,
+				EC19F546273900DA00F88012 /* ACDGroupEnterController.h */,
+				EC19F547273900DA00F88012 /* ACDGroupEnterController.m */,
+				EC54DDE52728158B00ABEE3E /* ACDGroupInfoViewController.h */,
+				EC54DDE62728158B00ABEE3E /* ACDGroupInfoViewController.m */,
+				EC7A323D272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.h */,
+				EC7A323E272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.m */,
+				EC7A3234272BADE000AF0C19 /* ACDGroupMemberAllViewController.h */,
+				EC7A3235272BADE000AF0C19 /* ACDGroupMemberAllViewController.m */,
+				EC7A323A272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.h */,
+				EC7A323B272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.m */,
+				EC7A3237272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.h */,
+				EC7A3238272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m */,
+				EC54DE1F272A8AD800ABEE3E /* ACDGroupMembersViewController.h */,
+				EC54DE20272A8AD800ABEE3E /* ACDGroupMembersViewController.m */,
+				EC54DDD62726DEF400ABEE3E /* ACDJoinGroupViewController.h */,
+				EC54DDD72726DEF400ABEE3E /* ACDJoinGroupViewController.m */,
+				EC7A3297272EC91C00AF0C19 /* ACDPublicGroupListViewController.h */,
+				EC7A3298272EC91C00AF0C19 /* ACDPublicGroupListViewController.m */,
 				7F6CC84026568B4600BA60BB /* AgoraCreateNewGroupViewController.h */,
 				7F6CC84426568B4600BA60BB /* AgoraCreateNewGroupViewController.m */,
 				7F6CC84826568B4600BA60BB /* AgoraCreateNewGroupViewController.xib */,
 				7F2A1FBE2669D70E00800ACC /* AgoraCreateViewController.h */,
 				7F2A1FBF2669D70E00800ACC /* AgoraCreateViewController.m */,
-				EC54DDE52728158B00ABEE3E /* ACDGroupInfoViewController.h */,
-				EC54DDE62728158B00ABEE3E /* ACDGroupInfoViewController.m */,
-				EC54DE1F272A8AD800ABEE3E /* ACDGroupMembersViewController.h */,
-				EC54DE20272A8AD800ABEE3E /* ACDGroupMembersViewController.m */,
-				EC7A3234272BADE000AF0C19 /* ACDGroupMemberAllViewController.h */,
-				EC7A3235272BADE000AF0C19 /* ACDGroupMemberAllViewController.m */,
-				EC7A323D272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.h */,
-				EC7A323E272BAE5200AF0C19 /* ACDGroupMemberAdminListViewController.m */,
-				EC7A3237272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.h */,
-				EC7A3238272BAE0700AF0C19 /* ACDGroupMemberMutedListViewController.m */,
-				EC7A323A272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.h */,
-				EC7A323B272BAE2500AF0C19 /* ACDGroupMemberBlockListViewController.m */,
-				EC7A3294272E597100AF0C19 /* ACDContainerSearchTableViewController+GroupMemberList.h */,
-				EC7A3295272E597100AF0C19 /* ACDContainerSearchTableViewController+GroupMemberList.m */,
-				EC19F546273900DA00F88012 /* ACDGroupEnterController.h */,
-				EC19F547273900DA00F88012 /* ACDGroupEnterController.m */,
-				EC54DDD62726DEF400ABEE3E /* ACDJoinGroupViewController.h */,
-				EC54DDD72726DEF400ABEE3E /* ACDJoinGroupViewController.m */,
 				716634591DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.h */,
 				7166345A1DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.m */,
 				7166345B1DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.xib */,
 				716634211DB0E86900C92E27 /* AgoraGroupsViewController.h */,
 				716634221DB0E86900C92E27 /* AgoraGroupsViewController.m */,
 				716634231DB0E86900C92E27 /* AgoraGroupsViewController.xib */,
+				EC00E2172743AC5300EEB474 /* ACDGroupMemberSelectViewController.h */,
+				EC00E2182743AC5300EEB474 /* ACDGroupMemberSelectViewController.m */,
 				7F6CC84926568B4600BA60BB /* AgoraMemberSelectViewController.h */,
 				7F6CC84226568B4600BA60BB /* AgoraMemberSelectViewController.m */,
 				7F6CC84126568B4600BA60BB /* AgoraMemberSelectViewController.xib */,
 				7F2A1FBB2667B4FC00800ACC /* AgoraPublicGroupsViewController.h */,
-				EC00E2172743AC5300EEB474 /* ACDGroupMemberSelectViewController.h */,
-				EC00E2182743AC5300EEB474 /* ACDGroupMemberSelectViewController.m */,
 				7F2A1FBC2667B4FC00800ACC /* AgoraPublicGroupsViewController.m */,
-				EC7A3297272EC91C00AF0C19 /* ACDPublicGroupListViewController.h */,
-				EC7A3298272EC91C00AF0C19 /* ACDPublicGroupListViewController.m */,
 				716634261DB0EB7C00C92E27 /* Cell */,
 				3A79D1071E77AAF40085AB6E /* Info */,
 				7166342E1DB0EC0A00C92E27 /* Protocol */,
@@ -2246,6 +2249,8 @@
 				7F663CF2265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m */,
 				7F3E7F9E267B2314009CEAB6 /* UIColor+Util.h */,
 				7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */,
+				EC1B2C2A27465A9100A6FA6E /* UITabBar+RedPoint.h */,
+				EC1B2C2B27465A9100A6FA6E /* UITabBar+RedPoint.m */,
 				9ECE66D5273B6EC2007CF85F /* AgoraChatDateHelper.h */,
 				9ECE66D4273B6EC2007CF85F /* AgoraChatDateHelper.m */,
 				EC19F5402738C5B600F88012 /* ACDUtil.h */,
@@ -3535,6 +3540,7 @@
 				9ECE6701273CBF5F007CF85F /* ACDChatViewController.m in Sources */,
 				7F0516D526A0122B00B2C795 /* AgoraChatBaseViewController.m in Sources */,
 				EC54DE21272A8AD800ABEE3E /* ACDGroupMembersViewController.m in Sources */,
+				EC1B2C2C27465A9100A6FA6E /* UITabBar+RedPoint.m in Sources */,
 				9ECE66C7273B6E7C007CF85F /* AgoraChatRefreshTableViewController.m in Sources */,
 				7F3E7F86267A2E7F009CEAB6 /* AgoraChatRecallCell.m in Sources */,
 				3A4BB1CA1ED43D7700B07FCA /* AgoraChatroomAdminsViewController.m in Sources */,

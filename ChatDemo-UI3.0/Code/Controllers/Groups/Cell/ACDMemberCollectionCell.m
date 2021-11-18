@@ -9,6 +9,8 @@
 #import "ACDMemberCollectionCell.h"
 #import "AgoraUserModel.h"
 
+#define kIconHeight 58.0f
+
 @interface ACDMemberCollectionCell()
 
 @property (nonatomic, strong) UIImageView *avatarImageView;
@@ -37,15 +39,19 @@
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(kAgroaPadding);
         make.centerX.equalTo(self.contentView);
+        make.size.mas_equalTo(kIconHeight);
     }];
     
     [self.deleteImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).offset(kAgroaPadding);
-        make.centerX.equalTo(self.contentView);
+        make.top.equalTo(self.avatarImageView).offset(-kAgroaPadding * 0.5);
+        make.right.equalTo(self.avatarImageView).offset(5.0);
     }];
     
     [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.avatarImageView);
+        make.top.equalTo(self.avatarImageView.mas_bottom).offset(kAgroaPadding * 0.8);
+        make.centerX.equalTo(self.avatarImageView);
+        make.left.right.equalTo(self.avatarImageView);
+
     }];
 
 }
@@ -81,7 +87,7 @@
     if (_avatarImageView == nil) {
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _avatarImageView.layer.cornerRadius = kAvatarHeight * 0.5;
+        _avatarImageView.layer.cornerRadius = kIconHeight * 0.5;
         _avatarImageView.clipsToBounds = YES;
     }
     return _avatarImageView;
@@ -91,8 +97,7 @@
     if (_deleteImageView == nil) {
         _deleteImageView = [[UIImageView alloc] init];
         _deleteImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _deleteImageView.layer.cornerRadius = kAvatarHeight * 0.5;
-        _deleteImageView.clipsToBounds = YES;
+        [_deleteImageView setImage:ImageWithName(@"member_delete")];
     }
     return _deleteImageView;
 }
@@ -100,7 +105,7 @@
 - (UILabel *)nickNameLabel {
     if (_nickNameLabel == nil) {
         _nickNameLabel = [[UILabel alloc] init];
-        _nickNameLabel.font = [UIFont fontWithName:@"PingFangSC-Semibold" size:16.0f];
+        _nickNameLabel.font = [UIFont fontWithName:@"PingFang SC" size:12.0f];
         _nickNameLabel.textColor = COLOR_HEX(0x0D0D0D);
         _nickNameLabel.textAlignment = NSTextAlignmentCenter;
         _nickNameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -111,3 +116,4 @@
 
 @end
 
+#undef kIconHeight

@@ -53,6 +53,7 @@ MISScrollPageControllerDelegate,AgoraGroupUIProtocol>
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = UIColor.whiteColor;
     
     [self placeAndLayoutSubviews];
     

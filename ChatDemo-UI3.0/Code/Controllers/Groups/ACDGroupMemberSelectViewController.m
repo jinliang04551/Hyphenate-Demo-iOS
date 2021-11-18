@@ -8,7 +8,7 @@
 
 #import "ACDGroupMemberSelectViewController.h"
 #import "AgoraUserModel.h"
-#import "AgoraMemberCollectionCell.h"
+#import "ACDMemberCollectionCell.h"
 #import "AgoraRealtimeSearchUtils.h"
 #import "NSArray+AgoraSortContacts.h"
 #import "AgoraGroupMemberCell.h"
@@ -18,41 +18,42 @@
 
 #define DONE_TITLE   @"Done"
 
+#define kCollectionViewHeight 90.0f
+
 @interface ACDGroupMemberSelectViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AgoraGroupUIProtocol>
 
 @property (strong, nonatomic) NSMutableArray<AgoraUserModel *> *selectContacts;
 
 @property (strong, nonatomic) NSMutableArray<NSMutableArray *> *unselectedContacts;
-
 @property (nonatomic) NSInteger maxInviteCount;
-
-
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UICollectionViewFlowLayout *collectionViewLayout;
 @property (nonatomic, strong) NSMutableArray *itemArray;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+@property (nonatomic, strong) UIButton *doneBtn;
+@property (nonatomic, strong) NSMutableArray *hasInvitees;
 
 @end
 
 
 @implementation ACDGroupMemberSelectViewController
-{
-    UIButton *_doneBtn;
-    NSMutableArray *_hasInvitees;
-    NSMutableArray *_sectionTitles;
-    NSMutableArray *_searchSource;
-    NSMutableArray *_searchResults;
-    BOOL _isSearchState;
-}
+//{
+//    UIButton *_doneBtn;
+//    NSMutableArray *_hasInvitees;
+//    NSMutableArray *self.sectionTitles;
+//    NSMutableArray *self.searchSource;
+//    NSMutableArray *_searchResults;
+//    BOOL self.isSearchState;
+//}
 
 - (instancetype)initWithInvitees:(NSArray *)aHasInvitees
                   maxInviteCount:(NSInteger)aCount
 {
-    self = [super initWithNibName:@"AgoraMemberSelectViewController" bundle:nil];
+    self = [super init];
     if (self) {
         _selectContacts = [NSMutableArray array];
         _unselectedContacts = [NSMutableArray array];
-        _hasInvitees = [NSMutableArray arrayWithArray:aHasInvitees];
+        self.hasInvitees = [NSMutableArray arrayWithArray:aHasInvitees];
         _maxInviteCount = aCount;
     }
     return self;
@@ -60,6 +61,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = UIColor.whiteColor;
+    
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
     [self setupNavBar];
@@ -68,19 +71,28 @@
 
 - (void)prepare {
     [self.view addSubview:self.searchBar];
+    [self.view addSubview:self.collectionView];
     [self.view addSubview:self.table];
 }
 
 - (void)placeSubViews {
     [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view);
-        make.left.equalTo(self.view).offset(14.0);
-        make.right.equalTo(self.view).offset(-14.0);
-        make.height.equalTo(@40.0);
+        make.left.equalTo(self.view).offset(12.0);
+        make.right.equalTo(self.view).offset(-12.0);
+        make.height.equalTo(@44.0);
     }];
     
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.searchBar.mas_bottom).offset(15.0);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.height.mas_equalTo(0);
+    }];
+
+    
     [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.searchBar.mas_bottom);
+        make.top.equalTo(self.collectionView.mas_bottom);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
@@ -98,7 +110,7 @@
     
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _doneBtn.frame = CGRectMake(0, 0, 44, 44);
-    [self updateDoneUserInteractionEnabled:NO];
+    [self updateDoneButtonStateEnabled:NO];
     NSString *title = @"Create";
     if (_style == AgoraContactSelectStyle_Invite) {
         title = DONE_TITLE;
@@ -115,44 +127,57 @@
 }
 
 - (void)updateHeaderView:(BOOL)isAdd {
-//    if (_selectContacts.count > 0 && self.selectConllection.hidden) {
-//        CGFloat height = self.selectConllection.frame.size.height;
+//    if (_selectContacts.count > 0 && self.collectionView.hidden) {
+//        CGFloat height = self.collectionView.frame.size.height;
 //        CGRect frame = self.headerView.frame;
 //        frame.size.height += height;
 //        self.headerView.frame = frame;
 //
-//        frame = .frame;
+//        frame = self.table.frame;
 //        frame.origin.y += height;
 //        frame.size.height -= height;
-//        .frame = frame;
-//        [_selectConllection reloadData];
-//        self.selectConllection.hidden = NO;
+//        self.table.frame = frame;
+//        [_collectionView reloadData];
+//        self.collectionView.hidden = NO;
 //
 //        return;
 //    }
-//    if (_selectContacts.count == 0 && !self.selectConllection.hidden) {
-//        self.selectConllection.hidden = YES;
-//        CGFloat height = self.selectConllection.frame.size.height;
+//
+//    if (_selectContacts.count == 0 && !self.collectionView.hidden) {
+//        self.collectionView.hidden = YES;
+//        CGFloat height = self.collectionView.frame.size.height;
 //        CGRect frame = self.headerView.frame;
 //        frame.size.height -= height;
 //        self.headerView.frame = frame;
 //
-//        frame = .frame;
+//        frame = self.table.frame;
 //        frame.origin.y -= height;
 //        frame.size.height += height;
-//        .frame = frame;
-//        [_selectConllection reloadData];
+//        self.table.frame = frame;
+//        [_collectionView reloadData];
 //        return;
 //    }
+    
+    if (self.selectContacts.count > 0) {
+        [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(kCollectionViewHeight);
+        }];
+    }else {
+        [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0);
+        }];
+    }
+    
 //    if (isAdd) {
 //        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:_selectContacts.count - 1 inSection:0];
-//        [_selectConllection insertItemsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil]];
+//        [_collectionView insertItemsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil]];
 //    }
+    
 }
 
-- (void)updateDoneUserInteractionEnabled:(BOOL)userInteractionEnabled {
-    _doneBtn.userInteractionEnabled = userInteractionEnabled;
-    if (userInteractionEnabled) {
+- (void)updateDoneButtonStateEnabled:(BOOL)enabled {
+    _doneBtn.userInteractionEnabled = enabled;
+    if (enabled) {
         [_doneBtn setTitleColor:TextLabelBlueColor forState:UIControlStateNormal];
         [_doneBtn setTitleColor:TextLabelBlueColor forState:UIControlStateHighlighted];
     }
@@ -175,36 +200,39 @@
                                  sectionTitles:&sectionTitles
                                   searchSource:&searchSource];
     [self.unselectedContacts addObjectsFromArray:sortArray];
-    _sectionTitles = [NSMutableArray arrayWithArray:sectionTitles];
-    _searchSource = [NSMutableArray arrayWithArray:searchSource];
+    self.sectionTitles = [NSMutableArray arrayWithArray:sectionTitles];
+    self.searchSource = [NSMutableArray arrayWithArray:searchSource];
 }
+
 
 - (void)removeOccupantsFromDataSource:(NSArray<AgoraUserModel *> *)modelArray {
     __block NSMutableArray *array = [NSMutableArray array];
-    __weak typeof(self) weakSelf = self;
-    __weak NSMutableArray *weakHasInvitees = _hasInvitees;
+        
+    ACD_WS
     [modelArray enumerateObjectsUsingBlock:^(AgoraUserModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([weakSelf.selectContacts containsObject:obj]) {
             NSUInteger index = [weakSelf.selectContacts indexOfObject:obj];
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
             [array addObject:indexPath];
-            [weakHasInvitees removeObject:obj.hyphenateId];
             [weakSelf.selectContacts removeObjectsInArray:modelArray];
         }
-    }];
-    dispatch_async(dispatch_get_main_queue(), ^{
+        
         if (array.count > 0) {
             [weakSelf.collectionView deleteItemsAtIndexPaths:array];
         }
+        
         if (weakSelf.selectContacts.count == 0) {
-            [self updateDoneUserInteractionEnabled:NO];
+            [self updateDoneButtonStateEnabled:NO];
         }
+        
+        [weakSelf.table reloadData];
+        [weakSelf.collectionView reloadData];
         [weakSelf updateHeaderView:NO];
-    });
+        
+    }];
 }
 
 #pragma mark - Action
-
 - (void)backAction {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -223,38 +251,36 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (_isSearchState) {
+    if (self.isSearchState) {
         return 1;
     }
-    return _sectionTitles.count;
+    return self.sectionTitles.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (_isSearchState) {
-        return _searchResults.count;
+    if (self.isSearchState) {
+        return self.searchResults.count;
     }
     return [(NSArray *)_unselectedContacts[section] count];
 }
 
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    if (_isSearchState) {
+    if (self.isSearchState) {
         return @[];
     }
-    return _sectionTitles;
+    return self.sectionTitles;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"AgoraGroupMember_Invite_Cell";
-    AgoraGroupMemberCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    AgoraGroupMemberCell *cell = [tableView dequeueReusableCellWithIdentifier:[AgoraGroupMemberCell reuseIdentifier]];
     if (!cell) {
-        cell = [[AgoraGroupMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        
+        cell = [[AgoraGroupMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[AgoraGroupMemberCell reuseIdentifier]];
     }
     
     AgoraUserModel *model = nil;
-    if (_isSearchState) {
-        model = _searchResults[indexPath.row];
+    if (self.isSearchState) {
+        model = self.searchResults[indexPath.row];
     }
     else {
         NSMutableArray *array = _unselectedContacts[indexPath.section];
@@ -268,21 +294,18 @@
 }
 
 #pragma mark - UITableViewDelegate
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 54.0f;
 }
 
-
-
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-//    if (scrollView ==  && scrollView.contentOffset.y < 0) {
-//        [scrollView setContentOffset:CGPointMake(0, 0)];
-//    }
-//    if (scrollView == self.selectConllection && scrollView.contentOffset.x < 0) {
-//        [scrollView setContentOffset:CGPointMake(0, 0)];
-//    }
+    if (scrollView == self.collectionView && scrollView.contentOffset.y < 0) {
+        [scrollView setContentOffset:CGPointMake(0, 0)];
+    }
+    if (scrollView == self.collectionView && scrollView.contentOffset.x < 0) {
+        [scrollView setContentOffset:CGPointMake(0, 0)];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -296,13 +319,12 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    AgoraMemberCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell" forIndexPath:indexPath];
+    ACDMemberCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[ACDMemberCollectionCell reuseIdentifier] forIndexPath:indexPath];
     cell.model = _selectContacts[indexPath.row];
     return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
-
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     AgoraUserModel *model = _selectContacts[indexPath.row];
@@ -325,7 +347,7 @@
     for (AgoraUserModel *model in modelArray) {
         [_hasInvitees addObject:model.hyphenateId];
     }
-    [self updateDoneUserInteractionEnabled:YES];
+    [self updateDoneButtonStateEnabled:YES];
     [self updateHeaderView:YES];
 }
 
@@ -336,12 +358,12 @@
 #pragma mark getter and setter
 - (UICollectionView *)collectionView {
     if (_collectionView == nil) {
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) collectionViewLayout:self.collectionViewLayout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kCollectionViewHeight) collectionViewLayout:self.collectionViewLayout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
+        _collectionView.backgroundColor = UIColor.yellowColor;
         
-//        [_collectionView registerClass:[ACDAvatarCollectionCell class] forCellWithReuseIdentifier:[ACDAvatarCollectionCell reuseIdentifier]];
-        [_collectionView registerNib:[UINib nibWithNibName:@"AgoraMemberCollection_Edit_Cell" bundle:nil] forCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell"];
+        [_collectionView registerClass:[ACDMemberCollectionCell class] forCellWithReuseIdentifier:[ACDMemberCollectionCell reuseIdentifier]];
     }
     return _collectionView;
 }
@@ -376,7 +398,7 @@
         _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
         _table.backgroundColor = UIColor.whiteColor;
         
-//         [_table registerClass:[ACDGroupEnterCell class] forCellReuseIdentifier:[ACDGroupEnterCell reuseIdentifier]];
+        [_table registerClass:[AgoraGroupMemberCell class] forCellReuseIdentifier:[AgoraGroupMemberCell reuseIdentifier]];
         
         _table.sectionIndexColor = SectionIndexTextColor;
         _table.sectionIndexBackgroundColor = [UIColor clearColor];
@@ -387,13 +409,7 @@
     return _table;
 }
 
-- (UIView *)headerView {
-    if (_headerView == nil) {
-    
-        
-    }
-    
-    return _headerView;
-}
 
 @end
+#undef kCollectionViewHeight
+
