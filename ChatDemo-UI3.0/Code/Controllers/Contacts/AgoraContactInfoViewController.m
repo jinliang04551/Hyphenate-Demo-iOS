@@ -12,7 +12,6 @@
 #import "AgoraUserModel.h"
 #import "AgoraContactInfoCell.h"
 #import "AgoraChatDemoHelper.h"
-#import "AgoraChatViewController.h"
 #import "ACDChatViewController.h"
 
 #define NAME                NSLocalizedString(@"contact.name", @"Name")

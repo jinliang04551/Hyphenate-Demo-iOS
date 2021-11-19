@@ -15,7 +15,7 @@
 #import "ACDGroupMembersViewController.h"
 
 #import "AgoraGroupTransferOwnerViewController.h"
-#import "AgoraChatViewController.h"
+#import "ACDChatViewController.h"
 #import "ACDTransferOwnerViewController.h"
 
 #define kGroupInfoHeaderViewHeight 360.0
@@ -333,7 +333,7 @@
 }
 
 - (void)goGroupChatPage {
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:self.group.groupId conversationType:AgoraChatConversationTypeGroupChat];
+    ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:self.group.groupId conversationType:AgoraChatConversationTypeGroupChat];
     chatViewController.navTitle = self.group.groupName;
     [self.navigationController pushViewController:chatViewController animated:YES];
 
@@ -431,6 +431,8 @@
 - (ACDInfoHeaderView *)groupInfoHeaderView {
     if (_groupInfoHeaderView == nil) {
         _groupInfoHeaderView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kGroupInfoHeaderViewHeight) withType:ACDHeaderInfoTypeGroup];
+        _groupInfoHeaderView.isHideChatButton = self.isHideChatButton;
+        
         [_groupInfoHeaderView.avatarImageView setImage:ImageWithName(@"group_default_avatar")];
         ACD_WS
         _groupInfoHeaderView.tapHeaderBlock = ^{

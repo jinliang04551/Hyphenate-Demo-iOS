@@ -209,22 +209,7 @@ static NSString *kGroupName = @"GroupName";
 #pragma mark - UITabBarDelegate
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{
-//    if (item.tag == 0) {
-//        self.title = NSLocalizedString(@"title.contacts", @"Contacts");
-//        [_contactsVC setupNavigationItem:self.navigationItem];
-//    }
-//    else if (item.tag == 1){
-//        self.title = NSLocalizedString(@"title.chats", @"Chats");
-//        self.navigationItem.rightBarButtonItem = nil;
-//        [_chatsVC setupNavigationItem:self.navigationItem];
-//    }
-//    else if (item.tag == 2){
-//        self.title = NSLocalizedString(@"title.settings", @"Settings");
-//        [self clearNavigationItem];
-//    }
-    
-    
+{    
         if (item.tag== 0) {
             self.title = NSLocalizedString(@"title.contacts", @"Contacts");
 //            [_contactsVC setupNavigationItem:self.navigationItem];

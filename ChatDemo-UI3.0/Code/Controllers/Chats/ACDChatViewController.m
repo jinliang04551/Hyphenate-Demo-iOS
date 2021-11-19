@@ -39,6 +39,8 @@
     if (self = [super init]) {
         _conversation = [AgoraChatClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:YES];
         _conversationModel = [[EaseConversationModel alloc]initWithConversation:_conversation];
+        self.conversationType = conType;
+        self.conversationId = conversationId;
         
         EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
         viewModel.displayOneselfAvatar = NO;
@@ -66,6 +68,19 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
+
+
 - (void)dealloc
 {
     [[AgoraChatClient sharedClient].roomManager removeDelegate:self];
@@ -73,24 +88,52 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-    self.navigationController.navigationBarHidden = NO;
-}
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
+//    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+//    self.navigationController.navigationBarHidden = NO;
+//}
+
+//- (void)_setupChatSubviews
+//{
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backleft"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
+//    [self _setupNavigationBarTitle];
+//    //[self _setupNavigationBarRightItem];
+//    [self addChildViewController:_chatController];
+//    [self.view addSubview:_chatController.view];
+//    _chatController.view.frame = self.view.bounds;
+//    [self loadData:YES];
+//    self.view.backgroundColor = [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0];
+//}
 
 - (void)_setupChatSubviews
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backleft"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
-    [self _setupNavigationBarTitle];
-    //[self _setupNavigationBarRightItem];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backleft"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
+//    [self _setupNavigationBarTitle];
+    
     [self addChildViewController:_chatController];
+    [self.view addSubview:self.navigationView];
     [self.view addSubview:_chatController.view];
-    _chatController.view.frame = self.view.bounds;
+    
+    [self.navigationView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
+        make.left.right.equalTo(self.view);
+        make.bottom.equalTo(_chatController.view.mas_top);
+    }];
+    
+    [_chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(60.0, 0, 0, 0));
+    }];
+    
+//    [self addChildViewController:_chatController];
+//    [self.view addSubview:_chatController.view];
+//    _chatController.view.frame = self.view.bounds;
+    
     [self loadData:YES];
     self.view.backgroundColor = [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0];
 }
+
 
 - (void)_setupNavigationBarRightItem
 {
@@ -431,6 +474,7 @@
 - (void)goContactInfoWithContactId:(NSString *)contactId {
     AgoraUserModel * model = [[AgoraUserModel alloc] initWithHyphenateId:contactId];
     ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
+    vc.isHideChatButton = YES;
     
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
@@ -439,7 +483,10 @@
 
 - (void)goGroupInfoWithGroupId:(NSString *)groupId {
     ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
+    
     vc.accessType = ACDGroupInfoAccessTypeChat;
+    vc.isHideChatButton = YES;
+    
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }

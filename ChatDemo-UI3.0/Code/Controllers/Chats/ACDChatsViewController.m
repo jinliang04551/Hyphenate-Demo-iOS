@@ -249,6 +249,7 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
         ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:model.easeId conversationType:model.type];
+        chatViewController.navTitle = model.showName;
 
         chatViewController.hidesBottomBarWhenPushed = YES;
         [weakself.navigationController pushViewController:chatViewController animated:YES];
@@ -436,7 +437,8 @@
 {
     EaseConversationCell *cell = (EaseConversationCell*)[tableView cellForRowAtIndexPath:indexPath];
     ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:cell.model.easeId conversationType:cell.model.type];
-
+    chatViewController.navTitle = cell.model.showName;
+    
     chatViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatViewController animated:YES];
 }

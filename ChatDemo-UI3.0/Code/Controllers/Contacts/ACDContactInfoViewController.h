@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ACDContactInfoViewController : ACDBaseTableViewController
 @property (nonatomic,copy) void (^addBlackListBlock)(void);
 @property (nonatomic,copy) void (^deleteContactBlock)(void);
+@property (nonatomic,assign) BOOL isHideChatButton;
 
 - (instancetype)initWithUserModel:(AgoraUserModel *)model;
 

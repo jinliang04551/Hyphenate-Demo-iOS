@@ -12,7 +12,7 @@
 #import "AgoraUserModel.h"
 #import "AgoraContactInfoCell.h"
 #import "AgoraChatDemoHelper.h"
-#import "AgoraChatViewController.h"
+#import "ACDChatViewController.h"
 #import "ACDInfoHeaderView.h"
 #import "ACDInfoCell.h"
 
@@ -257,6 +257,7 @@ typedef enum : NSUInteger {
 - (ACDInfoHeaderView *)contactInfoHeaderView {
     if (_contactInfoHeaderView == nil) {
         _contactInfoHeaderView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kContactInfoHeaderViewHeight) withType:ACDHeaderInfoTypeContact];
+        _contactInfoHeaderView.isHideChatButton = self.isHideChatButton;
         
         ACD_WS
         _contactInfoHeaderView.tapHeaderBlock = ^{
@@ -264,7 +265,7 @@ typedef enum : NSUInteger {
         };
         
         _contactInfoHeaderView.goChatPageBlock = ^{
-            AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
+            ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
             chatViewController.navTitle = weakSelf.model.nickname;
             [weakSelf.navigationController pushViewController:chatViewController animated:YES];
         };
