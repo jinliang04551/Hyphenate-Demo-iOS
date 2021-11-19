@@ -101,9 +101,25 @@
 
 - (void)updateWithObj:(id)obj {
     self.model = (AgoraApplyModel*)obj;
-    self.nameLabel.text = self.model.applyHyphenateId;
+    self.nameLabel.text = self.model.applyNickName;
     self.timeLabel.text = @"Now";
     self.contentLabel.text = self.model.reason;
+    
+    if (self.model.applyStatus != ACDApplyStatusDefault) {
+        self.acceptButton.hidden = self.rejectButton.hidden = YES;
+        self.resultlabel.hidden = NO;
+        
+        if (self.model.applyStatus == ACDApplyStatusAgreed) {
+            self.resultlabel.text = @"Accepted";
+        }
+        
+        if (self.model.applyStatus == ACDApplyStatusDeclined) {
+            self.resultlabel.text = @"Ignored";
+        }
+        
+    }
+    
+    
     
 //    NSString *iconImageName = @"";
 //    if (self.model.style == AgoraApplyStyle_contact) {

@@ -103,7 +103,8 @@
     else {
         [self showAlertWithMessage:@"Refused to apply for failure"];
     }
-    [self updateUI];
+    
+    [self.table reloadData];
 }
 
 - (void)acceptApplyFinished:(AgoraChatError *)error
@@ -115,7 +116,8 @@
     else {
         [self showAlertWithMessage:@"Failed to agree to apply"];
     }
-    [self updateUI];
+    
+    [self.table reloadData];
 }
 
 
@@ -143,11 +145,13 @@
     [cell updateWithObj:applyModel];
     ACD_WS
     cell.acceptBlock = ^(AgoraApplyModel * _Nonnull model) {
+        applyModel.applyStatus = ACDApplyStatusAgreed;
         [weakSelf acceptAction:model];
-        
     };
+    
     cell.rejectBlock = ^(AgoraApplyModel * _Nonnull model) {
-//        [weakSelf declineAction:model];
+        applyModel.applyStatus = ACDApplyStatusDeclined;
+        [weakSelf declineAction:model];
     };
     
     return cell;
@@ -176,8 +180,15 @@
 
 
 - (void)viewDidAppearForIndex:(NSUInteger)index{
-    NSLog(@"---------- viewDidAppearForIndex ---------- %lu", (unsigned long)index);
     [self updateUI];
+    [[AgoraChatDemoHelper shareHelper] hiddenApplyRedPoint];
+
+}
+
+- (void)viewDidDisappearForIndex:(NSUInteger)index {
+    [self updateUI];
+    [[AgoraChatDemoHelper shareHelper] setupUntreatedApplyCount];
+
 }
 
 @end

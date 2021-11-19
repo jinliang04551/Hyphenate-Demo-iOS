@@ -32,7 +32,7 @@
 + (instancetype)shareHelper;
 
 - (void)setupUntreatedApplyCount;
-
+- (void)hiddenApplyRedPoint;
 
 
 @end

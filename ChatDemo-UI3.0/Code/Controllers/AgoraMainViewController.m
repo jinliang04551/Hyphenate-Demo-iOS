@@ -99,7 +99,7 @@ static NSString *kGroupName = @"GroupName";
 //    self.title = NSLocalizedString(@"title.contacts", @"Contacts");
 //    _contactsVC = [[AgoraContactsViewController alloc] init];
     _contactsVC = [[ACDContactsViewController alloc] init];
-    _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Contacts"
+    _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@""
                                                    image:[ImageWithName(@"TabBar.bundle/tabbar_contacts")
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
                                            selectedImage:[ImageWithName(@"TabBar.bundle/tabbar_contactsHL")
@@ -107,7 +107,7 @@ static NSString *kGroupName = @"GroupName";
 
     
     _chatsVC = [[ACDChatsViewController alloc] init];
-    _chatsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats"
+    _chatsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@""
                                                    image:[ImageWithName(@"TabBar.bundle/tabbar_chats")
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
                                            selectedImage:[ImageWithName(@"TabBar.bundle/tabbar_chatsHL")
@@ -115,7 +115,7 @@ static NSString *kGroupName = @"GroupName";
 
     
     _settingsVC = [[ACDSettingsViewController alloc] init];
-    _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings"
+    _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@""
                                                    image:[ImageWithName(@"TabBar.bundle/tabbar_setting")
                                                           imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
                                            selectedImage:[ImageWithName(@"TabBar.bundle/tabbar_settingHL")

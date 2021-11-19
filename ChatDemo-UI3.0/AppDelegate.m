@@ -133,14 +133,14 @@
 
 
 - (void)loadViewController {
-//    BOOL isAutoLogin = [AgoraChatClient sharedClient].isAutoLogin;
-//    if (isAutoLogin) {
-//        [self loadMainPage];
-//    } else {
-//        [self loadLoginPage];
-//    }
+    BOOL isAutoLogin = [AgoraChatClient sharedClient].isAutoLogin;
+    if (isAutoLogin) {
+        [self loadMainPage];
+    } else {
+        [self loadLoginPage];
+    }
   
-    [self loadMainPage];
+//    [self loadMainPage];
 
 }
 

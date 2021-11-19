@@ -91,8 +91,7 @@
     }else {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:ImageWithName(@"black_goBack") style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
     }
-    
-    
+
 }
 
 - (void)placeSubViews {

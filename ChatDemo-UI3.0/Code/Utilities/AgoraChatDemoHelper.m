@@ -74,6 +74,11 @@ static AgoraChatDemoHelper *helper = nil;
     }
 }
 
+- (void)hiddenApplyRedPoint {
+    [_contactsVC.tabBarController.tabBar hideBadgeOnItemIndex:1];
+    [_contactsVC navBarUnreadRequestIsShow:NO];
+}
+
 #pragma mark - AgoraChatClientDelegate
 
 - (void)autoLoginDidCompleteWithError:(AgoraChatError *)aError {

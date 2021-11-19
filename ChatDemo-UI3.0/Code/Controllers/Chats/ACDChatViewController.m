@@ -13,6 +13,12 @@
 #import "AgoraChatDateHelper.h"
 #import "UserInfoStore.h"
 
+#import "ACDChatNavigationView.h"
+#import "ACDContactInfoViewController.h"
+#import "AgoraUserModel.h"
+#import "ACDGroupInfoViewController.h"
+
+
 @interface ACDChatViewController ()<EaseChatViewControllerDelegate, AgoraChatroomManagerDelegate, AgoraChatGroupManagerDelegate, EaseMessageCellDelegate>
 @property (nonatomic, strong) EaseConversationModel *conversationModel;
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -20,6 +26,11 @@
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic, strong) UIView* fullScreenView;
 @property (strong, nonatomic) UIButton *backButton;
+
+@property (nonatomic, strong) ACDChatNavigationView *navigationView;
+@property (nonatomic, assign) AgoraChatConversationType conversationType;
+@property (nonatomic, strong) NSString *conversationId;
+
 @end
 
 @implementation ACDChatViewController
@@ -385,6 +396,52 @@
 - (void)chatroomAnnouncementDidUpdate:(AgoraChatroom *)aChatroom announcement:(NSString *)aAnnouncement
 {
     [self showHint:@"聊天室公告内容已更新，请查看"];
+}
+
+#pragma mark getter and setter
+- (ACDChatNavigationView *)navigationView {
+    if (_navigationView == nil) {
+        _navigationView = [[ACDChatNavigationView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 80.0f)];
+    
+        _navigationView.leftLabel.text = self.navTitle;
+        ACD_WS
+        _navigationView.leftButtonBlock = ^{
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        };
+        
+        _navigationView.chatButtonBlock = ^{
+            [weakSelf goInfoPage];
+        };
+    }
+    return _navigationView;
+}
+
+- (void)goInfoPage {
+    if (self.conversationType == AgoraChatConversationTypeChat) {
+        [self goContactInfoWithContactId:self.conversationId];
+    }
+    
+    if (self.conversationType == AgoraChatConversationTypeGroupChat) {
+        [self goGroupInfoWithGroupId:self.conversationId];
+    }
+
+}
+
+
+- (void)goContactInfoWithContactId:(NSString *)contactId {
+    AgoraUserModel * model = [[AgoraUserModel alloc] initWithHyphenateId:contactId];
+    ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
+    
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
+- (void)goGroupInfoWithGroupId:(NSString *)groupId {
+    ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
+    vc.accessType = ACDGroupInfoAccessTypeChat;
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

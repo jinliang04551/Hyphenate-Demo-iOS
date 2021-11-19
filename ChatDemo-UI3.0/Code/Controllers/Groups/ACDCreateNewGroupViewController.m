@@ -138,7 +138,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     
     model = _groupPermissions.lastObject;
     if (_isPublic) {
-        model.title = NSLocalizedString(@"group.openJoin", @"Authorizated to join");
+        model.title = @"Authorizated to join";
         model.type = AgoraGroupInfoType_openJoin;
     }
     else {
