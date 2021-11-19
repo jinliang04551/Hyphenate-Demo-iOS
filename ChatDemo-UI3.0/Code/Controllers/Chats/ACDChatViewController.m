@@ -32,8 +32,8 @@
         EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
         viewModel.displayOneselfAvatar = NO;
         viewModel.displayOneselfName = NO;
-        if (conType == AgoraChatTypeChat) {
-            viewModel.displayOneselfName = NO;
+        if (conType != AgoraChatTypeGroupChat) {
+            viewModel.displayOtherName= NO;
         }
         _chatController = [EaseChatViewController initWithConversationId:conversationId
                                                     conversationType:conType

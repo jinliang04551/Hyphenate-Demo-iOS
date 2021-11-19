@@ -12,7 +12,8 @@
 #import "AgoraUserModel.h"
 #import "AgoraContactInfoCell.h"
 #import "AgoraChatDemoHelper.h"
-#import "AgoraChatViewController.h"
+//#import "AgoraChatViewController.h"
+#import "ACDChatViewController.h"
 #import "ACDInfoHeaderView.h"
 #import "ACDInfoCell.h"
 
@@ -264,8 +265,7 @@ typedef enum : NSUInteger {
         };
         
         _contactInfoHeaderView.goChatPageBlock = ^{
-            AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
-            chatViewController.navTitle = weakSelf.model.nickname;
+            ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
             [weakSelf.navigationController pushViewController:chatViewController animated:YES];
         };
         

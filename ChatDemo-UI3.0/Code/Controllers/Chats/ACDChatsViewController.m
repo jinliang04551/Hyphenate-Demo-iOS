@@ -108,7 +108,7 @@
     self.view.backgroundColor = [UIColor clearColor];
     self.viewModel = [[EaseConversationViewModel alloc] init];
     self.viewModel.canRefresh = YES;
-    self.viewModel.badgeLabelPosition = EaseAvatarTopRight;
+    self.viewModel.badgeLabelCenterVector = CGVectorMake(-16, 0);
 
     self.easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:self.viewModel];
     self.easeConvsVC.delegate = self;
@@ -400,36 +400,6 @@
         }
     }
     return userData;
-}
-
-- (NSArray<UIContextualAction *> *)easeTableView:(UITableView *)tableView trailingSwipeActionsForRowAtIndexPath:(NSIndexPath *)indexPath actions:(NSArray<UIContextualAction *> *)actions
-{
-    NSMutableArray<UIContextualAction *> *array = [[NSMutableArray<UIContextualAction *> alloc]init];
-    __weak typeof(self) weakself = self;
-    UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal
-                                                                               title:@"delete"
-                                                                             handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL))
-    {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"confirm delete？" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *clearAction = [UIAlertAction actionWithTitle:@"delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [tableView setEditing:NO];
-            [self _deleteConversation:indexPath];
-        }];
-        [clearAction setValue:[UIColor colorWithRed:245/255.0 green:52/255.0 blue:41/255.0 alpha:1.0] forKey:@"_titleTextColor"];
-        [alertController addAction:clearAction];
-        
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"cancel" style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [tableView setEditing:NO];
-        }];
-        [cancelAction  setValue:[UIColor blackColor] forKey:@"_titleTextColor"];
-        [alertController addAction:cancelAction];
-        alertController.modalPresentationStyle = 0;
-        [weakself presentViewController:alertController animated:YES completion:nil];
-    }];
-    deleteAction.backgroundColor = [UIColor redColor];
-    [array addObject:deleteAction];
-    [array addObject:actions[1]];
-    return [array copy];
 }
 
 - (void)easeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

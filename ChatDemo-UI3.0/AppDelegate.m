@@ -22,8 +22,8 @@
 #define EaseIMAppKey @"easemob-demo#easeim"
 #define ChatDemoUIAppKey @"easemob-demo#chatdemoui"
 #define HongKongAppkey @"52366312#441909"
-#define MeidongAppkey @"41117440#383391"
-#define Appkey @"61308276#489779"
+#define MeidongAppkey @"1193210624041558#chat-demo"
+#define Appkey @"61117440#460199"
  
 
 @interface AppDelegate () <AgoraChatClientDelegate,UNUserNotificationCenterDelegate>
@@ -78,7 +78,7 @@
 
 - (void)initSDK {
     // init HyphenateSDK
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:MeidongAppkey];
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:EaseIMAppKey];
     
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -148,7 +148,6 @@
     
     BOOL loginSuccess = [notification.object boolValue];
     if (loginSuccess) {
-//[self tokenDidExpire:401];
         [self loadMainPage];
         
     } else {
@@ -223,8 +222,6 @@
             UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:errorDes delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
             [alertError show];
         };
-        
-        [AgoraChatClient.sharedClient logout:NO];
         
         if (self.userName.length == 0 || self.nickName.length == 0) return;
         //unify token login
@@ -404,12 +401,6 @@
 
 - (void)autoLoginDidCompleteWithError:(AgoraChatError *)aError
 {
-#if ChatDemo_DEBUG
-    NSString *alertMsg = aError == nil ? NSLocalizedString(@"login.endAutoLogin.succeed", @"Automatic login succeed") : NSLocalizedString(@"login.endAutoLogin.failure", @"Automatic login failed");
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertMsg delegate:nil cancelButtonTitle:NSLocalizedString(@"login.ok", @"Ok") otherButtonTitles:nil, nil];
-    [alert show];
-#endif
-    
     if (aError) {
         [self loadLoginPage];
     }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30E5DE31A68CB65C97673D9B /* libPods-ChatDemo-UI3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD1B189658F9B85B7BFA9CD /* libPods-ChatDemo-UI3.0.a */; };
 		3A4BB1B01ED3DD6F00B07FCA /* AgoraChatroomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4BB1AE1ED3DD6F00B07FCA /* AgoraChatroomCell.m */; };
 		3A4BB1B11ED3DD6F00B07FCA /* AgoraChatroomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A4BB1AF1ED3DD6F00B07FCA /* AgoraChatroomCell.xib */; };
 		3A4BB1B51ED422BA00B07FCA /* AgoraChatroomInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4BB1B41ED422BA00B07FCA /* AgoraChatroomInfoViewController.m */; };
@@ -191,6 +190,7 @@
 		9ECE66F3273B6F69007CF85F /* backleft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9ECE66ED273B6F69007CF85F /* backleft@3x.png */; };
 		9ECE6701273CBF5F007CF85F /* ACDChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE6700273CBF5F007CF85F /* ACDChatViewController.m */; };
 		9ECE6704274271DB007CF85F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE6703274271DB007CF85F /* Reachability.m */; };
+		C37DDF32C819CBAD245EA2B9 /* libPods-ChatDemo-UI3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC01D30C732814F093CBF30 /* libPods-ChatDemo-UI3.0.a */; };
 		D20E26D71DCA011C00B3FAC6 /* icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D41DCA011C00B3FAC6 /* icon_info.png */; };
 		D20E26D81DCA011C00B3FAC6 /* icon_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */; };
 		D20E26D91DCA011C00B3FAC6 /* icon_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D61DCA011C00B3FAC6 /* icon_info@3x.png */; };
@@ -618,6 +618,19 @@
 		ECCAF7E1273E558B001DA505 /* ACDNaviBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = ECCAF7E0273E558B001DA505 /* ACDNaviBackView.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		9ECE670B2745334F007CF85F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1633BADC43B42D35B0A0969D /* Pods-ChatDemo-UI3.0.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatDemo-UI3.0.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0.debug.xcconfig"; sourceTree = "<group>"; };
 		3A4BB1AD1ED3DD6F00B07FCA /* AgoraChatroomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatroomCell.h; sourceTree = "<group>"; };
@@ -661,7 +674,6 @@
 		3AEBE3EC1E792ED400B82986 /* AgoraGroupPermissionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraGroupPermissionCell.m; sourceTree = "<group>"; };
 		3AEBE3ED1E792ED400B82986 /* AgoraGroupPermissionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgoraGroupPermissionCell.xib; sourceTree = "<group>"; };
 		3AEBE3F01E792FB000B82986 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		6CD1B189658F9B85B7BFA9CD /* libPods-ChatDemo-UI3.0.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatDemo-UI3.0.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		711158FF1DB7278B005158BB /* NSArray+AgoraSortContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+AgoraSortContacts.h"; sourceTree = "<group>"; };
 		711159001DB7278B005158BB /* NSArray+AgoraSortContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+AgoraSortContacts.m"; sourceTree = "<group>"; };
 		714E9DC11DD32B0A009D1E2D /* default_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_avatar.png; sourceTree = "<group>"; };
@@ -737,7 +749,6 @@
 		7F663CE9265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraChatUserInfoManagerHelper.m; sourceTree = "<group>"; };
 		7F663CF1265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AgoraChatUserInfo+expireTime.h"; sourceTree = "<group>"; };
 		7F663CF2265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AgoraChatUserInfo+expireTime.m"; sourceTree = "<group>"; };
-		7F663E06265FD32A003F74B8 /* AgoraChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AgoraChat.framework; sourceTree = "<group>"; };
 		7F6CC84026568B4600BA60BB /* AgoraCreateNewGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCreateNewGroupViewController.h; sourceTree = "<group>"; };
 		7F6CC84126568B4600BA60BB /* AgoraMemberSelectViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgoraMemberSelectViewController.xib; sourceTree = "<group>"; };
 		7F6CC84226568B4600BA60BB /* AgoraMemberSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMemberSelectViewController.m; sourceTree = "<group>"; };
@@ -1459,6 +1470,7 @@
 		EC7A329E272EE9A400AF0C19 /* ACDSearchResultView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDSearchResultView.m; sourceTree = "<group>"; };
 		ECCAF7DF273E558B001DA505 /* ACDNaviBackView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDNaviBackView.h; sourceTree = "<group>"; };
 		ECCAF7E0273E558B001DA505 /* ACDNaviBackView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDNaviBackView.m; sourceTree = "<group>"; };
+		FBC01D30C732814F093CBF30 /* libPods-ChatDemo-UI3.0.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatDemo-UI3.0.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1473,7 +1485,7 @@
 				D24510AA1D961FB5006DB36F /* MapKit.framework in Frameworks */,
 				D24327EA1DAA395F00EDCDAB /* libopencore-amrwb.a in Frameworks */,
 				D24327E91DAA395F00EDCDAB /* libopencore-amrnb.a in Frameworks */,
-				30E5DE31A68CB65C97673D9B /* libPods-ChatDemo-UI3.0.a in Frameworks */,
+				C37DDF32C819CBAD245EA2B9 /* libPods-ChatDemo-UI3.0.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1483,14 +1495,13 @@
 		2632E9220D0DB58F65DD15A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7F663E06265FD32A003F74B8 /* AgoraChat.framework */,
 				D27AC3431DE32667002C6020 /* UserNotifications.framework */,
 				D20E26DE1DCA13A500B3FAC6 /* CoreGraphics.framework */,
 				D20E26DC1DCA092700B3FAC6 /* Foundation.framework */,
 				D20E26DA1DCA084B00B3FAC6 /* UIKit.framework */,
 				D24510A91D961FB5006DB36F /* MapKit.framework */,
 				D24510A71D961F8B006DB36F /* CoreLocation.framework */,
-				6CD1B189658F9B85B7BFA9CD /* libPods-ChatDemo-UI3.0.a */,
+				FBC01D30C732814F093CBF30 /* libPods-ChatDemo-UI3.0.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2885,8 +2896,9 @@
 				D28344FB1D8FD1D400FD48A9 /* Sources */,
 				D28344FC1D8FD1D400FD48A9 /* Frameworks */,
 				D28344FD1D8FD1D400FD48A9 /* Resources */,
-				8F507D0BE0F752ED869E3A49 /* [CP] Copy Pods Resources */,
-				1FB65A32AA063B73F5E99C86 /* [CP] Embed Pods Frameworks */,
+				9ECE670B2745334F007CF85F /* Embed Frameworks */,
+				93716211FBAAE149C91F0C63 /* [CP] Copy Pods Resources */,
+				52231D579EB04DC2D470EAFC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3373,7 +3385,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1FB65A32AA063B73F5E99C86 /* [CP] Embed Pods Frameworks */ = {
+		52231D579EB04DC2D470EAFC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3391,7 +3403,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F507D0BE0F752ED869E3A49 /* [CP] Copy Pods Resources */ = {
+		93716211FBAAE149C91F0C63 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
