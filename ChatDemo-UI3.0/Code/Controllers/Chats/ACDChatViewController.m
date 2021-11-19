@@ -476,6 +476,7 @@
     ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
     vc.isHideChatButton = YES;
     
+    
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
     

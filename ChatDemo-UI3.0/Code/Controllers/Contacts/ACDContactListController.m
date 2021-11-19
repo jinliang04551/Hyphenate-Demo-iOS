@@ -85,7 +85,6 @@
     WEAK_SELF
     dispatch_async(dispatch_get_main_queue(), ^(){
         [weakSelf.table reloadData];
-//        [weakSelf.refreshControl endRefreshing];
     });
 }
 
