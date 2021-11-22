@@ -24,7 +24,7 @@
 - (void)prepare {
     [self.contentView addSubview:self.iconImageView];
     [self.contentView addSubview:self.nameLabel];
-    [self.contentView addSubview:self.numberCountLabel];
+//    [self.contentView addSubview:self.numberCountLabel];
     
 }
 
@@ -37,15 +37,19 @@
         make.size.mas_equalTo(kContactAvatarHeight);
     }];
     
+
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.iconImageView);
         make.left.equalTo(self.iconImageView.mas_right).offset(kAgroaPadding * 1.0);
+        make.right.equalTo(self.contentView).offset(-kAgroaPadding * 1.6);
+        
     }];
     
-    [self.numberCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self.iconImageView);
-        make.left.equalTo(self.nameLabel.mas_right).offset(kAgroaPadding * 1.5);
-    }];
+//    [self.numberCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.mas_equalTo(self.iconImageView);
+//        make.width.lessThanOrEqualTo(@30.0);
+//        make.right.lessThanOrEqualTo(self.contentView).offset(16.0);
+//    }];
     
 }
 
