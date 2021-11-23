@@ -19,7 +19,7 @@
 #import "ACDGroupInfoViewController.h"
 
 
-@interface ACDGroupListViewController ()<MISScrollPageControllerContentSubViewControllerDelegate>
+@interface ACDGroupListViewController ()
 @property (nonatomic, strong) ACDNoDataPromptView *noDataPromptView;
 
 @end
@@ -61,18 +61,6 @@
 - (void)loadGroupsFromServer {
     [self useRefresh];
     [self tableViewDidTriggerHeaderRefresh];
-}
-
-- (void)loadGroupsFromCache {
-    NSArray *myGroups = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
-    [self.dataArray removeAllObjects];
-    for (AgoraChatGroup *group in myGroups) {
-        AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:group];
-        if (model) {
-            [self.dataArray addObject:model];
-        }
-    }
-    [self.table reloadData];
 }
 
 - (void)addNotifications {

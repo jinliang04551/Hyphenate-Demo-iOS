@@ -9,6 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "IAgoraApplyModel.h"
+#import "IAgoraRealtimeSearch.h"
 
 typedef NS_ENUM(NSInteger, ACDApplyStatus) {
     ACDApplyStatusDefault = 0,
@@ -18,7 +19,7 @@ typedef NS_ENUM(NSInteger, ACDApplyStatus) {
 };
 
 
-@interface AgoraApplyModel : NSObject<IAgoraApplyModel>
+@interface AgoraApplyModel : NSObject<IAgoraApplyModel,IAgoraRealtimeSearch>
 
 @property (nonatomic, strong, readonly) NSString *recordId;
 @property (nonatomic, strong) NSString * applyHyphenateId;
