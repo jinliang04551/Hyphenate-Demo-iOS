@@ -192,6 +192,7 @@ typedef enum : NSUInteger {
         [userDefault setValue:imageName forKey:[NSString stringWithFormat:@"%@_avatar",self.userInfo.userId]];
         [userDefault synchronize];
         
+        UIImage *selectedImage = [UIImage imageWithColor:[UIColor blueColor] size:CGSizeMake(140.0, 140.0)];
         [self.userInfoHeaderView.avatarImageView setImage:ImageWithName(imageName)];
     };
     

@@ -9,7 +9,7 @@
 #import "ACDSearchTableViewController.h"
 #import "AgoraRealtimeSearchUtils.h"
 
-#define kSearchBarHeight 30.0f
+#define kSearchBarHeight 32.0
 
 @interface ACDSearchTableViewController ()<UISearchBarDelegate>
 @property (nonatomic, strong) NSMutableArray *searchResults;
@@ -106,18 +106,23 @@
 - (UISearchBar*)searchBar
 {
     if (_searchBar == nil) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 30)];
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kSearchBarHeight)];
         _searchBar.placeholder = @"Search";
         _searchBar.delegate = self;
         _searchBar.showsCancelButton = NO;
         _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
         [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:COLOR_HEX(0xF2F2F2) size:_searchBar.bounds.size] forState:UIControlStateNormal];
-        
+//        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:COLOR_HEX(0xF2F2F2) size:CGSizeMake(_searchBar.bounds.size.width - 50.0, _searchBar.bounds.size.height)] forState:UIControlStateNormal];
+                
         UITextField *searchField = [_searchBar valueForKey:@"searchField"];
           if (searchField) {
-              [searchField setBackgroundColor:[UIColor whiteColor]];
-              searchField.layer.cornerRadius = 14.0f;
+                  if (@available(iOS 13.0, *)){
+                      _searchBar.searchTextField.backgroundColor= COLOR_HEX(0xF2F2F2);
+                  }else{
+                      searchField.backgroundColor = COLOR_HEX(0xF2F2F2);
+                  }
+
+              searchField.layer.cornerRadius = kSearchBarHeight * 0.5;
               searchField.layer.masksToBounds = YES;
           }
     }
