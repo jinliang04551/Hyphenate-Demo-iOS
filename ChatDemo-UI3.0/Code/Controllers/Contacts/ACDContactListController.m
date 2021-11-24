@@ -11,7 +11,6 @@
 #import "AgoraContactsViewController.h"
 #import "AgoraContactListSectionHeader.h"
 #import "AgoraAddContactViewController.h"
-//#import "AgoraContactInfoViewController.h"
 #import "ACDContactInfoViewController.h"
 
 #import "AgoraChatroomsViewController.h"
@@ -27,7 +26,7 @@
 #import "ACDContactCell.h"
 
 
-@interface ACDContactListController()<UITableViewDelegate,UITableViewDataSource>
+@interface ACDContactListController()
 
 @end
 
@@ -172,11 +171,21 @@
     if (cell == nil) {
         cell = [[ACDContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDContactCell reuseIdentifier]];
     }
+    AgoraUserModel *model = nil;
+
     if (self.isSearchState) {
-        cell.model = self.searchResults[indexPath.row];
+        model = self.searchResults[indexPath.row];
+        cell.model = model;
     }else {
-        cell.model = self.dataArray[indexPath.section][indexPath.row];
+        model = self.dataArray[indexPath.section][indexPath.row];
+        cell.model = model;
     }
+    
+    cell.tapCellBlock = ^{
+        if (self.selectedBlock) {
+            self.selectedBlock(model.hyphenateId);
+        }
+    };
     
     return cell;
 }

@@ -20,6 +20,8 @@
 
 #define DONE_TITLE   @"Done"
 
+#define kSearchBarHeight 32.0
+
 @interface AgoraMemberSelectViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, AgoraGroupUIProtocol>
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 
@@ -90,14 +92,25 @@
     
 - (void)setupSearchBar {
     CGRect frame = _searchBar.frame;
-    frame.size.height = 30;
+    frame.size.height = kSearchBarHeight;
     _searchBar.frame = frame;
     _searchBar.placeholder = NSLocalizedString(@"common.search", @"Search");
     _searchBar.showsCancelButton = NO;
     _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
     [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-    [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
     _searchBar.tintColor = AlmostBlackColor;
+    
+    UITextField *searchField = [_searchBar valueForKey:@"searchField"];
+      if (searchField) {
+              if (@available(iOS 13.0, *)){
+                  _searchBar.searchTextField.backgroundColor= COLOR_HEX(0xF2F2F2);
+              }else{
+                  searchField.backgroundColor = COLOR_HEX(0xF2F2F2);
+              }
+
+          searchField.layer.cornerRadius = kSearchBarHeight * 0.5;
+          searchField.layer.masksToBounds = YES;
+      }
 }
 
 
@@ -448,3 +461,6 @@
 }
     
 @end
+
+#undef kSearchBarHeight
+

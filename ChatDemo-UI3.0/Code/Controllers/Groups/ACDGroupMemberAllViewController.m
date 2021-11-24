@@ -187,10 +187,7 @@
                       isHeader:(BOOL)aIsHeader
 {
     NSInteger pageSize = 50;
-    
-    NSLog(@"%s aCursor:%@ aIsHeader:%@",__func__,aCursor,@(aIsHeader));
-    
-    
+        
     ACD_WS
     [self showHudInView:self.view hint:@"Load data..."];
     [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {

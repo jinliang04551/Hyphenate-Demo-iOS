@@ -36,7 +36,7 @@
 
 
 - (void)placeSubViews {
-    self.iconImageView.layer.cornerRadius = kIconImageViewHeight * 0.5;
+   
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(12.0f);
         make.left.equalTo(self.contentView).offset(16.0f);
@@ -119,21 +119,14 @@
         
     }
     
-    
-    
-//    NSString *iconImageName = @"";
-//    if (self.model.style == AgoraApplyStyle_contact) {
-//        iconImageName = @"default_avatar";
-//    }else {
-//        iconImageName = @"group_default_avatar";
-//    }
-//
-//    [self.iconImageView setImage:ImageWithName(iconImageName)];
-  
+
     UIImage *avatarImage = nil;
     if (self.model.style == AgoraApplyStyle_contact) {
+        self.iconImageView.layer.cornerRadius = kIconImageViewHeight * 0.5;
         avatarImage = [UIImage imageWithColor:AvatarLightGreenColor size:CGSizeMake(kIconImageViewHeight, kIconImageViewHeight)];
     }else {
+        self.iconImageView.layer.cornerRadius = 0;
+
         UIImage *originImage = ImageWithName(@"group_default_avatar");
         
         avatarImage = [originImage acd_scaleToAssignSize:CGSizeMake(kIconImageViewHeight, kIconImageViewHeight)];

@@ -66,6 +66,11 @@
     return recordId;
 }
 
-
+- (NSString *)searchKey {
+    if (_applyNickName.length > 0) {
+        return _applyNickName;
+    }
+    return _applyHyphenateId;
+}
 
 @end

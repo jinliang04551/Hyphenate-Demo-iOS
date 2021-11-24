@@ -12,7 +12,7 @@
 #import "AgoraApplyManager.h"
 #import "AgoraApplyModel.h"
 
-@interface ACDRequestListViewController ()<MISScrollPageControllerContentSubViewControllerDelegate>
+@interface ACDRequestListViewController ()
 
 @end
 
@@ -32,6 +32,7 @@
     [self.dataArray addObjectsFromArray:contactApplys];
     [self.dataArray addObjectsFromArray:groupApplys];
     
+    self.searchSource = [NSMutableArray arrayWithArray:self.dataArray];
     [self.table reloadData];
 }
 
@@ -141,7 +142,13 @@
         cell = [[ACDRequestCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    AgoraApplyModel *applyModel = self.dataArray[indexPath.row];
+    AgoraApplyModel *applyModel = nil;
+    if (self.isSearchState) {
+        applyModel = self.searchResults[indexPath.row];
+    }else {
+        applyModel = self.dataArray[indexPath.row];
+    }
+    
     [cell updateWithObj:applyModel];
     ACD_WS
     cell.acceptBlock = ^(AgoraApplyModel * _Nonnull model) {
@@ -179,10 +186,10 @@
 }
 
 
+#pragma mark MISScrollPageControllerContentSubViewControllerDelegate
 - (void)viewDidAppearForIndex:(NSUInteger)index{
     [self updateUI];
     [[AgoraChatDemoHelper shareHelper] hiddenApplyRedPoint];
-
 }
 
 - (void)viewDidDisappearForIndex:(NSUInteger)index {

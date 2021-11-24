@@ -126,9 +126,11 @@
 {
     NSInteger pageSize = 50;
     ACD_WS
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+
     [[AgoraChatClient sharedClient].groupManager getGroupBlacklistFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, AgoraChatError *aError) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self hideHud];
+        
         [self endRefresh];
         if (!aError) {
             if (aIsHeader) {

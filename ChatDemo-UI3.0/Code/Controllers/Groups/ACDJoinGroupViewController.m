@@ -71,7 +71,7 @@
 
 
 - (void)sendAddContact:(NSString *)contactName {
-    NSString *requestMessage = [NSString stringWithFormat:@"%@ add you as a friend",contactName];
+    NSString *requestMessage = [NSString stringWithFormat:@"%@ add you as a friend",AgoraChatClient.sharedClient.currentUsername];
     WEAK_SELF
     [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     [[AgoraChatClient sharedClient].contactManager addContact:contactName

@@ -256,32 +256,55 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
         cell = [[ACDContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDContactCell reuseIdentifier]];
     }
     
+    ACD_WS
     if (self.accessType == ACDGroupEnterAccessTypeChat) {
+        AgoraUserModel *userModel = nil;
         if (self.isSearchState) {
-            cell.model = self.searchResults[indexPath.row];
+            userModel = self.searchResults[indexPath.row];
+            cell.model = userModel;
+            cell.tapCellBlock = ^{
+                [weakSelf goContactInfoPageWithUserModel:userModel];
+            };
         }else {
             if (indexPath.section == 0) {
                 if (indexPath.row == 0) {
                     [cell.iconImageView setImage:ImageWithName(@"new_group")];
                     cell.nameLabel.text = @"New Group";
+                    cell.tapCellBlock = ^{
+                        [weakSelf goCreateNewGroup];
+                    };
+
                 }
                 
                 if (indexPath.row == 1) {
                     [cell.iconImageView setImage:ImageWithName(@"join_group")];
                     cell.nameLabel.text = @"Join a Group";
+                    cell.tapCellBlock = ^{
+                        [weakSelf joinPublicGroup];
+                    };
                 }
 
                 if (indexPath.row == 2) {
                     [cell.iconImageView setImage:ImageWithName(@"public_group")];
                     cell.nameLabel.text = @"Public Group List";
+                    cell.tapCellBlock = ^{
+                        [weakSelf goPublicGroupList];
+                    };
                 }
 
                 if (indexPath.row == 3) {
                     [cell.iconImageView setImage:ImageWithName(@"add_contact")];
                     cell.nameLabel.text = @"Add Contacts";
+                    cell.tapCellBlock = ^{
+                        [weakSelf goAddContact];
+                    };
                 }
             }else {
-             cell.model = self.dataArray[indexPath.section - 1][indexPath.row];
+                userModel = self.dataArray[indexPath.section - 1][indexPath.row];
+                cell.model = userModel;
+                cell.tapCellBlock = ^{
+                    [weakSelf goContactInfoPageWithUserModel:userModel];
+                };
             }
             
         }
@@ -290,16 +313,25 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
         if (indexPath.row == 0) {
             [cell.iconImageView setImage:ImageWithName(@"add_contact")];
             cell.nameLabel.text = @"Add Contacts";
+            cell.tapCellBlock = ^{
+                [weakSelf goAddContact];
+            };
         }
 
         if (indexPath.row == 1) {
             [cell.iconImageView setImage:ImageWithName(@"join_group")];
             cell.nameLabel.text = @"Join a Group";
+            cell.tapCellBlock = ^{
+                [weakSelf joinPublicGroup];
+            };
         }
 
         if (indexPath.row == 2) {
             [cell.iconImageView setImage:ImageWithName(@"public_group")];
             cell.nameLabel.text = @"Public Group List";
+            cell.tapCellBlock = ^{
+                [weakSelf goPublicGroupList];
+            };
         }
     }
 
@@ -307,54 +339,6 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 }
 
 #pragma mark - UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (self.accessType == ACDGroupEnterAccessTypeChat) {
-        AgoraUserModel *userModel = nil;
-        if (self.isSearchState) {
-            userModel = self.searchResults[indexPath.row];
-            [self goContactInfoPageWithUserModel:userModel];
-        }else {
-            if (indexPath.section == 0) {
-                if (indexPath.row == 0) {
-                    [self goCreateNewGroup];
-                }
-                
-                if (indexPath.row == 1) {
-                    [self joinPublicGroup];
-                }
-                
-                if (indexPath.row == 2) {
-                    [self goPublicGroupList];
-                }
-
-                if (indexPath.row == 3) {
-                    [self goAddContact];
-                }
-            
-            }else {
-                userModel = self.dataArray[indexPath.section - 1][indexPath.row];
-                [self goContactInfoPageWithUserModel:userModel];
-            }
-
-        }
-    }else {
-        if (indexPath.row == 0) {
-            [self goAddContact];
-        }
-        
-        if (indexPath.row == 1) {
-            [self joinPublicGroup];
-        }
-        
-        if (indexPath.row == 2) {
-            [self goPublicGroupList];
-        }
-
-    }
-}
-
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 54.0f;
 }
@@ -363,7 +347,6 @@ static NSString *cellIdentifier = @"AgoraGroupEnterCell";
 - (ACDContactListController *)contactVC {
     if (_contactVC == nil) {
         _contactVC = ACDContactListController.new;
-
     }
     return _contactVC;
 }
