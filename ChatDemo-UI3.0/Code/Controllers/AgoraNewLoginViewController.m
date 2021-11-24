@@ -10,6 +10,7 @@
 #import "AgoraChatHttpRequest.h"
 #import "UserInfoStore.h"
 #import "Reachability.h"
+#import "UIViewController+ComponentSize.h"
 
 #define kLoginButtonHeight 48.0f
 #define kMaxLimitLength 64
@@ -38,7 +39,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
         _isMaxLimitLength = NO;
     }
     return self;
@@ -51,6 +51,17 @@
     [self placeAndLayoutSubViews];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
 
 - (void)placeAndLayoutSubViews
 {
@@ -90,22 +101,22 @@
     
     [self.usernameTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.titleImageView.mas_bottom).offset(95);
-        make.left.equalTo(self.contentView).offset(30);
-        make.right.equalTo(self.contentView).offset(-30);
+        make.left.equalTo(self.contentView).offset(24);
+        make.right.equalTo(self.contentView).offset(-24);
         make.height.equalTo(@kLoginButtonHeight);
     }];
     
     [self.passwordTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_usernameTextField.mas_bottom).offset(20);
-        make.left.equalTo(self.contentView).offset(30);
-        make.right.equalTo(self.contentView).offset(-30);
+        make.left.equalTo(self.usernameTextField);
+        make.right.equalTo(self.usernameTextField);
         make.height.equalTo(@kLoginButtonHeight);
     }];
     
     [self.loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.passwordTextField.mas_bottom).offset(kAgroaPadding * 2);
-        make.left.equalTo(self.contentView).offset(30);
-        make.right.equalTo(self.contentView).offset(-30);
+        make.left.equalTo(self.usernameTextField);
+        make.right.equalTo(self.usernameTextField);
         make.height.equalTo(@kLoginButtonHeight);
     }];
     
@@ -115,24 +126,42 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *hint = nil;
-    if (_usernameTextField.isFirstResponder &&_usernameTextField.text.length >= kMaxLimitLength) {
+    if (_usernameTextField.isFirstResponder && [self charactorNumberWithEncoding:[_usernameTextField.text copy]] >= kMaxLimitLength) {
         _isMaxLimitLength = YES;
         hint = NSLocalizedString(@"register.userName.outOfLimit", @"Username length out of limit, maximum 64 bytes");
     } else {
-        _isMaxLimitLength = !_isMaxLimitLength ? NO : _isMaxLimitLength;
+        _isMaxLimitLength = _isMaxLimitLength ? NO : _isMaxLimitLength;
     }
     
-    if (_passwordTextField.isFirstResponder && _passwordTextField.text.length >= kMaxLimitLength) {
+    if (_passwordTextField.isFirstResponder && [self charactorNumberWithEncoding:_passwordTextField.text] >= kMaxLimitLength) {
         _isMaxLimitLength = YES;
         hint = NSLocalizedString(@"register.password.outOfLimit", @"Password length out of limit, maximum 64 bytes");
     } else {
-        _isMaxLimitLength = !_isMaxLimitLength ? NO : _isMaxLimitLength;
+        _isMaxLimitLength = _isMaxLimitLength ? NO : _isMaxLimitLength;
     }
     
     self.hintView.hidden = hint == nil ? YES : NO;
     self.hintTitleLabel.text = hint == nil ? @"" : hint;
     
     return YES;
+}
+
+- (NSUInteger)charactorNumberWithEncoding:(NSString *)str
+{
+    NSUInteger strLength = 0;
+    char *p = (char *)[str cStringUsingEncoding:NSUTF8StringEncoding];
+    
+    NSUInteger lengthOfBytes = [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    for (int i = 0; i < lengthOfBytes; i++) {
+        if (*p) {
+            p++;
+            strLength++;
+        }
+        else {
+            p++;
+        }
+    }
+    return strLength;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -155,7 +184,7 @@
 - (void)startAnimation {
     CGAffineTransform endAngle = CGAffineTransformMakeRotation(self.loadingAngle * (M_PI /180.0f));
 
-    [UIView animateWithDuration:0.01 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.loadingImageView.transform = endAngle;
     } completion:^(BOOL finished) {
         self.loadingAngle += 15;
@@ -323,6 +352,41 @@
 
 #pragma mark - notification
 
+#pragma mark - KeyBoard
+
+- (void)keyBoardWillShow:(NSNotification *)note
+{
+    // 获取用户信息
+    NSDictionary *userInfo = [NSDictionary dictionaryWithDictionary:note.userInfo];
+    // 获取键盘高度
+    CGRect keyBoardBounds  = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat keyBoardHeight = keyBoardBounds.size.height;
+    
+    CGFloat offset = 0;
+    if (self.contentView.frame.size.height - keyBoardHeight <= CGRectGetMaxY(self.loginButton.frame)) {
+        offset = CGRectGetMaxY(self.loginButton.frame) - (self.contentView.frame.size.height - keyBoardHeight);
+    } else {
+        return;
+    }
+    
+    void (^animation)(void) = ^void(void) {
+        [self.logoImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.contentView.mas_top).offset(134.0 - offset - 20);
+        }];
+    };
+    [self keyBoardWillShow:note animations:animation completion:nil];
+}
+
+- (void)keyBoardWillHide:(NSNotification *)note
+{
+    void (^animation)(void) = ^void(void) {
+        [self.logoImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.contentView.mas_top).offset(134.0);
+        }];
+    };
+    [self keyBoardWillHide:note animations:animation completion:nil];
+}
+
 - (void)keyboardWillChangeFrame:(NSNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;
@@ -346,7 +410,7 @@
         top = -100;
     }
     [UIView animateWithDuration:0.3 animations:^{
-        [[UIApplication sharedApplication].keyWindow setTop:top];
+        //[[UIApplication sharedApplication].keyWindow setTop:top];
 //        _loginButton.frame = buttonFrame;
     }];
 }
@@ -462,6 +526,7 @@
         [self.loadingImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(_loginButton);
         }];
+        
     }
     return _loginButton;
 }

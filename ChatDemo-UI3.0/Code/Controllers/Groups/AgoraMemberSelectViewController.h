@@ -8,14 +8,15 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "ACDGroupMemberSelectViewController.h"
 
 @class AgoraUserModel;
 #import "AgoraGroupUIProtocol.h"
 
-typedef NS_ENUM(NSUInteger, AgoraContactSelectStyle) {
-    AgoraContactSelectStyle_Add      =       0,
-    AgoraContactSelectStyle_Invite
-};
+//typedef NS_ENUM(NSUInteger, AgoraContactSelectStyle) {
+//    AgoraContactSelectStyle_Add      =       0,
+//    AgoraContactSelectStyle_Invite
+//};
 
 @interface AgoraMemberSelectViewController : AgoraChatBaseViewController
 

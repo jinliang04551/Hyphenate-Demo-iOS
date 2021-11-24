@@ -18,6 +18,7 @@
 #import "UITextField+DarkMode.h"
 #import "UIImage+Util.h"
 #import "UIAlertAction+Custom.h"
+#import "UITabBar+RedPoint.h"
 
 #endif /* AgoraCategory_h */
 

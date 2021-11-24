@@ -10,6 +10,14 @@
 #import <Foundation/Foundation.h>
 #import "IAgoraApplyModel.h"
 
+typedef NS_ENUM(NSInteger, ACDApplyStatus) {
+    ACDApplyStatusDefault = 0,
+    ACDApplyStatusAgreed,
+    ACDApplyStatusDeclined,
+    ACDApplyStatusExpired,
+};
+
+
 @interface AgoraApplyModel : NSObject<IAgoraApplyModel>
 
 @property (nonatomic, strong, readonly) NSString *recordId;
@@ -22,5 +30,6 @@
 @property (nonatomic, strong) NSString * groupId;
 @property (nonatomic, strong) NSString * groupSubject;
 @property (nonatomic, assign) NSInteger groupMemberCount;
+@property (nonatomic, assign) ACDApplyStatus applyStatus;
 
 @end

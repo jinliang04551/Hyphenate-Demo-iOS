@@ -63,13 +63,20 @@ static AgoraChatDemoHelper *helper = nil;
     NSInteger unreadCount = [[AgoraApplyManager defaultManager] unHandleApplysCount];
     if (_contactsVC) {
         if (unreadCount > 0) {
-            _contactsVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%i",(int)unreadCount];
+//            _contactsVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%i",(int)unreadCount];
+            [_contactsVC.tabBarController.tabBar showBadgeOnItemIndex:1];
             [_contactsVC navBarUnreadRequestIsShow:YES];
         }else{
-            _contactsVC.tabBarItem.badgeValue = nil;
+//            _contactsVC.tabBarItem.badgeValue = nil;
+            [_contactsVC.tabBarController.tabBar hideBadgeOnItemIndex:1];
             [_contactsVC navBarUnreadRequestIsShow:NO];
         }
     }
+}
+
+- (void)hiddenApplyRedPoint {
+    [_contactsVC.tabBarController.tabBar hideBadgeOnItemIndex:1];
+    [_contactsVC navBarUnreadRequestIsShow:NO];
 }
 
 #pragma mark - AgoraChatClientDelegate

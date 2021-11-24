@@ -48,6 +48,8 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     
     [self.pageController reloadData];
     
+    [self reloadContactRequests];
+    
 }
 
 

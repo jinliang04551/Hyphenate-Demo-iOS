@@ -39,5 +39,6 @@
 #import "ACDUtil.h"
 #import "NSArray+AgoraSortContacts.h"
 #import <EaseChatKit/EaseChatKit.h>
+#import "AgoraChatDemoHelper.h"
 
 #endif

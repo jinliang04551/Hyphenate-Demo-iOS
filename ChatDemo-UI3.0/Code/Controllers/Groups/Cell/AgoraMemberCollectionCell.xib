@@ -51,7 +51,7 @@
                 <outlet property="avatarImageView" destination="Lh5-ay-C6N" id="zjv-Sh-0dB"/>
                 <outlet property="nicknamLabel" destination="e3U-RC-Hf4" id="eEF-V1-mjm"/>
             </connections>
-            <point key="canvasLocation" x="18" y="28"/>
+            <point key="canvasLocation" x="16.666666666666668" y="27.790178571428569"/>
         </collectionViewCell>
     </objects>
     <resources>

@@ -15,6 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) AgoraChatConversation *conversation;
 @property (nonatomic, strong) EaseChatViewController *chatController;
 
+@property (nonatomic, strong, readonly) NSString *conversationId;
+@property (nonatomic, strong) NSString *navTitle;
+@property (nonatomic, strong) void(^leaveGroupBlock)(void);
+
+
 - (instancetype)initWithConversationId:(NSString *)conversationId conversationType:(AgoraChatConversationType)conType;
 
 - (NSArray *)formatMessages:(NSArray<AgoraChatMessage *> *)aMessages;

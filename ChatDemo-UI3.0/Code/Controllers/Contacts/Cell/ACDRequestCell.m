@@ -9,12 +9,13 @@
 #import "ACDRequestCell.h"
 #import "AgoraApplyModel.h"
 
-#define kAcceptButtonHeight 72.0f
 #define kIconImageViewHeight 58.0f
+#define kAcceptButtonHeight 28.0f
 
 @interface ACDRequestCell ()
 @property (nonatomic, strong) UIButton *acceptButton;
 @property (nonatomic, strong) UIButton *rejectButton;
+@property (nonatomic, strong) UILabel *resultlabel;
 @property (nonatomic, strong) AgoraApplyModel *model;
 
 @end
@@ -28,6 +29,7 @@
     [self.contentView addSubview:self.timeLabel];
     [self.contentView addSubview:self.acceptButton];
     [self.contentView addSubview:self.rejectButton];
+    [self.contentView addSubview:self.resultlabel];
     [self.contentView addSubview:self.bottomLine];
 
 }
@@ -60,15 +62,20 @@
 
     [self.rejectButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.contentView).offset(-kAgroaPadding);
-        make.right.equalTo(self.contentView).offset(-16.0f);
-        make.size.equalTo(@28.0f);
+        make.right.equalTo(self.timeLabel);
+        make.size.mas_equalTo(kAcceptButtonHeight);
     }];
     
     [self.acceptButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.rejectButton);
         make.right.equalTo(self.rejectButton.mas_left).offset(-5.0);
-        make.width.equalTo(@kAcceptButtonHeight);
-        make.height.equalTo(@28.0);
+        make.width.equalTo(@72);
+        make.height.mas_equalTo(kAcceptButtonHeight);
+    }];
+    
+    [self.resultlabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.acceptButton);
+        make.right.equalTo(self.contentView).offset(-16.0f);
     }];
     
     [self.bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -94,9 +101,25 @@
 
 - (void)updateWithObj:(id)obj {
     self.model = (AgoraApplyModel*)obj;
-    self.nameLabel.text = self.model.applyHyphenateId;
+    self.nameLabel.text = self.model.applyNickName;
     self.timeLabel.text = @"Now";
     self.contentLabel.text = self.model.reason;
+    
+    if (self.model.applyStatus != ACDApplyStatusDefault) {
+        self.acceptButton.hidden = self.rejectButton.hidden = YES;
+        self.resultlabel.hidden = NO;
+        
+        if (self.model.applyStatus == ACDApplyStatusAgreed) {
+            self.resultlabel.text = @"Accepted";
+        }
+        
+        if (self.model.applyStatus == ACDApplyStatusDeclined) {
+            self.resultlabel.text = @"Ignored";
+        }
+        
+    }
+    
+    
     
 //    NSString *iconImageName = @"";
 //    if (self.model.style == AgoraApplyStyle_contact) {
@@ -127,7 +150,7 @@
         _timeLabel = [[UILabel alloc] init];
         _timeLabel.font = [UIFont systemFontOfSize:14.0f];
         _timeLabel.textColor = TextLabelGrayColor;
-        _timeLabel.textAlignment = NSTextAlignmentLeft;
+        _timeLabel.textAlignment = NSTextAlignmentRight;
         _timeLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _timeLabel.text = @"Now";
     }
@@ -137,9 +160,9 @@
 - (UILabel *)contentLabel {
     if (_contentLabel == nil) {
         _contentLabel = [[UILabel alloc] init];
-        _contentLabel.font = [UIFont systemFontOfSize:14.0f];
+        _contentLabel.font = Font(@"PingFang SC", 14.0f);
         _contentLabel.numberOfLines = 2;
-        _contentLabel.textColor = TextLabelGrayColor;
+        _contentLabel.textColor = TextLabelBlackColor;
         _contentLabel.textAlignment = NSTextAlignmentLeft;
         _contentLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _contentLabel.text = @"hhhhhh";
@@ -156,7 +179,8 @@
         [_acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_acceptButton setTitle:@"Accept" forState:UIControlStateNormal];
         [_acceptButton addTarget:self action:@selector(acceptButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        _acceptButton.layer.cornerRadius = 15.0f;
+        _acceptButton.layer.cornerRadius = kAcceptButtonHeight * 0.5;
+        _acceptButton.layer.masksToBounds= YES;
     }
     return _acceptButton;
 }
@@ -170,9 +194,21 @@
     return _rejectButton;
 }
 
+- (UILabel *)resultlabel {
+    if (_resultlabel == nil) {
+        _resultlabel = [[UILabel alloc] init];
+        _resultlabel.font = [UIFont systemFontOfSize:14.0f];
+        _resultlabel.textColor = TextLabelGrayColor;
+        _resultlabel.textAlignment = NSTextAlignmentRight;
+        _resultlabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        _resultlabel.hidden = YES;
+    }
+    return _resultlabel;
+}
+
 
 @end
 
-#undef kAcceptButtonHeight
 #undef kIconImageViewHeight
+#undef kAcceptButtonHeight
 

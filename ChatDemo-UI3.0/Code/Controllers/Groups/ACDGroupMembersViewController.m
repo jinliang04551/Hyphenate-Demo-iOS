@@ -12,7 +12,6 @@
 #import "ACDGroupMemberAdminListViewController.h"
 #import "ACDGroupMemberMutedListViewController.h"
 #import "ACDGroupMemberBlockListViewController.h"
-#import "ACDGroupMemberWhiteListViewController.h"
 
 #import "ACDGroupMembersViewController.h"
 #import "AgoraChatDemoHelper.h"
@@ -54,6 +53,7 @@ MISScrollPageControllerDelegate,AgoraGroupUIProtocol>
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = UIColor.whiteColor;
     
     [self placeAndLayoutSubviews];
     

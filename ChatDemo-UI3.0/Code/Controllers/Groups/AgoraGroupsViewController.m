@@ -12,7 +12,7 @@
 #import "AgoraGroupModel.h"
 #import "AgoraNotificationNames.h"
 #import "AgoraGroupInfoViewController.h"
-#import "AgoraChatViewController.h"
+#import "ACDChatViewController.h"
 #import "AgoraCreateViewController.h"
 
 @interface AgoraGroupsViewController ()
@@ -152,7 +152,7 @@
     [ext setObject:[NSNumber numberWithBool:model.group.isPublic] forKey:@"isPublic"];
     conversation.ext = ext;
     
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:AgoraChatConversationTypeGroupChat];
+    ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:AgoraChatConversationTypeGroupChat];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 

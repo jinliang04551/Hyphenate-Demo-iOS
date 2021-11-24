@@ -108,6 +108,27 @@ typedef enum : NSUInteger {
     }
 }
 
+- (void)logoutAlert {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Sure to Quit?" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+       
+    }];
+    [cancelAction setValue:TextLabelBlueColor forKey:@"titleTextColor"];
+
+    
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self logout];
+    }];
+        
+    [confirmAction setValue:TextLabelBlueColor forKey:@"titleTextColor"];
+
+    [alertController addAction:cancelAction];
+    [alertController addAction:confirmAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+
 - (void)logout
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -381,7 +402,7 @@ typedef enum : NSUInteger {
         _logoutCell.nameLabel.text = @"Log Out";
         ACD_WS
         _logoutCell.tapCellBlock = ^{
-            [weakSelf logout];
+            [weakSelf logoutAlert];
         };
     }
     return  _logoutCell;

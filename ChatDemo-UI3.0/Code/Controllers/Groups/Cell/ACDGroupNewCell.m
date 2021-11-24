@@ -22,8 +22,6 @@
 @implementation ACDGroupNewCell
 
 - (void)prepare {
-    
-    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [self.contentView addSubview:self.iconImageView];
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.numberCountLabel];
@@ -31,13 +29,12 @@
 }
 
 - (void)placeSubViews {
-    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     self.iconImageView.clipsToBounds = NO;
     
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.contentView);
         make.left.equalTo(self.contentView).offset(16.0f);
-        make.width.mas_equalTo(kAvatarHeight);
+        make.size.mas_equalTo(kContactAvatarHeight);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {

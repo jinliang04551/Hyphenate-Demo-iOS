@@ -17,13 +17,14 @@
 #import "ACDTextFieldCell.h"
 #import "ACDTextViewCell.h"
 #import "ACDMAXGroupNumberCell.h"
+#import "ACDGroupMemberSelectViewController.h"
 
 #define KAgora_GROUP_MAgoraBERSCOUNT         2000
 
 
 static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell";
 
-@interface ACDCreateNewGroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UINavigationControllerDelegate, AgoraGroupUIProtocol>
+@interface ACDCreateNewGroupViewController () <UITextFieldDelegate, UINavigationControllerDelegate, AgoraGroupUIProtocol>
 
 
 @property (strong, nonatomic) ACDTextFieldCell *groupNameCell;
@@ -51,6 +52,15 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     
 }
 
+- (void)prepare {
+    [self.view addSubview:self.table];
+}
+
+- (void)placeSubViews {
+    [self.table mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+}
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 }
@@ -82,9 +92,9 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     [self.navigationItem setRightBarButtonItems:@[rightSpace,rightBar]];
 }
 
-- (void)updateCreateButtonUserInteractionEnabled:(BOOL)userInteractionEnabled {
-    self.createBtn.userInteractionEnabled = userInteractionEnabled;
-    if (userInteractionEnabled) {
+- (void)updateCreateButtonStatus:(BOOL)enabled {
+    self.createBtn.userInteractionEnabled = enabled;
+    if (enabled) {
         [self.createBtn setTitleColor:TextLabelBlueColor forState:UIControlStateNormal];
         [self.createBtn setTitleColor:TextLabelBlueColor forState:UIControlStateHighlighted];
     }
@@ -128,7 +138,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     
     model = _groupPermissions.lastObject;
     if (_isPublic) {
-        model.title = NSLocalizedString(@"group.openJoin", @"Authorizated to join");
+        model.title = @"Authorizated to join";
         model.type = AgoraGroupInfoType_openJoin;
     }
     else {
@@ -136,7 +146,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
         model.type = AgoraGroupInfoType_canAllInvite;
     }
     [_groupPermissions replaceObjectAtIndex:1 withObject:model];
-    [self.tableView reloadData];
+    [self.table reloadData];
 }
 
 
@@ -147,7 +157,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 
 - (void)nextButtonAction {
     if (self.groupNameCell.titleTextField.text.length == 0) {
-        [self showAlertWithMessage:@"请输入群组标题"];
+        [self showAlertWithMessage:@"please input group name"];
         return;
     }
     
@@ -156,7 +166,12 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     selectVC.title = @"Add Members";
     selectVC.delegate = self;
     [self.navigationController pushViewController:selectVC animated:YES];
-        
+  
+//    ACDGroupMemberSelectViewController *selectVC = [[ACDGroupMemberSelectViewController alloc] initWithInvitees:@[] maxInviteCount:0];
+//    selectVC.style = AgoraContactSelectStyle_Add;
+//    selectVC.title = @"Add Members";
+//    selectVC.delegate = self;
+//    [self.navigationController pushViewController:selectVC animated:YES];
 }
 
 
@@ -174,6 +189,25 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark UITextFieldDelegate
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if (textField == self.maxGroupNumberCell.maxGroupMemberField) {
+
+        NSInteger maxNumber = [textField.text integerValue];
+        if (maxNumber > 2000) {
+            [self showHint:@"max number can not exceed 2000"];
+            textField.text = @"2000";
+        }
+    }
+    
+    if (textField == self.groupNameCell.titleTextField) {
+        BOOL enable = textField.text.length > 0;
+        [self updateCreateButtonStatus:enable];
+
+    }
+}
+
 
 #pragma mark - Table view data source
 
@@ -277,10 +311,23 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
 
 
 #pragma mark getter
+- (UITableView *)table {
+    if (!_table) {
+        _table                 = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight) style:UITableViewStylePlain];
+        _table.delegate        = self;
+        _table.dataSource      = self;
+        _table.separatorStyle  = UITableViewCellSeparatorStyleNone;
+        _table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+        _table.backgroundColor = UIColor.whiteColor;
+    }
+    return _table;
+}
+
 - (ACDTextFieldCell *)groupNameCell {
     if (_groupNameCell == nil) {
         _groupNameCell = ACDTextFieldCell.new;
         _groupNameCell.nameLabel.text = @"Group Name";
+        _groupNameCell.titleTextField.delegate = self;
     }
     return _groupNameCell;
 }
@@ -296,6 +343,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     if (_maxGroupNumberCell == nil) {
         _maxGroupNumberCell = ACDMAXGroupNumberCell.new;
         _maxGroupNumberCell.nameLabel.text = @"Maximum Mumber";
+        _maxGroupNumberCell.maxGroupMemberField.delegate = self;
     }
     return _maxGroupNumberCell;
 }

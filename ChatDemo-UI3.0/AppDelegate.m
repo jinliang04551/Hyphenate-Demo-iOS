@@ -22,9 +22,10 @@
 #define EaseIMAppKey @"easemob-demo#easeim"
 #define ChatDemoUIAppKey @"easemob-demo#chatdemoui"
 #define HongKongAppkey @"52366312#441909"
-#define MeidongAppkey @"1193210624041558#chat-demo"
-#define Appkey @"61117440#460199"
- 
+#define MeidongAppkey @"41117440#383391"
+#define Appkey @"61308276#489779"
+#define Appkey1 @"61117440#460199"
+
 
 @interface AppDelegate () <AgoraChatClientDelegate,UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) NSString *userName;
@@ -108,7 +109,7 @@
 
 - (void)initUIKit
 {
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:Appkey];
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:Appkey1];
     
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -137,7 +138,9 @@
     } else {
         [self loadLoginPage];
     }
-    
+  
+//    [self loadMainPage];
+
 }
 
 
@@ -254,7 +257,12 @@
     AgoraMainViewController *main = [[AgoraMainViewController alloc] init];
 //    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:main];
 //    navigationController.interactivePopGestureRecognizer.delegate = (id)self;
-    self.window.rootViewController = main;
+    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+    if (!navigationController || (navigationController && ![navigationController.viewControllers[0] isKindOfClass:[AgoraMainViewController class]])) {
+        navigationController = [[UINavigationController alloc] initWithRootViewController:main];
+    }
+    navigationController.navigationBarHidden = YES;
+    self.window.rootViewController = navigationController;
     [AgoraChatDemoHelper shareHelper].mainVC = main;
 }
 
@@ -262,7 +270,9 @@
 //    AgoraLoginViewController *login = [[AgoraLoginViewController alloc] init];
     AgoraNewLoginViewController *login = [[AgoraNewLoginViewController alloc] init];
 
-    self.window.rootViewController = login;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:login];
+    navigationController.navigationBarHidden = YES;
+    self.window.rootViewController = navigationController;
     [AgoraChatDemoHelper shareHelper].mainVC = nil;
 
 }

@@ -9,10 +9,11 @@
 
 #import "AgoraMemberSelectViewController.h"
 #import "AgoraUserModel.h"
-#import "AgoraMemberCollectionCell.h"
+//#import "AgoraMemberCollectionCell.h"
 #import "AgoraRealtimeSearchUtils.h"
 #import "NSArray+AgoraSortContacts.h"
 #import "AgoraGroupMemberCell.h"
+#import "ACDMemberCollectionCell.h"
 
 
 #define NEXT_TITLE   NSLocalizedString(@"common.next", @"Next")
@@ -71,13 +72,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.edgesForExtendedLayout = UIRectEdgeNone;
-    [self.selectConllection registerNib:[UINib nibWithNibName:@"AgoraMemberCollection_Edit_Cell" bundle:nil] forCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell"];
-    self.tableView.sectionIndexBackgroundColor = [UIColor clearColor];
+//    [self.selectConllection registerNib:[UINib nibWithNibName:@"AgoraMemberCollection_Edit_Cell" bundle:nil] forCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell"];
+    
+    [self.selectConllection registerClass:[ACDMemberCollectionCell class] forCellWithReuseIdentifier:[ACDMemberCollectionCell reuseIdentifier]];
+    
     self.tableView.tableFooterView = [UIView new];
     self.selectConllection.backgroundColor = UIColor.whiteColor;
     self.tableView.backgroundColor = UIColor.whiteColor;
-    
-    
+    self.tableView.sectionIndexColor = SectionIndexTextColor;
+    self.tableView.sectionIndexBackgroundColor = [UIColor clearColor];
+    self.tableView.separatorStyle  = UITableViewCellSeparatorStyleNone;
+
     [self setupNavBar];
     [self loadUnSelectContacts];
     [self setupSearchBar];
@@ -108,7 +113,7 @@
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _doneBtn.frame = CGRectMake(0, 0, 44, 44);
     [self updateDoneUserInteractionEnabled:NO];
-    NSString *title = @"create";
+    NSString *title = @"Create";
     if (_style == AgoraContactSelectStyle_Invite) {
         title = DONE_TITLE;
     }
@@ -262,6 +267,7 @@
     AgoraGroupMemberCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[AgoraGroupMemberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        
     }
     
     AgoraUserModel *model = nil;
@@ -285,18 +291,18 @@
     return 54.0f;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (_isSearchState) {
-        return 0;
-    }
-    return [AgoraSectionTitleHeader sectionHeight];
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    AgoraSectionTitleHeader *headerView = [[AgoraSectionTitleHeader alloc] init];
-    headerView.title = _sectionTitles[section];
-    return headerView;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    if (_isSearchState) {
+//        return 0;
+//    }
+//    return [AgoraSectionTitleHeader sectionHeight];
+//}
+//
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    AgoraSectionTitleHeader *headerView = [[AgoraSectionTitleHeader alloc] init];
+//    headerView.title = _sectionTitles[section];
+//    return headerView;
+//}
 
 #pragma mark - UIScrollViewDelegate
 
@@ -320,7 +326,7 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    AgoraMemberCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell" forIndexPath:indexPath];
+    ACDMemberCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[ACDMemberCollectionCell reuseIdentifier] forIndexPath:indexPath];
     cell.model = _selectContacts[indexPath.row];
     return cell;
 }
@@ -440,4 +446,5 @@
 + (CGFloat)sectionHeight {
     return 20;
 }
+    
 @end

@@ -16,7 +16,7 @@
 
 @interface ACDJoinGroupViewController ()
 @property (nonatomic, strong) ACDSearchResultView *resultView;
-@property (nonatomic, strong) ACDSearchJoinCell *searchJoincell;
+
 @end
 
 @implementation ACDJoinGroupViewController
@@ -28,7 +28,28 @@
     }else {
         self.title = @"Add Contacts";
     }
+    
+    [self setNavBar];
+    [self.table registerClass:[ACDSearchJoinCell class] forCellReuseIdentifier:[ACDSearchJoinCell reuseIdentifier]];
 }
+
+- (void)setNavBar {
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:ImageWithName(@"gray_goBack") style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
+    
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 8, 15)];
+    [button addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    
+    [button setTitle:@"Cancel" forState:UIControlStateNormal];
+    [button setTitleColor:TextLabelBlueColor forState:UIControlStateNormal];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+}
+
+- (void)goBack {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (void)joinToPublicGroup:(NSString *)groupId {
     ACD_WS
@@ -60,7 +81,6 @@
         if (!aError) {
             NSString *msg =  @"You request has been sent.";
             [weakSelf showAlertWithMessage:msg];
-            [weakSelf.navigationController popViewControllerAnimated:YES];
         }
         else {
             [weakSelf showAlertWithMessage:aError.errorDescription];
@@ -74,6 +94,7 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     self.dataArray = [@[searchText] mutableCopy];
     self.searchSource = self.dataArray;
+    self.table.userInteractionEnabled = YES;
     [self.table reloadData];
 }
 
@@ -87,6 +108,7 @@
 }
 
 
+
 #pragma mark - Table view data source
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 54.0f;
@@ -98,6 +120,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    ACDSearchJoinCell *cell = [tableView dequeueReusableCellWithIdentifier:[ACDSearchJoinCell reuseIdentifier]];
+    if (cell == nil) {
+        cell = [[ACDSearchJoinCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDSearchJoinCell reuseIdentifier]];
+    }
+    cell.isSearchGroup = self.isSearchGroup;
+    
     NSString *title = @"";
     if (self.isSearchGroup) {
         title = [NSString stringWithFormat:@"GroupID：%@",self.searchSource[0]];
@@ -105,8 +133,20 @@
         title = [NSString stringWithFormat:@"AgoraID：%@",self.searchSource[0]];
     }
 
-    self.searchJoincell.nameLabel.text = title;
-    return self.searchJoincell;
+    ACD_WS
+    cell.addGroupBlock = ^{
+        if (weakSelf.isSearchGroup) {
+            [weakSelf joinToPublicGroup:weakSelf.searchSource[0]];
+
+        }else {
+            [weakSelf sendAddContact:weakSelf.searchSource[0]];
+        }
+
+    };
+
+    [cell updateSearchName:title];
+    return cell;
+    
 }
 
 
@@ -117,23 +157,6 @@
     }
     
     return _resultView;
-}
-
-
-- (ACDSearchJoinCell *)searchJoincell {
-    if (_searchJoincell == nil) {
-        _searchJoincell = [[ACDSearchJoinCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[ACDSearchJoinCell reuseIdentifier]];
-        ACD_WS
-        _searchJoincell.tapCellBlock = ^{
-            if (weakSelf.isSearchGroup) {
-                [weakSelf joinToPublicGroup:weakSelf.searchSource[0]];
-
-            }else {
-                [weakSelf sendAddContact:weakSelf.searchSource[0]];
-            }
-        };
-    }
-    return _searchJoincell;
 }
 
 

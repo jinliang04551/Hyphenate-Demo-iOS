@@ -34,6 +34,8 @@ typedef NS_ENUM(NSInteger, ACDGroupInfoAccessType) {
 
 @interface ACDGroupInfoViewController : ACDBaseTableViewController
 @property (nonatomic, assign) ACDGroupInfoAccessType accessType;
+@property (nonatomic,assign) BOOL isHideChatButton;
+
 @property (nonatomic, assign) id<ACDGroupInfoViewControllerDelegate> delegate;
  
 - (instancetype)initWithGroupId:(NSString *)aGroupId;

@@ -29,15 +29,15 @@
     
     [self.titleTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView);
-        make.left.equalTo(self.contentView).offset(10);
-        make.right.equalTo(self.contentView).offset(-10);
+        make.left.equalTo(self.contentView).offset(16);
+        make.right.equalTo(self.contentView).offset(-16);
     }];
     
     [self.bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(@(ACD_ONE_PX));
         make.bottom.equalTo(self.contentView);
-        make.left.equalTo(self.contentView).offset(10);
-        make.right.equalTo(self.contentView).offset(-10);
+        make.left.equalTo(self.titleTextField);
+        make.right.equalTo(self.titleTextField);
     }];
 }
 

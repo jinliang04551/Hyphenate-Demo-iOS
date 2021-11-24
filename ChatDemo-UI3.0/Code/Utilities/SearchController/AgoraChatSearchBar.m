@@ -44,17 +44,17 @@
     self.textField.delegate = self;
     self.textField.backgroundColor = kColor_textViewGray;
     self.textField.font = [UIFont systemFontOfSize:16];
-    self.textField.placeholder = @"search";
+    self.textField.placeholder = @"Search";
     self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.textField.leftViewMode = UITextFieldViewModeAlways;
     self.textField.returnKeyType = UIReturnKeySearch;
-    self.textField.layer.cornerRadius = 8;
+    self.textField.layer.cornerRadius = 18;
     [self addSubview:self.textField];
     [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self);
         make.left.equalTo(self).offset(15);
         make.right.equalTo(self).offset(-15);
-        make.height.equalTo(@35);
+        make.height.equalTo(@36);
     }];
     
     UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 15)];
@@ -65,8 +65,8 @@
     
     self.cancelButton = [[UIButton alloc] init];
     self.cancelButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    [self.cancelButton setTitle:@"cancel" forState:UIControlStateNormal];
-    [self.cancelButton setTitleColor:kColor_Blue forState:UIControlStateNormal];
+    [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [self.cancelButton setTitleColor:[UIColor colorWithHexString:@"#114EFF"] forState:UIControlStateNormal];
     [self.cancelButton addTarget:self action:@selector(searchCancelButtonClicked) forControlEvents:UIControlEventTouchUpInside];
 }
 

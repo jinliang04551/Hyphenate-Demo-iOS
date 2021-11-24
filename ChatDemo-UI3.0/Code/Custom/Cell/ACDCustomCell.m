@@ -60,6 +60,7 @@
         _iconImageView.contentMode = UIViewContentModeScaleAspectFit;
         _iconImageView.layer.cornerRadius = kAvatarHeight * 0.5;
         _iconImageView.clipsToBounds = YES;
+        _iconImageView.layer.masksToBounds = YES;
     }
     return _iconImageView;
 }

@@ -15,10 +15,10 @@
 #import "ACDGroupMembersViewController.h"
 
 #import "AgoraGroupTransferOwnerViewController.h"
-#import "AgoraChatViewController.h"
+#import "ACDChatViewController.h"
 #import "ACDTransferOwnerViewController.h"
 
-#define kGroupInfoHeaderViewHeight 320
+#define kGroupInfoHeaderViewHeight 360.0
 
 @interface ACDGroupInfoViewController ()
 @property (nonatomic, strong) ACDInfoHeaderView *groupInfoHeaderView;
@@ -58,8 +58,40 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self setupNavbar];
     [self fetchGroupInfo];
+}
+
+- (void)setupNavbar {
+    if (self.accessType == ACDGroupInfoAccessTypeSearch) {
+        self.title = @"Public Groups";
+
+        UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        leftBtn.frame = CGRectMake(0, 0, 20, 20);
+        [leftBtn setImage:[UIImage imageNamed:@"gray_goBack"] forState:UIControlStateNormal];
+        [leftBtn setImage:[UIImage imageNamed:@"gray_goBack"] forState:UIControlStateHighlighted];
+        [leftBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *leftBar = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
+        [self.navigationItem setLeftBarButtonItem:leftBar];
+        
+        UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        cancelButton.frame = CGRectMake(0, 0, 50, 40);
+        cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+        [cancelButton setTitleColor:ButtonEnableBlueColor forState:UIControlStateNormal];
+        [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+        [cancelButton setTitle:@"Cancel" forState:UIControlStateHighlighted];
+        [cancelButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithCustomView:cancelButton];
+        
+        UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                    target:nil
+                                                                                    action:nil];
+        rightSpace.width = -2;
+        [self.navigationItem setRightBarButtonItems:@[rightSpace,rightBar]];
+    }else {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:ImageWithName(@"black_goBack") style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
+    }
+
 }
 
 - (void)placeSubViews {
@@ -68,17 +100,18 @@
     }];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
-}
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.navigationController.navigationBarHidden = NO;
-}
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    self.navigationController.navigationBarHidden = YES;
+//}
+//
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    self.navigationController.navigationBarHidden = NO;
+//}
 
 #pragma mark NSNotification
 - (void)updateUIWithNotification:(NSNotification *)notification
@@ -115,7 +148,11 @@
 }
 
 
-#pragma mark action
+#pragma mark - Action
+- (void)backAction {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)fetchGroupInfo
 {
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
@@ -296,7 +333,7 @@
 }
 
 - (void)goGroupChatPage {
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:self.group.groupId conversationType:AgoraChatConversationTypeGroupChat];
+    ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:self.group.groupId conversationType:AgoraChatConversationTypeGroupChat];
     chatViewController.navTitle = self.group.groupName;
     [self.navigationController pushViewController:chatViewController animated:YES];
 
@@ -308,7 +345,7 @@
         [self joinToPublicGroup:self.group.groupId];
     }
     else {
-        [self showAlertView];
+        [self requestToJoinPublicGroup:self.groupId message:[NSString stringWithFormat:@"%@ request join the group",AgoraChatClient.sharedClient.currentUsername]];
     }
 }
 
@@ -394,6 +431,8 @@
 - (ACDInfoHeaderView *)groupInfoHeaderView {
     if (_groupInfoHeaderView == nil) {
         _groupInfoHeaderView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kGroupInfoHeaderViewHeight) withType:ACDHeaderInfoTypeGroup];
+        _groupInfoHeaderView.isHideChatButton = self.isHideChatButton;
+        
         [_groupInfoHeaderView.avatarImageView setImage:ImageWithName(@"group_default_avatar")];
         ACD_WS
         _groupInfoHeaderView.tapHeaderBlock = ^{

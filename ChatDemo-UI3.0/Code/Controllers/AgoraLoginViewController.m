@@ -302,7 +302,7 @@
         top = -100;
     }
     [UIView animateWithDuration:0.3 animations:^{
-        [[UIApplication sharedApplication].keyWindow setTop:top];
+        //[[UIApplication sharedApplication].keyWindow setTop:top];
         _loginButton.frame = buttonFrame;
         _signupButton.frame = buttonFrame;
     }];

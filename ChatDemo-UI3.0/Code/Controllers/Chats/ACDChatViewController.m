@@ -13,6 +13,12 @@
 #import "AgoraChatDateHelper.h"
 #import "UserInfoStore.h"
 
+#import "ACDChatNavigationView.h"
+#import "ACDContactInfoViewController.h"
+#import "AgoraUserModel.h"
+#import "ACDGroupInfoViewController.h"
+
+
 @interface ACDChatViewController ()<EaseChatViewControllerDelegate, AgoraChatroomManagerDelegate, AgoraChatGroupManagerDelegate, EaseMessageCellDelegate>
 @property (nonatomic, strong) EaseConversationModel *conversationModel;
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -20,6 +26,11 @@
 @property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
 @property (nonatomic, strong) UIView* fullScreenView;
 @property (strong, nonatomic) UIButton *backButton;
+
+@property (nonatomic, strong) ACDChatNavigationView *navigationView;
+@property (nonatomic, assign) AgoraChatConversationType conversationType;
+@property (nonatomic, strong) NSString *conversationId;
+
 @end
 
 @implementation ACDChatViewController
@@ -28,6 +39,8 @@
     if (self = [super init]) {
         _conversation = [AgoraChatClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:YES];
         _conversationModel = [[EaseConversationModel alloc]initWithConversation:_conversation];
+        self.conversationType = conType;
+        self.conversationId = conversationId;
         
         EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
         viewModel.displayOneselfAvatar = NO;
@@ -55,6 +68,19 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
+
+
 - (void)dealloc
 {
     [[AgoraChatClient sharedClient].roomManager removeDelegate:self];
@@ -62,39 +88,24 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-    self.navigationController.navigationBarHidden = NO;
-}
-
 - (void)_setupChatSubviews
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backleft"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
-    [self _setupNavigationBarTitle];
-    //[self _setupNavigationBarRightItem];
     [self addChildViewController:_chatController];
+    [self.view addSubview:self.navigationView];
     [self.view addSubview:_chatController.view];
-    _chatController.view.frame = self.view.bounds;
+    
+    [self.navigationView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
+        make.left.right.equalTo(self.view);
+        make.bottom.equalTo(_chatController.view.mas_top);
+    }];
+    
+    [_chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(60.0, 0, 0, 0));
+    }];
+ 
     [self loadData:YES];
     self.view.backgroundColor = [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0];
-}
-
-- (void)_setupNavigationBarRightItem
-{
-//    if (self.conversation.type == AgoraChatConversationTypeChat) {
-//        UIImage *image = [[UIImage imageNamed:@"userData"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(chatInfoAction)];
-//    }
-//    if (self.conversation.type == AgoraChatConversationTypeGroupChat) {
-//        UIImage *image = [[UIImage imageNamed:@"groupInfo"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(groupInfoAction)];
-//    }
-//    if (self.conversation.type == AgoraChatConversationTypeChatRoom) {
-//        UIImage *image = [[UIImage imageNamed:@"groupInfo"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(chatroomInfoAction)];
-//    }
 }
 
 - (void)_setupNavigationBarTitle
@@ -241,6 +252,9 @@
     
     NSMutableArray *userInfoAry = [[NSMutableArray alloc]init];
     for (AgoraChatUserInfo *userInfo in userinfoList) {
+        if ([userInfo.userId isEqualToString:self.chatController.currentConversation.conversationId]) {
+            [_navigationView.chatImageView sd_setImageWithURL:[NSURL URLWithString:userInfo.avatarUrl]];
+        }
         AgoraChatUserDataModel *model = [[AgoraChatUserDataModel alloc]initWithUserInfo:userInfo];
         [userInfoAry addObject:model];
     }
@@ -296,7 +310,7 @@
 
 - (void)didLeaveGroup:(AgoraChatGroup *)aGroup reason:(AgoraChatGroupLeaveReason)aReason
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self backAction];
 }
 
 #pragma mark - AgoraChatroomManagerDelegate
@@ -330,7 +344,7 @@
     if (aReason == 2)
         [self showHint:@"您的账号已离线"];
     if (self.conversation.type == AgoraChatTypeChatRoom && [aChatroom.chatroomId isEqualToString:self.conversation.conversationId]) {
-        [self.navigationController popViewControllerAnimated:YES];
+        [self backAction];
     }
 }
 
@@ -385,6 +399,57 @@
 - (void)chatroomAnnouncementDidUpdate:(AgoraChatroom *)aChatroom announcement:(NSString *)aAnnouncement
 {
     [self showHint:@"聊天室公告内容已更新，请查看"];
+}
+
+#pragma mark getter and setter
+- (ACDChatNavigationView *)navigationView {
+    if (_navigationView == nil) {
+        _navigationView = [[ACDChatNavigationView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 80.0f)];
+    
+        _navigationView.leftLabel.text = self.navTitle;
+        ACD_WS
+        _navigationView.leftButtonBlock = ^{
+            [weakSelf backAction];
+        };
+        
+        _navigationView.chatButtonBlock = ^{
+            [weakSelf goInfoPage];
+        };
+    }
+    return _navigationView;
+}
+
+- (void)goInfoPage {
+    if (self.conversationType == AgoraChatConversationTypeChat) {
+        [self goContactInfoWithContactId:self.conversationId];
+    }
+    
+    if (self.conversationType == AgoraChatConversationTypeGroupChat) {
+        [self goGroupInfoWithGroupId:self.conversationId];
+    }
+
+}
+
+
+- (void)goContactInfoWithContactId:(NSString *)contactId {
+    AgoraUserModel * model = [[AgoraUserModel alloc] initWithHyphenateId:contactId];
+    ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
+    vc.isHideChatButton = YES;
+    
+    
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
+- (void)goGroupInfoWithGroupId:(NSString *)groupId {
+    ACDGroupInfoViewController *vc = [[ACDGroupInfoViewController alloc] initWithGroupId:groupId];
+    
+    vc.accessType = ACDGroupInfoAccessTypeChat;
+    vc.isHideChatButton = YES;
+    
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

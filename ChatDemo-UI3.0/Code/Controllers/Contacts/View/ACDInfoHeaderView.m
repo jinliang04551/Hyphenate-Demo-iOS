@@ -9,7 +9,8 @@
 #import "ACDInfoHeaderView.h"
 #import "ACDImageTextButtonView.h"
 
-#define kMeHeaderImageViewHeight  180.0
+#define kMeHeaderImageViewHeight  140.0f
+#define kBackIconSize 28.0f
 
 
 @interface ACDInfoHeaderView ()
@@ -52,8 +53,9 @@
 }
 
 - (void)placeAndLayoutForContactInfo {
-    self.avatarImageView.layer.cornerRadius = 100 * 0.5;
-
+    self.avatarImageView.layer.cornerRadius = kMeHeaderImageViewHeight * 0.5;
+    self.avatarImageView.layer.masksToBounds = YES;
+    
     [self addSubview:self.backButton];
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
@@ -63,13 +65,13 @@
     [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset(kAgroaPadding * 4.4);
         make.left.equalTo(self).offset(kAgroaPadding);
-        make.size.mas_equalTo(28.0);
+        make.size.mas_equalTo(kBackIconSize);
     }];
     
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.backButton.mas_bottom).offset(kAgroaPadding);
         make.centerX.equalTo(self);
-        make.size.equalTo(@100.0);
+        make.size.mas_equalTo(kMeHeaderImageViewHeight);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -97,23 +99,23 @@
 - (void)placeAndLayoutForGroupInfo {
     self.avatarImageView.image = ImageWithName(@"group_default_avatar");
 
-    [self addSubview:self.backButton];
+//    [self addSubview:self.backButton];
     [self addSubview:self.avatarImageView];
     [self addSubview:self.nameLabel];
     [self addSubview:self.userIdLabel];
     [self addSubview:self.describeLabel];
     [self addSubview:self.chatView];
     
-    [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(kAgroaPadding * 2);
-        make.left.equalTo(self).offset(kAgroaPadding);
-        make.size.mas_equalTo(28.0);
-    }];
+//    [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self).offset(kAgroaPadding * 4.4);
+//        make.left.equalTo(self).offset(kAgroaPadding);
+//        make.size.mas_equalTo(kBackIconSize);
+//    }];
     
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.backButton.mas_bottom).offset(kAgroaPadding);
+        make.top.equalTo(self).offset(kAgroaPadding *6.0);
         make.centerX.equalTo(self);
-//        make.size.equalTo(@150.0);
+        make.size.mas_equalTo(kMeHeaderImageViewHeight);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -147,6 +149,7 @@
 }
 
 - (void)placeAndLayoutForMeInfo {
+
     self.avatarImageView.layer.cornerRadius = kMeHeaderImageViewHeight * 0.5;
     self.avatarImageView.layer.masksToBounds = YES;
     
@@ -155,7 +158,7 @@
     [self addSubview:self.userIdLabel];
         
     [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(kAgroaPadding *5.0);
+        make.top.equalTo(self).offset(kAgroaPadding *9.2);
         make.centerX.equalTo(self);
         make.size.mas_equalTo(kMeHeaderImageViewHeight);
     }];
@@ -270,7 +273,7 @@
     if (_chatView == nil) {
         _chatView = [[ACDImageTextButtonView alloc] init];
         [_chatView.iconImageView setImage:ImageWithName(@"start_chat")];
-        _chatView.titleLabel.text = @"chat";
+        _chatView.titleLabel.text = @"Chat";
         [_chatView.tapBtn addTarget:self action:@selector(goChatPageAction) forControlEvents:UIControlEventTouchUpInside];
 //        _chatView.backgroundColor = UIColor.yellowColor;
         
@@ -288,5 +291,6 @@
 @end
 
 #undef kMeHeaderImageViewHeight
+#undef kBackIconSize
 
 

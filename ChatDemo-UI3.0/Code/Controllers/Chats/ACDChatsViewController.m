@@ -21,7 +21,6 @@
 //@property (nonatomic, strong) AgoraChatInviteGroupMemberViewController *inviteController;
 @property (nonatomic, strong) EaseConversationsViewController *easeConvsVC;
 @property (nonatomic, strong) EaseConversationViewModel *viewModel;
-@property (nonatomic, strong) UINavigationController *resultNavigationController;
 @property (nonatomic, strong) AgoraChatSearchResultController *resultController;
 @property (strong, nonatomic) UIView *networkStateView;
 @property (nonatomic,strong) ACDNaviCustomView *navView;
@@ -62,47 +61,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-//- (void)_setupSubviews
-//{
-//    self.view.backgroundColor = [UIColor clearColor];
-//    UILabel *titleLabel = [[UILabel alloc] init];
-//    titleLabel.text = @"Chats";
-//    titleLabel.textColor = [UIColor blackColor];
-//    titleLabel.font = [UIFont systemFontOfSize:18];
-//    [self.view addSubview:titleLabel];
-//    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(self.view);
-//        make.top.equalTo(self.view).offset(AgoraChatVIEWTOPMARGIN + 35);
-//        make.height.equalTo(@25);
-//    }];
-//
-//    self.addImageBtn = [[UIButton alloc]init];
-//    [self.addImageBtn setImage:[UIImage imageNamed:@"chat_nav_add"] forState:UIControlStateNormal];
-//    [self.addImageBtn addTarget:self action:@selector(chatInfoAction) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:self.addImageBtn];
-//    [self.addImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.width.height.equalTo(@35);
-//        make.centerY.equalTo(titleLabel);
-//        make.right.equalTo(self.view).offset(-16);
-//    }];
-//
-//    self.viewModel = [[EaseConversationViewModel alloc] init];
-//    self.viewModel.canRefresh = YES;
-//    self.viewModel.badgeLabelPosition = EaseAvatarTopRight;
-//
-//    self.easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:self.viewModel];
-//    self.easeConvsVC.delegate = self;
-//    [self addChildViewController:self.easeConvsVC];
-//    [self.view addSubview:self.easeConvsVC.view];
-//    [self.easeConvsVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(titleLabel.mas_bottom).offset(15);
-//        make.left.equalTo(self.view);
-//        make.right.equalTo(self.view);
-//        make.bottom.equalTo(self.view);
-//    }];
-//    [self _updateConversationViewTableHeader];
-//}
-
 - (void)_setupSubviews
 {
     self.view.backgroundColor = [UIColor clearColor];
@@ -134,11 +92,11 @@
 
 - (void)_updateConversationViewTableHeader {
     self.easeConvsVC.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.easeConvsVC.tableView.tableHeaderView.backgroundColor = [UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1];
+    self.easeConvsVC.tableView.tableHeaderView.backgroundColor = [UIColor whiteColor];
     UIControl *control = [[UIControl alloc] initWithFrame:CGRectZero];
     control.clipsToBounds = YES;
     control.layer.cornerRadius = 18;
-    control.backgroundColor = UIColor.whiteColor;
+    control.backgroundColor = [UIColor colorWithHexString:@"#F2F2F2"];;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchButtonAction)];
     [control addGestureRecognizer:tap];
     
@@ -146,7 +104,7 @@
         make.left.equalTo(self.easeConvsVC.tableView);
         make.width.equalTo(self.easeConvsVC.tableView);
         make.top.equalTo(self.easeConvsVC.tableView);
-        make.height.mas_equalTo(52);
+        make.height.mas_equalTo(54);
     }];
     
     [self.easeConvsVC.tableView.tableHeaderView addSubview:control];
@@ -154,15 +112,16 @@
         make.height.mas_offset(36);
         make.top.equalTo(self.easeConvsVC.tableView.tableHeaderView).offset(8);
         make.bottom.equalTo(self.easeConvsVC.tableView.tableHeaderView).offset(-8);
-        make.left.equalTo(self.easeConvsVC.tableView.tableHeaderView.mas_left).offset(17);
+        make.left.equalTo(self.easeConvsVC.tableView.tableHeaderView.mas_left).offset(16);
         make.right.equalTo(self.easeConvsVC.tableView.tableHeaderView).offset(-16);
     }];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search"]];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
     label.font = [UIFont systemFontOfSize:16];
-    label.text = @"search";
-    label.textColor = [UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1];
+    label.text = @"Search";
+    label.textColor = [UIColor colorWithHexString:@"#999999"];
+    label.textAlignment = NSTextAlignmentLeft;
     [label setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     UIView *subView = [[UIView alloc] init];
     [subView addSubview:imageView];
@@ -170,21 +129,22 @@
     [control addSubview:subView];
     
     [imageView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.height.mas_equalTo(15);
+        make.width.height.mas_equalTo(36);
         make.left.equalTo(subView);
         make.top.equalTo(subView);
         make.bottom.equalTo(subView);
     }];
     
     [label mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(imageView.mas_right).offset(3);
+        make.left.equalTo(imageView.mas_right);
         make.right.equalTo(subView);
         make.top.equalTo(subView);
         make.bottom.equalTo(subView);
     }];
     
     [subView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(control);
+        make.centerY.equalTo(control);
+        make.left.equalTo(control);
     }];
 }
 
@@ -195,11 +155,10 @@
     self.resultController.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.resultController setCellForRowAtIndexPathCompletion:^UITableViewCell *(UITableView *tableView, NSIndexPath *indexPath) {
         NSString *cellIdentifier = @"EaseConversationCell";
-        EaseConversationCell *cell = (EaseConversationCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        EaseConversationCell *cell = [EaseConversationCell tableView:tableView identifier:cellIdentifier];
         if (cell == nil) {
-            cell = [EaseConversationCell tableView:tableView identifier:@"EaseConversationCell"];
+            cell = [[EaseConversationCell alloc]initWithConversationsViewModel:_viewModel identifier:cellIdentifier];
         }
-        
         NSInteger row = indexPath.row;
         EaseConversationModel *model = [weakself.resultController.dataArray objectAtIndex:row];
         cell.model = model;
@@ -245,10 +204,12 @@
         [weakself.resultController.searchBar resignFirstResponder];
         weakself.resultController.searchBar.showsCancelButton = NO;
         [weakself searchBarCancelButtonAction:nil];
-        [weakself.resultNavigationController dismissViewControllerAnimated:YES completion:nil];
+        //[weakself.resultController.navigationController popViewControllerAnimated:YES];
+        [weakself.resultController dismissViewControllerAnimated:YES completion:nil];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
         ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:model.easeId conversationType:model.type];
+        chatViewController.navTitle = model.showName;
 
         chatViewController.hidesBottomBarWhenPushed = YES;
         [weakself.navigationController pushViewController:chatViewController animated:YES];
@@ -294,17 +255,15 @@
 
 - (void)searchButtonAction
 {
-    if (self.resultNavigationController == nil) {
+    if (self.resultController == nil) {
         self.resultController = [[AgoraChatSearchResultController alloc] init];
         self.resultController.delegate = self;
-        self.resultNavigationController = [[UINavigationController alloc] initWithRootViewController:self.resultController];
-        [self.resultNavigationController.navigationBar setBackgroundImage:[[UIImage imageNamed:@"navBarBg"] stretchableImageWithLeftCapWidth:10 topCapHeight:10] forBarMetrics:UIBarMetricsDefault];
         [self _setupSearchResultController];
     }
     [self.resultController.searchBar becomeFirstResponder];
     self.resultController.searchBar.showsCancelButton = YES;
-    self.resultNavigationController.modalPresentationStyle = 0;
-    [self presentViewController:self.resultNavigationController animated:YES completion:nil];
+    self.resultController.modalPresentationStyle = 0;
+    [self presentViewController:self.resultController animated:YES completion:nil];
 }
 
 #pragma mark - Action
@@ -406,7 +365,8 @@
 {
     EaseConversationCell *cell = (EaseConversationCell*)[tableView cellForRowAtIndexPath:indexPath];
     ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:cell.model.easeId conversationType:cell.model.type];
-
+    chatViewController.navTitle = cell.model.showName;
+    
     chatViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatViewController animated:YES];
 }

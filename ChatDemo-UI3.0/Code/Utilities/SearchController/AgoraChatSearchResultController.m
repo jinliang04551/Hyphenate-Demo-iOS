@@ -51,6 +51,16 @@
         _searchBar.searchBarStyle = UISearchBarStyleMinimal;
         _searchBar.backgroundColor = [UIColor whiteColor];
         _searchBar.returnKeyType = UIReturnKeyDone;
+        [_searchBar setImage:[UIImage imageNamed:@"deleteSearch"] forSearchBarIcon:UISearchBarIconClear state:UIControlStateNormal];
+        UITextField *searchField = [_searchBar valueForKey:@"searchField"];
+        if (searchField) {
+            [searchField setTintColor:[UIColor colorWithHexString:@"#005FFF"]];
+            [searchField setBackgroundColor:[UIColor whiteColor]];
+            searchField.layer.cornerRadius = 18.0f;
+            searchField.layer.masksToBounds = YES;
+        }
+        [[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTintColor:[UIColor colorWithHexString:@"#114EFF"]];
+        [[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"PingFangSC-Medium" size:16.0]} forState:UIControlStateNormal];
         _searchBar.delegate = self;
     }
     
@@ -65,10 +75,10 @@
     
     [self.view addSubview:self.searchBar];
     [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(25);
+        make.top.equalTo(self.view.mas_top).offset(43);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
-        make.height.equalTo(@50);
+        make.height.equalTo(@54);
     }];
     
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -77,7 +87,7 @@
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.view.mas_bottom);
     }];
-    
+    /*
     self.defaultFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 80)];
     UILabel *label = [[UILabel alloc] init];
     label.text = NSLocalizedString(@"title.searchNoResult", @"Search has no result");
@@ -90,7 +100,7 @@
         make.left.equalTo(self.defaultFooterView).offset(20);
         make.right.equalTo(self.defaultFooterView).offset(-20);
         make.bottom.equalTo(self.defaultFooterView).offset(-20);
-    }];
+    }];*/
 }
 
 #pragma mark - Table view data source
@@ -145,7 +155,6 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //在iOS8.0上，必须加上这个方法才能出发左划操作
     if (_commitEditingAtIndexPath) {
         return _commitEditingAtIndexPath(tableView, editingStyle, indexPath);
     }

@@ -85,7 +85,6 @@
     WEAK_SELF
     dispatch_async(dispatch_get_main_queue(), ^(){
         [weakSelf.table reloadData];
-//        [weakSelf.refreshControl endRefreshing];
     });
 }
 
@@ -210,7 +209,9 @@
         _table.clipsToBounds = YES;
         _table.rowHeight = 54.0f;
         [_table registerClass:[ACDContactCell class] forCellReuseIdentifier:[ACDContactCell reuseIdentifier]];
-        
+        _table.sectionIndexColor = SectionIndexTextColor;
+        _table.sectionIndexBackgroundColor = [UIColor clearColor];
+
     }
     return _table;
 }

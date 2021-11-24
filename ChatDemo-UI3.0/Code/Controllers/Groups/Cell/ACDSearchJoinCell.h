@@ -11,7 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDSearchJoinCell : ACDCustomCell
+@property (nonatomic, assign) BOOL isSearchGroup;
 @property (nonatomic, copy) void (^addGroupBlock)(void);
+- (void)updateSearchName:(NSString *)searchName;
 
 @end
 

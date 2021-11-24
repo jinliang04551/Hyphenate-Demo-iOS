@@ -21,8 +21,9 @@
     [super awakeFromNib];
     // Initialization code
     self.accessoryType = UITableViewCellAccessoryNone;
-    _permissionTitleLabel.textColor = UIColor.blackColor;
     _permissionSwitch.hidden = YES;
+    _permissionTitleLabel.font = [UIFont fontWithName:@"PingFangSC-Semibold" size:16.0f];
+    _permissionTitleLabel.textColor = COLOR_HEX(0x0D0D0D);
 }
 
 - (IBAction)permissionSelectAction:(UISwitch *)sender {

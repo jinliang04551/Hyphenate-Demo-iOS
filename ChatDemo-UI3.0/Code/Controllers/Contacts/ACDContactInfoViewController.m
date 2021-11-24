@@ -12,12 +12,11 @@
 #import "AgoraUserModel.h"
 #import "AgoraContactInfoCell.h"
 #import "AgoraChatDemoHelper.h"
-//#import "AgoraChatViewController.h"
 #import "ACDChatViewController.h"
 #import "ACDInfoHeaderView.h"
 #import "ACDInfoCell.h"
 
-#define kContactInfoHeaderViewHeight 320.0
+#define kContactInfoHeaderViewHeight 360.0
 
 typedef enum : NSUInteger {
     AgoraContactInfoActionNone,
@@ -122,7 +121,7 @@ typedef enum : NSUInteger {
     ACD_WS
     if (indexPath.row == 0) {
         [cell.iconImageView setImage:ImageWithName(@"blocked")];
-        cell.nameLabel.text = @"block";
+        cell.nameLabel.text = @"Block Contact";
         
         cell.tapCellBlock = ^{
             [weakSelf blockAction];
@@ -132,7 +131,7 @@ typedef enum : NSUInteger {
     
     if (indexPath.row == 1) {
         [cell.iconImageView setImage:ImageWithName(@"delete")];
-        cell.nameLabel.text = @"delete";
+        cell.nameLabel.text = @"Delete Contact";
         cell.tapCellBlock = ^{
             [weakSelf deleteAction];
         };
@@ -258,6 +257,7 @@ typedef enum : NSUInteger {
 - (ACDInfoHeaderView *)contactInfoHeaderView {
     if (_contactInfoHeaderView == nil) {
         _contactInfoHeaderView = [[ACDInfoHeaderView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, kContactInfoHeaderViewHeight) withType:ACDHeaderInfoTypeContact];
+        _contactInfoHeaderView.isHideChatButton = self.isHideChatButton;
         
         ACD_WS
         _contactInfoHeaderView.tapHeaderBlock = ^{
@@ -266,6 +266,8 @@ typedef enum : NSUInteger {
         
         _contactInfoHeaderView.goChatPageBlock = ^{
             ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:weakSelf.model.hyphenateId conversationType:AgoraChatConversationTypeChat];
+            chatViewController.navTitle = weakSelf.model.nickname;
+            chatViewController.hidesBottomBarWhenPushed = YES;
             [weakSelf.navigationController pushViewController:chatViewController animated:YES];
         };
         

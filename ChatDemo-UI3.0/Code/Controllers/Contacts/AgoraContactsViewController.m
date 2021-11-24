@@ -57,7 +57,7 @@
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.tableView.sectionIndexColor = BrightBlueColor;
+    self.tableView.sectionIndexColor = SectionIndexTextColor;
     self.tableView.sectionIndexBackgroundColor = [UIColor clearColor];
     [self setupNavigationItem:self.navigationItem];
     [self reloadGroupNotifications];
