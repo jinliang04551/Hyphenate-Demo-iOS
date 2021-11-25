@@ -294,13 +294,13 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
                                                       completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
       if (!aError) {
         dispatch_async(dispatch_get_main_queue(), ^(){
-        [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION
-                                                                  object:nil];
-          });
-          
-          //跳转到聊天页面
-          
-          [self backAction];
+        [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_CreateGroup object:aGroup];
+
+        });
+        
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
       }
       else {
          [weakSelf showAlertWithMessage:NSLocalizedString(@"group.createFailure", @"Create group failure")];
@@ -308,6 +308,9 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
         
     }];
 }
+
+
+
 
 
 #pragma mark getter

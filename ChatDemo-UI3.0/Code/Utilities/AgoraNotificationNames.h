@@ -18,3 +18,5 @@
 #define KAgora_END_CHAT  @"endChat_notification"
 
 #define KAgora_UPDATE_CONVERSATIONS @"UpdateConversations"
+
+#define KAgora_CreateGroup @"createGroup"

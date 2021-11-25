@@ -116,7 +116,6 @@
             [weakSelf hideHud];
         });
         
-//        [weakSelf tableViewDidFinishTriggerHeader:YES];
         if (!error) {
             weakSelf.group = group;
             dispatch_async(dispatch_get_main_queue(), ^{

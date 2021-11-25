@@ -36,6 +36,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:CHAT_BACKOFF object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableView) name:GROUP_LIST_FETCHFINISHED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetUserInfo:) name:USERINFO_UPDATE object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createGroupNotification:) name:KAgora_CreateGroup object:nil];
+
+    
     [self _setupSubviews];
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"isFirstLaunch"]) {
@@ -224,6 +228,7 @@
     });
 }
 
+#pragma mark NSNotification
 - (void)resetUserInfo:(NSNotification *)notification
 {
     NSArray *userinfoList = (NSArray *)notification.userInfo[USERINFO_LIST];
@@ -238,6 +243,12 @@
     
     [self.easeConvsVC resetUserProfiles:userInfoAry];
 }
+
+- (void)createGroupNotification:(NSNotification *)notify {
+    AgoraChatGroup *group = (AgoraChatGroup *)notify.object;
+    [self goGroupChatPageWithGroup:group];
+}
+
 
 - (void)refreshTableViewWithData
 {
@@ -304,6 +315,13 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:groupEnterVC];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 
+}
+
+- (void)goGroupChatPageWithGroup:(AgoraChatGroup *)group {
+    ACDChatViewController *chatViewController = [[ACDChatViewController alloc] initWithConversationId:group.groupId conversationType:AgoraChatConversationTypeGroupChat];
+    chatViewController.navTitle = group.groupName;
+    chatViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
 #pragma mark - AgoraChatSearchControllerDelegate
