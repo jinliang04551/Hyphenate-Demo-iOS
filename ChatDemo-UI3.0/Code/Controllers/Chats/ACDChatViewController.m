@@ -23,7 +23,7 @@
 @property (nonatomic, strong) EaseConversationModel *conversationModel;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *titleDetailLabel;
-@property (nonatomic, strong) NSString *moreMsgId;  //第一条消息的消息id
+@property (nonatomic, strong) NSString *moreMsgId;
 @property (nonatomic, strong) UIView* fullScreenView;
 @property (strong, nonatomic) UIButton *backButton;
 
@@ -99,9 +99,8 @@
         make.left.right.equalTo(self.view);
         make.bottom.equalTo(_chatController.view.mas_top);
     }];
-    
     [_chatController.view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(60.0, 0, 0, 0));
+        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(AgoraChatVIEWTOPMARGIN + 60.0, 0, 0, 0));
     }];
  
     [self loadData:YES];
@@ -172,7 +171,7 @@
     }
     return nil;
 }
-//对方输入状态
+//typing
 - (void)beginTyping
 {
     self.titleDetailLabel.text = @"other party is typing";
@@ -194,7 +193,7 @@
     return model;
 }
 
-//头像点击
+
 - (void)avatarDidSelected:(id<EaseUserProfile>)userData
 {
     if (userData && userData.easeId) {
@@ -217,14 +216,14 @@
 
 #pragma mark - AgoraChatMessageCellDelegate
 
-//通话记录点击事件
+
 - (void)messageCellDidSelected:(EaseMessageCell *)aCell
 {
     if (!aCell.model.message.isReadAcked) {
         [[AgoraChatClient sharedClient].chatManager sendMessageReadAck:aCell.model.message.messageId toUser:aCell.model.message.conversationId completion:nil];
     }
 }
-//通话记录cell头像点击事件
+
 - (void)messageAvatarDidSelected:(EaseMessageModel *)model
 {
     [self personData:model.message.from];
@@ -292,7 +291,6 @@
     return formated;
 }
 
-//个人资料页
 - (void)personData:(NSString*)contanct
 {
     AgoraUserModel *userModel = [[AgoraUserModel alloc] initWithHyphenateId:contanct];
@@ -315,12 +313,11 @@
 
 #pragma mark - AgoraChatroomManagerDelegate
 
-//有用户加入聊天室
 - (void)userDidJoinChatroom:(AgoraChatroom *)aChatroom
                        user:(NSString *)aUsername
 {
     if (self.conversation.type == AgoraChatTypeChatRoom && [aChatroom.chatroomId isEqualToString:self.conversation.conversationId]) {
-        NSString *str = [NSString stringWithFormat:@"%@ 加入聊天室", aUsername];
+        NSString *str = [NSString stringWithFormat:@"%@ join chat room", aUsername];
         [self showHint:str];
     }
 }
@@ -329,7 +326,7 @@
                         user:(NSString *)aUsername
 {
     if (self.conversation.type == AgoraChatTypeChatRoom && [aChatroom.chatroomId isEqualToString:self.conversation.conversationId]) {
-        NSString *str = [NSString stringWithFormat:@"%@ 离开聊天室", aUsername];
+        NSString *str = [NSString stringWithFormat:@"%@ leave chat room", aUsername];
         [self showHint:str];
     }
 }
@@ -338,11 +335,11 @@
                         reason:(AgoraChatroomBeKickedReason)aReason
 {
     if (aReason == 0)
-        [self showHint:[NSString stringWithFormat:@"被移出聊天室 %@", aChatroom.subject]];
+        [self showHint:[NSString stringWithFormat:@"removed from chat room %@", aChatroom.subject]];
     if (aReason == 1)
-        [self showHint:[NSString stringWithFormat:@"聊天室 %@ 已解散", aChatroom.subject]];
+        [self showHint:[NSString stringWithFormat:@"chatroom %@ has dissolved", aChatroom.subject]];
     if (aReason == 2)
-        [self showHint:@"您的账号已离线"];
+        [self showHint:@"your account is offline"];
     if (self.conversation.type == AgoraChatTypeChatRoom && [aChatroom.chatroomId isEqualToString:self.conversation.conversationId]) {
         [self backAction];
     }
@@ -351,54 +348,54 @@
 - (void)chatroomMuteListDidUpdate:(AgoraChatroom *)aChatroom removedMutedMembers:(NSArray *)aMutes
 {
     if ([aMutes containsObject:AgoraChatClient.sharedClient.currentUsername]) {
-        [self showHint:@"您已被解除禁言"];
+        [self showHint:@"your gag order is lifted"];
     }
 }
 
 - (void)chatroomMuteListDidUpdate:(AgoraChatroom *)aChatroom addedMutedMembers:(NSArray *)aMutes muteExpire:(NSInteger)aMuteExpire
 {
     if ([aMutes containsObject:AgoraChatClient.sharedClient.currentUsername]) {
-        [self showHint:@"您已被禁言"];
+        [self showHint:@"you're under a gag order"];
     }
 }
 
 - (void)chatroomWhiteListDidUpdate:(AgoraChatroom *)aChatroom addedWhiteListMembers:(NSArray *)aMembers
 {
     if ([aMembers containsObject:AgoraChatClient.sharedClient.currentUsername]) {
-        [self showHint:@"您已被加入白名单"];
+        [self showHint:@"you have been whitelisted"];
     }
 }
 
 - (void)chatroomWhiteListDidUpdate:(AgoraChatroom *)aChatroom removedWhiteListMembers:(NSArray *)aMembers
 {
     if ([aMembers containsObject:AgoraChatClient.sharedClient.currentUsername]) {
-        [self showHint:@"您已被移出白名单"];
+        [self showHint:@"you have been removed from the whitelist"];
     }
 }
 
 - (void)chatroomAllMemberMuteChanged:(AgoraChatroom *)aChatroom isAllMemberMuted:(BOOL)aMuted
 {
-    [self showHint:[NSString stringWithFormat:@"全员禁言已%@", aMuted ? @"开启" : @"关闭"]];
+    [self showHint:[NSString stringWithFormat:@"all member mute %@", aMuted ? @"open" : @"close"]];
 }
 
 - (void)chatroomAdminListDidUpdate:(AgoraChatroom *)aChatroom addedAdmin:(NSString *)aAdmin
 {
-    [self showHint:[NSString stringWithFormat:@"%@已成为管理员", aAdmin]];
+    [self showHint:[NSString stringWithFormat:@"%@ become an administrator", aAdmin]];
 }
 
 - (void)chatroomAdminListDidUpdate:(AgoraChatroom *)aChatroom removedAdmin:(NSString *)aAdmin
 {
-    [self showHint:[NSString stringWithFormat:@"%@被降级为普通成员", aAdmin]];
+    [self showHint:[NSString stringWithFormat:@"%@ demoted to common member", aAdmin]];
 }
 
 - (void)chatroomOwnerDidUpdate:(AgoraChatroom *)aChatroom newOwner:(NSString *)aNewOwner oldOwner:(NSString *)aOldOwner
 {
-    [self showHint:[NSString stringWithFormat:@"%@ 已将聊天室移交给 %@", aOldOwner, aNewOwner]];
+    [self showHint:[NSString stringWithFormat:@"%@ turn over the chat room owner to %@", aOldOwner, aNewOwner]];
 }
 
 - (void)chatroomAnnouncementDidUpdate:(AgoraChatroom *)aChatroom announcement:(NSString *)aAnnouncement
 {
-    [self showHint:@"聊天室公告内容已更新，请查看"];
+    [self showHint:@"chat room bulletin content has been updated, please check"];
 }
 
 #pragma mark getter and setter

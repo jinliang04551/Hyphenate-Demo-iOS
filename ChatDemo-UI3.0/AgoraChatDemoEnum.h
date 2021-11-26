@@ -10,11 +10,11 @@
 #define AgoraChatDemoEnum_h
 
 /*!
- *  弱提醒消息
+ *  weak hint
  */
 typedef NS_ENUM(NSInteger, AgoraChatDemoWeakRemind) {
-    AgoraChatDemoWeakRemindSystemHint = 0,   //系统提示
-    AgoraChatDemoWeakRemindMsgTime = 10,             //消息时间
+    AgoraChatDemoWeakRemindSystemHint = 0,
+    AgoraChatDemoWeakRemindMsgTime = 10,
 };
 
 
