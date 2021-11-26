@@ -277,7 +277,7 @@ static NSString *agoraGroupPermissionCellIdentifier = @"AgoraGroupPermissionCell
     AgoraChatGroupOptions *options = [[AgoraChatGroupOptions alloc] init];
     options.maxUsersCount = KAgora_GROUP_MAgoraBERSCOUNT;
     if (_isPublic) {
-        options.style = _isAllowMemberInvite ? AgoraChatGroupStylePublicOpenJoin : AgoraChatGroupStylePublicJoinNeedApproval;
+        options.style = _isAllowMemberInvite ? AgoraChatGroupStylePublicJoinNeedApproval : AgoraChatGroupStylePublicOpenJoin;
     }
     else {
         options.style = _isAllowMemberInvite ? AgoraChatGroupStylePrivateMemberCanInvite : AgoraChatGroupStylePrivateOnlyOwnerInvite;
