@@ -2,7 +2,7 @@
 //  UIViewController+ComponentSize.m
 //  EaseChatKit
 //
-//  Created by 娜塔莎 on 2020/11/25.
+//  Created by zhangchong on 2020/11/25.
 //
 
 #import "UIViewController+ComponentSize.h"

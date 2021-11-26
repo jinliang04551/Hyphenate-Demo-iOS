@@ -25,7 +25,6 @@
 @property (nonatomic, strong) UITextField *usernameTextField;
 @property (nonatomic, strong) UITextField *passwordTextField;
 @property (nonatomic, strong) UIButton *loginButton;
-@property (nonatomic) BOOL isMaxLimitLength;
 
 @property (nonatomic, strong) UIButton *registerButton;
 @property (nonatomic, strong) UIImageView *loadingImageView;
@@ -39,7 +38,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _isMaxLimitLength = NO;
     }
     return self;
 }
@@ -124,28 +122,6 @@
 
 #pragma mark - UITextFieldDelegate
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSString *hint = nil;
-    if (_usernameTextField.isFirstResponder && [self charactorNumberWithEncoding:[_usernameTextField.text copy]] >= kMaxLimitLength) {
-        _isMaxLimitLength = YES;
-        hint = NSLocalizedString(@"register.userName.outOfLimit", @"Username length out of limit, maximum 64 bytes");
-    } else {
-        _isMaxLimitLength = _isMaxLimitLength ? NO : _isMaxLimitLength;
-    }
-    
-    if (_passwordTextField.isFirstResponder && [self charactorNumberWithEncoding:_passwordTextField.text] >= kMaxLimitLength) {
-        _isMaxLimitLength = YES;
-        hint = NSLocalizedString(@"register.password.outOfLimit", @"Password length out of limit, maximum 64 bytes");
-    } else {
-        _isMaxLimitLength = _isMaxLimitLength ? NO : _isMaxLimitLength;
-    }
-    
-    self.hintView.hidden = hint == nil ? YES : NO;
-    self.hintTitleLabel.text = hint == nil ? @"" : hint;
-    
-    return YES;
-}
-
 - (NSUInteger)charactorNumberWithEncoding:(NSString *)str
 {
     NSUInteger strLength = 0;
@@ -216,10 +192,6 @@
         ret = YES;
         self.hintView.hidden = NO;
         self.hintTitleLabel.text = NSLocalizedString(@"login.inputNameAndPswd", @"Please enter username and password");
-    } else if (_isMaxLimitLength) {
-        ret = YES;
-        self.hintView.hidden = NO;
-        self.hintTitleLabel.text = NSLocalizedString(@"login.inputNameOrPswdTooLength", @"Username or password too length");
     } else {
         NSString *regex = @"^[A-Za-z0-9]+$";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
@@ -283,8 +255,6 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.hintView.hidden = YES;
                 self.hintTitleLabel.text = @"";
-                UIAlertView *alertError = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.succeed", @"Sign in succeed") delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"login.ok", @"Ok"), nil];
-                [alertError show];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES userInfo:@{@"userName":aName,@"nickName":!nickName ? @"" : nickName}];
             });

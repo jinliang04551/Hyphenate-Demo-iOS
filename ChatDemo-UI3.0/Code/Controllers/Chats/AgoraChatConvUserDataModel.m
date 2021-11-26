@@ -2,8 +2,8 @@
 //  AgiraChatConvUserDataModel.m
 //  EaseIM
 //
-//  Created by 娜塔莎 on 2020/12/6.
-//  Copyright © 2020 娜塔莎. All rights reserved.
+//  Created by zhangchong on 2020/12/6.
+//  Copyright © 2020 zhangchong. All rights reserved.
 //
 
 #import "AgoraChatConvUserDataModel.h"

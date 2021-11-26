@@ -24,7 +24,7 @@ end
     pod 'WHToast'
     pod 'FMDB'
     pod 'AgoraChat'
-    pod 'EaseChatKit',  :path => "../EaseChatKit"
+    pod 'EaseChatKit',  :path => "../UIKIT"
 
 end
 
