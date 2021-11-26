@@ -267,8 +267,13 @@ MISScrollPageControllerDelegate,AgoraGroupUIProtocol>
         _navView = [[ACDGroupMemberNavView alloc] init];
         _navView.leftLabel.text = @"Members";
         _navView.leftSubLabel.text = [NSString stringWithFormat:@"(%@)",@(self.group.occupantsCount)];
+       
         if (_group.permissionType == AgoraChatGroupPermissionTypeMember) {
-            _navView.rightButton.hidden = YES;
+            if (_group.setting.style == AgoraChatGroupStylePrivateMemberCanInvite) {
+                _navView.rightButton.hidden = NO;
+            }else {
+                _navView.rightButton.hidden = YES;
+            }
         }
         ACD_WS
         _navView.leftButtonBlock = ^{
