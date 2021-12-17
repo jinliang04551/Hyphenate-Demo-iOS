@@ -191,7 +191,7 @@
     if (username.length == 0 || password.length == 0) {
         ret = YES;
         self.hintView.hidden = NO;
-        self.hintTitleLabel.text = NSLocalizedString(@"login.inputNameAndPswd", @"Please enter username and password");
+        self.hintTitleLabel.text = NSLocalizedString(@"login.inputNameAndPswd", @"Please enter username and nickname");
     } else {
         NSString *regex = @"^[A-Za-z0-9]+$";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];

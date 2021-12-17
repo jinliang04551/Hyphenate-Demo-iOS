@@ -36,6 +36,17 @@
     return self;
 }
 
+- (instancetype)initWithType:(ACDHeaderInfoType)type
+{
+    self = [super init];
+    if (self) {
+        self.infoType = type;
+        [self placeAndLayoutSubviews];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHeaderViewAction)];
+        [self addGestureRecognizer:tap];
+    }
+    return self;
+}
 
 - (void)placeAndLayoutSubviews {
     if (self.infoType == ACDHeaderInfoTypeContact) {
@@ -285,6 +296,15 @@
     _isHideChatButton = isHideChatButton;
     if (_isHideChatButton) {
         self.chatView.hidden = YES;
+    }
+}
+
+- (void)setIsHideBackButton:(BOOL)isHideBackButton
+{
+    if (isHideBackButton) {
+        self.backButton.hidden = YES;
+    } else {
+        self.backButton.hidden = NO;
     }
 }
 

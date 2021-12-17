@@ -71,6 +71,15 @@
     self.viewModel = [[EaseConversationViewModel alloc] init];
     self.viewModel.canRefresh = YES;
     self.viewModel.badgeLabelCenterVector = CGVectorMake(-16, 0);
+    
+//    self.viewModel.avatarType = Rectangular;
+//    self.viewModel.nameLabelFont = [UIFont fontWithName:@"PingFangSC-Medium" size:18.0];
+//    self.viewModel.nameLabelColor = [UIColor redColor];
+//    self.viewModel.detailLabelFont = [UIFont fontWithName:@"PingFangSC-Regular" size:16.0];;
+//    self.viewModel.detailLabelColor = [UIColor systemPinkColor];
+//    self.viewModel.timeLabelColor = [UIColor redColor];
+//    self.viewModel.badgeViewStyle = EaseUnreadBadgeViewRedDot;
+//    self.viewModel.badgeLabelPosition = EaseAvatarTopRight;
 
     self.easeConvsVC = [[EaseConversationsViewController alloc] initWithModel:self.viewModel];
     self.easeConvsVC.delegate = self;

@@ -65,9 +65,10 @@
                   nickName:(NSString *)nickName
                 completion:(void (^)(NSInteger statusCode, NSString *response))aCompletionBlock
 {
-    NSURL *url = [NSURL URLWithString:@"https://a61.easemob.com/app/chat/user/login"];
+    NSURL *USUrl = [NSURL URLWithString:@"https://a41.easemob.com/app/chat/user/login"];
+    //NSURL *SingaporeUrl = [NSURL URLWithString:@"https://a61.easemob.com/app/chat/user/login"];
     NSMutableURLRequest *request = [NSMutableURLRequest
-                                                requestWithURL:url];
+                                                requestWithURL:USUrl];
     request.HTTPMethod = @"POST";
     
     NSMutableDictionary *headerDict = [[NSMutableDictionary alloc]init];

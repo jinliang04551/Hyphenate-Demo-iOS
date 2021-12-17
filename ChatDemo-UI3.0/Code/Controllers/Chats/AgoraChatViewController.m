@@ -90,7 +90,6 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
         _chatController = [EaseChatViewController initWithConversationId:conversationId
                                                     conversationType:type
                                                         chatViewModel:viewModel];
-        [_chatController setEditingStatusVisible:YES];
         _chatController.delegate = self;
         
     }

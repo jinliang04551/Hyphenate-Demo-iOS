@@ -22,8 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithConversationId:(NSString *)conversationId conversationType:(AgoraChatConversationType)conType;
 
-- (NSArray *)formatMessages:(NSArray<AgoraChatMessage *> *)aMessages;
-
 @end
 
 NS_ASSUME_NONNULL_END

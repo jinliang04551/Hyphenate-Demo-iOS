@@ -38,7 +38,7 @@
     UITextField *searchField = [self.searchBar valueForKey:@"searchField"];
     CGFloat color = 245 / 255.0;
     searchField.backgroundColor = [UIColor colorWithRed:color green:color blue:color alpha:1.0];
-    self.searchBar.placeholder = @"搜索联系人";
+    self.searchBar.placeholder = @"Search contacts";
     [self.view addSubview:self.searchBar];
     [self.view sendSubviewToBack:self.searchBar];
     [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {

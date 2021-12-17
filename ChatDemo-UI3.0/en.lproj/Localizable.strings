@@ -64,8 +64,8 @@
 "login.failure" = "Login failure";
 "login.failure.password.notmatch" = "Password does not match username";
 "login.ok" = "Ok";
-"login.inputNameAndPswd" = "Please enter username and password.";
-"login.inputNameOrPswdTooLength" = "Username or password too length.";
+"login.inputNameAndPswd" = "Please enter username and nickname.";
+"login.inputNameOrPswdTooLength" = "Username or nickname too length.";
 "login.inputNameNotCompliance" = "Latin letters and numbers only.";
 "login.networkReachable" = "Network disconnected.";
 "login.endAutoLogin.failure" = "Automatic login failed";

@@ -195,6 +195,9 @@
 		9ECE6749274B9D60007CF85F /* deleteSearch@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9ECE6747274B9D60007CF85F /* deleteSearch@3x.png */; };
 		9ECE674C274CD54F007CF85F /* AgoraChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE674B274CD54F007CF85F /* AgoraChatViewController.m */; };
 		9ECE674F274DE7C0007CF85F /* UIViewController+ComponentSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE674E274DE7C0007CF85F /* UIViewController+ComponentSize.m */; };
+		9ECE67842757908D007CF85F /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9ECE67822757908C007CF85F /* add@2x.png */; };
+		9ECE67852757908D007CF85F /* add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9ECE67832757908D007CF85F /* add@3x.png */; };
+		9ECE678827586E6B007CF85F /* ACDAddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE678727586E6B007CF85F /* ACDAddContactViewController.m */; };
 		C37DDF32C819CBAD245EA2B9 /* libPods-ChatDemo-UI3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC01D30C732814F093CBF30 /* libPods-ChatDemo-UI3.0.a */; };
 		D20E26D71DCA011C00B3FAC6 /* icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D41DCA011C00B3FAC6 /* icon_info.png */; };
 		D20E26D81DCA011C00B3FAC6 /* icon_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */; };
@@ -971,6 +974,10 @@
 		9ECE674B274CD54F007CF85F /* AgoraChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraChatViewController.m; sourceTree = "<group>"; };
 		9ECE674D274DE7C0007CF85F /* UIViewController+ComponentSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ComponentSize.h"; sourceTree = "<group>"; };
 		9ECE674E274DE7C0007CF85F /* UIViewController+ComponentSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ComponentSize.m"; sourceTree = "<group>"; };
+		9ECE67822757908C007CF85F /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
+		9ECE67832757908D007CF85F /* add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@3x.png"; sourceTree = "<group>"; };
+		9ECE678627586E6B007CF85F /* ACDAddContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACDAddContactViewController.h; sourceTree = "<group>"; };
+		9ECE678727586E6B007CF85F /* ACDAddContactViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACDAddContactViewController.m; sourceTree = "<group>"; };
 		D16326FFC6F317D24E92E388 /* Pods-ChatDemo-UI3.0.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatDemo-UI3.0.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0.release.xcconfig"; sourceTree = "<group>"; };
 		D20E26D41DCA011C00B3FAC6 /* icon_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_info.png; sourceTree = "<group>"; };
 		D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_info@2x.png"; sourceTree = "<group>"; };
@@ -2181,6 +2188,8 @@
 				7F6CC8BA26568C4A00BA60BB /* AgoraAddContactViewController.h */,
 				7F6CC8B726568C4A00BA60BB /* AgoraAddContactViewController.m */,
 				7F6CC8B926568C4A00BA60BB /* AgoraAddContactViewController.xib */,
+				9ECE678627586E6B007CF85F /* ACDAddContactViewController.h */,
+				9ECE678727586E6B007CF85F /* ACDAddContactViewController.m */,
 				EC432EBD271EE73A001B31DE /* ACDContactsViewController.h */,
 				EC432EBE271EE73A001B31DE /* ACDContactsViewController.m */,
 				EC54DCC5272143B300ABEE3E /* ACDContactListController.h */,
@@ -2846,6 +2855,8 @@
 		EC54DD2827226C0C00ABEE3E /* Group */ = {
 			isa = PBXGroup;
 			children = (
+				9ECE67822757908C007CF85F /* add@2x.png */,
+				9ECE67832757908D007CF85F /* add@3x.png */,
 				EC19F573273A187B00F88012 /* remove_admin@2x.png */,
 				EC19F575273A187B00F88012 /* remove_admin@3x.png */,
 				EC19F574273A187B00F88012 /* Unmute@2x.png */,
@@ -3084,6 +3095,7 @@
 				EC54DD3B27226C1700ABEE3E /* contact_request_hint@2x.png in Resources */,
 				D2BF7F151D914DB30090AA66 /* logo1@3x.png in Resources */,
 				714E9DC31DD32B0A009D1E2D /* default_avatar.png in Resources */,
+				9ECE67852757908D007CF85F /* add@3x.png in Resources */,
 				716633F71DB0DE5600C92E27 /* feedback@2x.png in Resources */,
 				EC570EAC2730E9D200CBC408 /* Privacy@3x.png in Resources */,
 				D2835FF41D94EDB400EC7A4A /* icon_emoji_disable@3x.png in Resources */,
@@ -3371,6 +3383,7 @@
 				EC570EA92730E9D200CBC408 /* About@3x.png in Resources */,
 				7F6CC86626568B8B00BA60BB /* AgoraGroup_Public_Cell.xib in Resources */,
 				D2BF7E821D914DB30090AA66 /* Button_Stats disabled@3x.png in Resources */,
+				9ECE67842757908D007CF85F /* add@2x.png in Resources */,
 				716633FA1DB0DE5600C92E27 /* message@2x.png in Resources */,
 				EC54DDF527299DF700ABEE3E /* request_reject@2x.png in Resources */,
 				D2BF7EA31D914DB30090AA66 /* Disabled@3x.png in Resources */,
@@ -3633,6 +3646,7 @@
 				7FB1589226A19AE300B995F3 /* UITextField+DarkMode.m in Sources */,
 				7F663CA1265B9FDA003F74B8 /* AgoraChatToolBar.m in Sources */,
 				EC54DCEA2721502200ABEE3E /* UIView+MISHelper.m in Sources */,
+				9ECE678827586E6B007CF85F /* ACDAddContactViewController.m in Sources */,
 				EC7A329C272EE67F00AF0C19 /* ACDSearchJoinCell.m in Sources */,
 				7F6CC8AB26568C3600BA60BB /* AgoraChatVideoBubbleView.m in Sources */,
 				7F6CC93426568DC300BA60BB /* AgoraAudioRecorderUtil.m in Sources */,
@@ -3836,7 +3850,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 499WYUV8Q2;
 				ENABLE_BITCODE = NO;
@@ -3872,7 +3886,7 @@
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "";
-				MARKETING_VERSION = 3.8.7;
+				MARKETING_VERSION = 3.8.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"$(inherited)",
@@ -3949,7 +3963,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: EaseMob Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 499WYUV8Q2;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -3983,7 +3997,7 @@
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "";
-				MARKETING_VERSION = 3.8.7;
+				MARKETING_VERSION = 3.8.8;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",

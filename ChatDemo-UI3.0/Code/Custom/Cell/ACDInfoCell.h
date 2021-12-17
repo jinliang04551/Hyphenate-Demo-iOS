@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ACDInfoCell : ACDCustomCell
 
+@property (nonatomic, strong) UIButton *customBtn;
+
+@property (nonatomic, copy) void (^customBtnSelect)();
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -21,12 +21,15 @@ typedef NS_ENUM(NSInteger, ACDHeaderInfoType) {
 - (instancetype)initWithFrame:(CGRect)frame
                      withType:(ACDHeaderInfoType)type;
 
+- (instancetype)initWithType:(ACDHeaderInfoType)type;
+
 
 @property (nonatomic, strong) UIImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *userIdLabel;
 @property (nonatomic, strong) UILabel *describeLabel;
 @property (nonatomic, assign) BOOL isHideChatButton;
+@property (nonatomic, assign) BOOL isHideBackButton;
 @property (nonatomic, copy) void (^tapHeaderBlock)(void);
 @property (nonatomic, copy) void (^goChatPageBlock)(void);
 @property (nonatomic, copy) void (^goBackBlock)(void);

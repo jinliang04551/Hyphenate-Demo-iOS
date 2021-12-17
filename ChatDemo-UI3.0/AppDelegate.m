@@ -109,7 +109,7 @@
 
 - (void)initUIKit
 {
-    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:Appkey1];
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:MeidongAppkey];
     
     // Hyphenate cert keys
     NSString *apnsCertName = nil;

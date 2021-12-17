@@ -17,19 +17,20 @@
 #import "ACDContactInfoViewController.h"
 #import "AgoraUserModel.h"
 #import "ACDGroupInfoViewController.h"
+#import "ACDAddContactViewController.h"
 
 
 @interface ACDChatViewController ()<EaseChatViewControllerDelegate, AgoraChatroomManagerDelegate, AgoraChatGroupManagerDelegate, EaseMessageCellDelegate>
 @property (nonatomic, strong) EaseConversationModel *conversationModel;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *titleDetailLabel;
-@property (nonatomic, strong) NSString *moreMsgId;
 @property (nonatomic, strong) UIView* fullScreenView;
 @property (strong, nonatomic) UIButton *backButton;
 
 @property (nonatomic, strong) ACDChatNavigationView *navigationView;
 @property (nonatomic, assign) AgoraChatConversationType conversationType;
 @property (nonatomic, strong) NSString *conversationId;
+@property (nonatomic, strong) NSArray *contacts;
 
 @end
 
@@ -43,15 +44,17 @@
         self.conversationId = conversationId;
         
         EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
-        viewModel.displayOneselfAvatar = NO;
-        viewModel.displayOneselfName = NO;
+        viewModel.displaySentAvatar = NO;
+        viewModel.displaySentName = NO;
         if (conType != AgoraChatTypeGroupChat) {
-            viewModel.displayOtherName= NO;
+            viewModel.displayReceiverName= NO;
         }
+      
+        _contacts = [[AgoraChatClient sharedClient].contactManager getContacts];
         _chatController = [EaseChatViewController initWithConversationId:conversationId
                                                     conversationType:conType
                                                         chatViewModel:viewModel];
-        [_chatController setEditingStatusVisible:YES];
+        [_chatController setTypingIndicator:YES];
         _chatController.delegate = self;
     }
     return self;
@@ -103,7 +106,6 @@
         make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(AgoraChatVIEWTOPMARGIN + 60.0, 0, 0, 0));
     }];
  
-    [self loadData:YES];
     self.view.backgroundColor = [UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0];
 }
 
@@ -145,7 +147,6 @@
 
 #pragma mark - EaseChatViewControllerDelegate
 
-//自定义通话记录cell
 - (UITableViewCell *)cellForItem:(UITableView *)tableView messageModel:(EaseMessageModel *)messageModel
 {
 //    if (messageModel.type == AgoraChatMessageTypePictMixText) {
@@ -171,15 +172,19 @@
     }
     return nil;
 }
-//typing
-- (void)beginTyping
+
+//typing 1v1 single chat only
+- (void)peerTyping
 {
     self.titleDetailLabel.text = @"other party is typing";
 }
-- (void)endTyping
+
+//1v1 single chat only
+- (void)peerEndTyping
 {
     self.titleDetailLabel.text = nil;
 }
+
 //userProfile
 - (id<EaseUserProfile>)userProfile:(NSString *)huanxinID
 {
@@ -199,12 +204,6 @@
     if (userData && userData.easeId) {
         [self personData:userData.easeId];
     }
-}
-
-- (void)loadMoreMessageData:(NSString *)firstMessageId currentMessageList:(NSArray<AgoraChatMessage *> *)messageList
-{
-    self.moreMsgId = firstMessageId;
-    [self loadData:NO];
 }
 
 - (void)didSendMessage:(AgoraChatMessage *)message error:(AgoraChatError *)error
@@ -231,18 +230,6 @@
 
 #pragma mark - data
 
-- (void)loadData:(BOOL)isScrollBottom
-{
-    __weak typeof(self) weakself = self;
-    void (^block)(NSArray *aMessages, AgoraChatError *aError) = ^(NSArray *aMessages, AgoraChatError *aError) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakself.chatController refreshTableViewWithData:aMessages isInsertBottom:NO isScrollBottom:isScrollBottom];
-        });
-    };
-    
-    [self.conversation loadMessagesStartFromId:self.moreMsgId count:50 searchDirection:AgoraChatMessageSearchDirectionUp completion:block];
-}
-
 - (void)resetUserInfo:(NSNotification *)notification
 {
     NSArray *userinfoList = (NSArray *)notification.userInfo[USERINFO_LIST];
@@ -258,44 +245,21 @@
         [userInfoAry addObject:model];
     }
     
-    [self.chatController resetUserProfiles:userInfoAry];
-}
-
-#pragma mark - ConfirmUserCardViewDelegate
-
-- (NSArray *)formatMessages:(NSArray<AgoraChatMessage *> *)aMessages
-{
-    NSMutableArray *formated = [[NSMutableArray alloc] init];
-
-    for (int i = 0; i < [aMessages count]; i++) {
-        AgoraChatMessage *msg = aMessages[i];
-        if (msg.chatType == AgoraChatTypeChat && msg.isReadAcked && (msg.body.type == AgoraChatMessageBodyTypeText || msg.body.type == AgoraChatMessageBodyTypeLocation)) {
-            [[AgoraChatClient sharedClient].chatManager sendMessageReadAck:msg.messageId toUser:msg.conversationId completion:nil];
-        }
-        
-        CGFloat interval = (self.chatController.msgTimelTag - msg.timestamp) / 1000;
-        if (self.chatController.msgTimelTag < 0 || interval > 60 || interval < -60) {
-            NSString *timeStr = [AgoraChatDateHelper formattedTimeFromTimeInterval:msg.timestamp];
-            [formated addObject:timeStr];
-            self.chatController.msgTimelTag = msg.timestamp;
-        }
-        EaseMessageModel *model = nil;
-        model = [[EaseMessageModel alloc] initWithAgoraChatMessage:msg];
-        if (!model) {
-            model = [[EaseMessageModel alloc]init];
-        }
-        model.userDataProfile = [self userProfile:msg.from];
-        [formated addObject:model];
-    }
-    
-    return formated;
+    [self.chatController setUserProfiles:userInfoAry];
 }
 
 - (void)personData:(NSString*)contanct
 {
     AgoraUserModel *userModel = [[AgoraUserModel alloc] initWithHyphenateId:contanct];
-    UIViewController* controller = [[ACDContactInfoViewController alloc] initWithUserModel:userModel];
-    [self.navigationController pushViewController:controller animated:YES];
+    UIViewController *controller = nil;
+    if ([self.contacts containsObject:contanct]) {
+        controller = [[ACDContactInfoViewController alloc] initWithUserModel:userModel];
+        [self.navigationController pushViewController:controller animated:YES];
+    } else {
+        controller = [[ACDAddContactViewController alloc]initWithUserModel:userModel];
+        controller.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [self presentViewController:controller animated:YES completion:nil];
+    }
 }
 
 - (void)backAction
