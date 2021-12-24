@@ -116,7 +116,10 @@
         if (self.model.applyStatus == ACDApplyStatusDeclined) {
             self.resultlabel.text = @"Ignored";
         }
-        
+    } else {
+        self.acceptButton.hidden = self.rejectButton.hidden = NO;
+        self.resultlabel.hidden = YES;
+        self.resultlabel.text = @"";
     }
     
 

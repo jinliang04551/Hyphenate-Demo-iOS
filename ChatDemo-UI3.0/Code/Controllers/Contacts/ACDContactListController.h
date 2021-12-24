@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ACDContactListController : ACDContainerSearchTableViewController
 @property (nonatomic,copy)void (^selectedBlock)(NSString *contactId);
 
+- (void)reloadContacts;
+
 @end
 
 NS_ASSUME_NONNULL_END

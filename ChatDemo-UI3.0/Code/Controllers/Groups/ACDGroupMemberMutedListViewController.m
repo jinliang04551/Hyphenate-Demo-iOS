@@ -125,7 +125,8 @@
 {
     NSInteger pageSize = 50;
     ACD_WS
-    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    [self showHint:NSLocalizedString(@"hud.load", @"Load data...")];
+    //[self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     [[AgoraChatClient sharedClient].groupManager getGroupMuteListFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, AgoraChatError *aError) {
         [weakSelf hideHud];
         

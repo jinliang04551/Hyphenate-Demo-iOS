@@ -237,7 +237,7 @@
                 [weakSelf showAlertWithMessage:alertMsg];
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupAdminList" object:group];
-            [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:group];
+            //[[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:group];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         });
     });

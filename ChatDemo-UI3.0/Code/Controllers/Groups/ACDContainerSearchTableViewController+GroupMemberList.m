@@ -289,7 +289,6 @@ static NSString *groupIdKey = @"groupId";
 - (void)handleActionTitle:(NSString *)title
             responseError:(AgoraChatError *)error {
     if (error == nil) {
-        [self showHint:[NSString stringWithFormat:@"%@ success",title]];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:self.groupId];
     }else {

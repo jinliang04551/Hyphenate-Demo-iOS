@@ -121,11 +121,12 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
     AgoraUserModel * model = [[AgoraUserModel alloc] initWithHyphenateId:contactId];
     ACDContactInfoViewController *vc = [[ACDContactInfoViewController alloc] initWithUserModel:model];
 
+    ACD_WS
     vc.addBlackListBlock = ^{
-        [self reloadContacts];
+        [weakSelf.contactListVC reloadContacts];
     };
     vc.deleteContactBlock = ^{
-        [self reloadContacts];
+        [weakSelf.contactListVC reloadContacts];
     };
     
     vc.hidesBottomBarWhenPushed = YES;
@@ -135,7 +136,7 @@ MISScrollPageControllerDelegate,ACDGroupInfoViewControllerDelegate>
 
 
 - (void)reloadContacts {
-    
+
 }
 
 - (void)reloadContactRequests {

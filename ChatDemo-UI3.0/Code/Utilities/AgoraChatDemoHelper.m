@@ -335,7 +335,7 @@ static AgoraChatDemoHelper *helper = nil;
 - (void)groupInvitationDidAccept:(AgoraChatGroup *)aGroup
                          invitee:(NSString *)aInvitee
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
     NSString *message = [NSString stringWithFormat:NSLocalizedString(@"group.acceptInvitation", @"%@ has agreed to join the group [%@]"), aInvitee, aGroup.subject];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];

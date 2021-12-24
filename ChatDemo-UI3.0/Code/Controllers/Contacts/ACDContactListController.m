@@ -117,6 +117,9 @@
     self.searchSource = [NSMutableArray arrayWithArray:searchSource];
 }
 
+- (void)viewDidAppearForIndex:(NSUInteger)index{
+    [self reloadContacts];
+}
 
 #pragma mark NSNotification
 - (void)settingBlackListDidChange {
